@@ -1,0 +1,177 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 25
+%  Kuhn's Theorem & Equilibria in Behavior Strategies
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 25: Kuhn's Theorem \& Equilibria in Behavior Strategies}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Recap: Constructing an Equivalent Behavior Strategy from a Mixed Strategy}
+
+From the previous lecture, when we have a mixed strategy $\sigma_1$ for Player I and want to find an equivalent behavior strategy $b_1$, we use the following approach via a worked example.
+
+\subsection{Example: Two-Level Game Tree}
+
+Consider a game tree where Player I has two information sets: $h_1 = \{n_0\}$ (the root, actions $L$ with prob.\ $u$ and $R$ with prob.\ $1-u$) and $h_2 = \{n_1, n_2\}$ (actions $\ell$ and $r$). Player I's pure strategies are $L\ell$, $Lr$, $R\ell$, $Rr$.
+
+Suppose the mixed strategy satisfies:
+\[
+  \sigma_1(L\ell) = \sigma_1(Rr) = \tfrac{1}{2}.
+\]
+The terminal nodes have labels as shown; for Player II the behavior strategy at $h_2$ uses probabilities $y$ and $(1-y)$ for $\ell$ and $r$:
+
+\begin{center}
+  \begin{tabular}{ll}
+    $\sigma_1(L\ell) = \tfrac{1}{2}$, & $\sigma_1(Rr) = \tfrac{1}{2}$.
+  \end{tabular}
+\end{center}
+
+Let $b_1(L;\, n_0) = u$ and $b_1(\ell;\, h_2) = y$. Then the reaching probabilities give:
+\[
+  uy = \tfrac{1}{2}, \quad u(1-y) = 0, \quad (1-u)y = 0, \quad (1-u)(1-y) = \tfrac{1}{2}.
+\]
+This system has the solution: $u = \tfrac{1}{2}$, $y = 1$ is \emph{not} consistent; instead the only solution is $u=1, y=1/2$ fails too. In fact the compatible solution is $u = 1/2$, which implies from $u(1-y)=0$ that $y=1$, contradiction with $uy=1/2$ giving $y=1$. Re-examining: $uy = 1/2$ and $(1-u)(1-y) = 1/2$, and $u(1-y)=0$ so $u=0$ or $y=1$. Since $u=0$ contradicts $uy=1/2$, we need $y=1$. But then $(1-u)(1-y)=0\neq 1/2$. Hence \textbf{no solution exists} for this imperfect-recall tree.
+
+\medskip
+Now consider a different (perfect-recall) tree. Suppose:
+\[
+  \sigma_1(AL) = \tfrac{1}{5}, \quad \sigma_1(Ar) = \tfrac{1}{10}, \quad
+  \sigma_1(BL) = \tfrac{2}{5}, \quad \sigma_1(Br) = \tfrac{3}{10}.
+\]
+Here $\sigma_1(A\cdot) = \tfrac{1}{5}+\tfrac{1}{10} = \tfrac{3}{10}$ and $\sigma_1(B\cdot)= \tfrac{2}{5}+\tfrac{3}{10}=\tfrac{7}{10}$... (see boxed equations below).
+
+For the tree with $n_0$ (Player I, actions $A$ prob.\ $u$ and $B$ prob.\ $1-u$), $n_1$ (Player II, actions $L$ and $R$), and an information set $h_2 = \{n_3, n_4\}$ (Player I, actions $\ell$ prob.\ $y$ and $r$ prob.\ $1-y$):
+\[
+  \boxed{ny = \tfrac{1}{5},\quad n(1-y) = \tfrac{1}{10},\quad (1-n)y = \tfrac{2}{5},\quad (1-n)(1-y) = \tfrac{3}{10}.}
+\]
+Solving: $n(y + 1-y) = ny + n(1-y) = \tfrac{1}{5}+\tfrac{1}{10} = \tfrac{3}{10}$, so $n = \tfrac{3}{10}$... Checking sign: from $ny = \tfrac{1}{5}$ with $n = 3/10$: $y = \tfrac{1/5}{3/10} = \tfrac{2}{3}$. Similarly $(1-n) = 7/10$.
+
+% ============================================================
+\section{Constructing $b_i$ from $\sigma_i$ -- General Formula}
+
+\begin{defbox}{Converting a Mixed Strategy to a Behavior Strategy}
+  Let $S_i(h_2) \subseteq S_i$ denote the set of strategies of Player $i$ such that the game \textbf{possibly reaches} $h_2$ (i.e., the information set $h_2$ is reachable under $s_i$).
+
+  \medskip
+  More precisely, for information set $h_2$, define:
+  \[
+    S_i(\ell;\,h_2) \subseteq S_i(h_2)
+  \]
+  as the set of strategies in $S_i(h_2)$ that \textbf{choose action $\ell$ at $h_2$}.
+
+  \medskip
+  Also define:
+  \begin{align*}
+    \sigma_i\!\bigl(S_i(h_2)\bigr)   &: \text{ the total probability of } S_i(h_2) \text{ under } \sigma_i, \\
+    \sigma_i\!\bigl(S_i(\ell;\,h_2)\bigr) &: \text{ the total probability of } S_i(\ell;\,h_2) \text{ under } \sigma_i.
+  \end{align*}
+
+  The behavior strategy $b_i$ is then constructed as:
+  \[
+    b_i(\ell;\,h_2) =
+    \begin{cases}
+      \dfrac{\sigma_i\!\bigl(S_i(\ell;\,h_2)\bigr)}{\sigma_i\!\bigl(S_i(h_2)\bigr)} & \text{provided } \sigma_i\!\bigl(S_i(h_2)\bigr) > 0, \\[8pt]
+      \alpha \in [0,1] & \text{o.f.\ (otherwise free)},
+    \end{cases}
+  \]
+  and similarly:
+  \[
+    b_i(r;\,h_2) =
+    \begin{cases}
+      \dfrac{\sigma_i\!\bigl(S_i(r;\,h_2)\bigr)}{\sigma_i\!\bigl(S_i(h_2)\bigr)} & \text{provided } \sigma_i\!\bigl(S_i(h_2)\bigr) > 0, \\[8pt]
+      1 - \alpha & \text{o.f.}
+    \end{cases}
+  \]
+\end{defbox}
+
+\subsection{Computed Example}
+
+For the information set $h_1 = S_i$ (the root):
+\[
+  S_i(h_1) = S_i.
+\]
+\[
+  S_i(A;\,h_1) = \{A\ell,\, Ar\}.
+\]
+\[
+  b_i(A;\,h_1)
+  = \frac{\sigma_i\!\bigl(S_i(A;\,h_1)\bigr)}{\sigma_i(S_i)}
+  = \frac{\sigma_i(A\ell) + \sigma_i(Ar)}{1}
+  = \tfrac{1}{5} + \tfrac{1}{10} = \tfrac{3}{10}.
+\]
+
+\begin{notebox}
+  When $\sigma_i(S_i(h_2)) = 0$ (the information set is reached with zero probability under $\sigma_i$), the value of $b_i(\ell;\,h_2)$ can be chosen \emph{freely} (any $\alpha \in [0,1]$). This is why the conversion from mixed strategy to behavior strategy is generally non-unique only when some information sets are off the equilibrium path.
+\end{notebox}
+
+% ============================================================
+\section{Kuhn's Theorem (1957)}
+
+\begin{thmbox}{Kuhn's Theorem (1957)}
+  In every game in extensive form, if Player $i$ has \textbf{perfect recall}, then for every mixed strategy of Player $i$, there exists a behavior strategy that is \textbf{equivalent} to the mixed strategy.
+\end{thmbox}
+
+\begin{notebox}
+  Together with the result from Lecture 24 (that given any behavior strategy one can always construct an equivalent mixed strategy), Kuhn's Theorem establishes that \textbf{under perfect recall}, the sets of mixed strategies and behavior strategies are \emph{strategically equivalent} -- every mixed strategy has an equivalent behavior strategy and vice versa.
+\end{notebox}
+
+% ============================================================
+\section{Equilibria in Behavior Strategies}
+
+\begin{thmbox}{Existence of NE in Behavior Strategies}
+  If all players in an extensive form game have \textbf{perfect recall}, then the game has a Nash Equilibrium in behavior strategies.
+\end{thmbox}
+
+\begin{proof}
+  From the extensive form game, construct the corresponding strategic (normal) form game.
+
+  Since the extensive form game is finite, the corresponding strategic form game is finite too.
+
+  Now, the strategic form game has a mixed strategy Nash Equilibrium -- say $\sigma^* = (\sigma_1^*,\ldots,\sigma_n^*)$. For each $\sigma_i^*$, construct $b_i^*$, an outcome-equivalent behavior strategy (which exists by Kuhn's Theorem, since each player has perfect recall). We claim $b^* = (b_1^*,\ldots,b_n^*)$ is an NE in behavior strategies.
+
+  By Remark R-2 from Lecture 24:
+  \[
+    U_i(\sigma^*) = U_i(b^*) \quad \forall\, i \in N.
+  \]
+
+  Assume for contradiction that $b^*$ is \textbf{not} an NE. Then $\exists\, k \in N$ such that:
+  \[
+    U_k(b^*) < U_k(b_k,\, b^*_{-k})
+    \quad \text{for some behavior strategy } b_k.
+  \]
+  Now, since $b_k$ is a behavior strategy, there exists an equivalent mixed strategy $\sigma_k$ (this direction always holds). Therefore:
+  \[
+    U_k(b^*) < U_k(b_k,\, b^*_{-k}) = U_k(\sigma_k,\, b^*_{-k}).
+  \]
+  Since $\sigma^*$ is equivalent to $b^*$ component-wise and $\sigma_k$ is equivalent to $b_k$:
+  \[
+    = U_k(\sigma_k,\, \sigma^*_{-k}) \leq U_k(\sigma^*), \quad \text{a contradiction.}
+  \]
+  (The last inequality holds because $\sigma^*$ is a Nash Equilibrium of the strategic form game, so no player can profitably deviate.)
+
+  Hence $b^*$ is an NE in behavior strategies.
+\end{proof}
+
+\begin{takebox}
+  \textbf{Key Takeaway.} For extensive form games with perfect recall:
+  \begin{enumerate}
+    \item Every mixed strategy $\Leftrightarrow$ some behavior strategy (Kuhn's Theorem, plus the easy direction).
+    \item A Nash Equilibrium in \emph{mixed} strategies always induces a Nash Equilibrium in \emph{behavior} strategies.
+    \item Behavior strategies are preferred in practice because they are far more compact to describe.
+  \end{enumerate}
+\end{takebox}
+
+\end{document}

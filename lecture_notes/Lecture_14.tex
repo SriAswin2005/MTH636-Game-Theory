@@ -1,0 +1,130 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 14
+%  Domination by Mixed Strategies & Nash's Existence Theorem
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 14: Domination by Mixed Strategies \& Nash's Theorem}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Domination by Mixed Strategies}
+
+A pure strategy can be strictly dominated not only by another pure strategy, but also by a \textit{mixed} strategy.
+
+\begin{exbox}{Strict Domination by a Mixed Strategy}
+  Consider the following game matrix:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|ccc}
+    $P_1 \setminus P_2$ & L & C & R \\
+    \hline
+    T & \payoff{6}{2} & \payoff{0}{6} & \payoff{4}{4} \\
+    M & \payoff{2}{12} & \payoff{4}{3} & \payoff{2}{5} \\
+    B & \payoff{0}{6} & \payoff{10}{0} & \payoff{2}{2} \\
+  \end{tabular}
+  \end{center}
+  
+  Observe that the pure strategy $M$ for Player 1 is not strictly dominated by either $T$ or $B$ alone. However, consider the mixed strategy $\sigma_1 = [\frac{1}{2}(T), 0(M), \frac{1}{2}(B)]$. Let's calculate the expected payoff of $\sigma_1$ against each of Player 2's pure strategies:
+  \begin{itemize}
+      \item Against L: $U_1(\sigma_1, L) = \frac{1}{2}(6) + \frac{1}{2}(0) = 3 > 2 = U_1(M, L)$
+      \item Against C: $U_1(\sigma_1, C) = \frac{1}{2}(0) + \frac{1}{2}(10) = 5 > 4 = U_1(M, C)$
+      \item Against R: $U_1(\sigma_1, R) = \frac{1}{2}(4) + \frac{1}{2}(2) = 3 > 2 = U_1(M, R)$
+  \end{itemize}
+  Since $U_1(\sigma_1, s_2) > U_1(M, s_2)$ for all $s_2 \in S_2$, we have:
+  \[
+    U_1(\sigma_1, \sigma_2) > U_1(M, \sigma_2) \quad \forall \sigma_2 \in \Sigma_2
+  \]
+  Thus, $M$ is strictly dominated by the mixed strategy $\sigma_1$.
+\end{exbox}
+
+\begin{defbox}{Strict Domination (General Definition)}
+  A strategy $\sigma_i$ of player $i$ \textbf{strictly dominates} a pure strategy $s_i$ of player $i$ if:
+  \[
+    U_i(\sigma_i, \sigma_{-i}) > U_i(s_i, \sigma_{-i}) \quad \forall \sigma_{-i} \in \Sigma_{-i}
+  \]
+  Equivalently, it suffices to check against all pure strategies of the opponent:
+  \[
+    U_i(\sigma_i, s_{-i}) > U_i(s_i, s_{-i}) \quad \forall s_{-i} \in S_{-i}
+  \]
+\end{defbox}
+
+\begin{thmbox}{Strictly Dominated Strategies in Nash Equilibrium}
+  Suppose for player $i$, a strategy $\sigma_i$ strictly dominates a pure strategy $s_i$ of player $i$. Then $s_i$ \textbf{does not get a positive probability} in any Nash Equilibrium of the game.
+\end{thmbox}
+
+\begin{proof}
+  Suppose $\overline{\sigma}$ is a mixed strategy profile and $\overline{\sigma}_i(s_i) > 0$. We will show that there exists a mixed strategy $\overline{\overline{\sigma}}_i$ such that $\overline{\overline{\sigma}}_i$ strictly dominates $\overline{\sigma}_i$ against any opponent strategy profile, meaning $\overline{\sigma}$ cannot be a best response and thus cannot be part of an NE.
+  
+  Construct the new strategy $\overline{\overline{\sigma}}_i$ by taking the probability mass assigned to the dominated strategy $s_i$ and reassigning it proportionally to the components of the dominating strategy $\sigma_i$. Specifically, for any pure strategy $t_i \in S_i$:
+  \[
+    \overline{\overline{\sigma}}_i(t_i) = \begin{cases}
+      \overline{\sigma}_i(s_i) \cdot \sigma_i(s_i) & \text{if } t_i = s_i \\
+      \overline{\sigma}_i(t_i) + \overline{\sigma}_i(s_i) \sigma_i(t_i) & \text{if } t_i \neq s_i
+    \end{cases}
+  \]
+  By calculating the expected utility, we can sum the terms:
+  \begin{align*}
+    U_i(\overline{\overline{\sigma}}_i, \sigma_{-i}) &= \sum_{t_i \in S_i} \overline{\overline{\sigma}}_i(t_i) U_i(t_i, \sigma_{-i}) \\
+    &= \sum_{t_i \neq s_i} \left[ \overline{\sigma}_i(t_i) + \overline{\sigma}_i(s_i)\sigma_i(t_i) \right] U_i(t_i, \sigma_{-i}) + \overline{\sigma}_i(s_i)\sigma_i(s_i)U_i(s_i, \sigma_{-i}) \\
+    &= \sum_{t_i \neq s_i} \overline{\sigma}_i(t_i) U_i(t_i, \sigma_{-i}) + \overline{\sigma}_i(s_i) \left( \sum_{t_i \neq s_i} \sigma_i(t_i) U_i(t_i, \sigma_{-i}) + \sigma_i(s_i)U_i(s_i, \sigma_{-i}) \right) \\
+    &= \sum_{t_i \neq s_i} \overline{\sigma}_i(t_i) U_i(t_i, \sigma_{-i}) + \overline{\sigma}_i(s_i) U_i(\sigma_i, \sigma_{-i})
+  \end{align*}
+  Since $\sigma_i$ strictly dominates $s_i$, we have $U_i(\sigma_i, \sigma_{-i}) > U_i(s_i, \sigma_{-i})$. Substituting this inequality gives:
+  \begin{align*}
+    U_i(\overline{\overline{\sigma}}_i, \sigma_{-i}) &> \sum_{t_i \neq s_i} \overline{\sigma}_i(t_i) U_i(t_i, \sigma_{-i}) + \overline{\sigma}_i(s_i) U_i(s_i, \sigma_{-i}) \\
+    &= U_i(\overline{\sigma}_i, \sigma_{-i})
+  \end{align*}
+  Thus, $\overline{\overline{\sigma}}_i$ yields a strictly higher payoff than $\overline{\sigma}_i$, meaning $\overline{\sigma}_i$ cannot be a best response, and thus cannot be part of an NE.
+\end{proof}
+
+% ============================================================
+\section{Proof of Nash's Theorem}
+
+\begin{thmbox}{Nash's Existence Theorem}
+  Suppose $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$ is a strategic form game where all the players have finitely many pure strategies. Then $G$ has at least one \textbf{mixed strategy Nash Equilibrium}.
+\end{thmbox}
+
+To prove this, we rely on Brouwer's Fixed Point Theorem.
+
+\begin{thmbox}{Brouwer's Fixed Point Theorem}
+  Let $X$ be a convex and compact subset of $\mathbb{R}^d$ for some $d \in \mathbb{N}$, and let $f: X \to X$ be a continuous function. Then $f$ has a fixed point, i.e., $\exists x \in X$ such that $f(x) = x$.
+\end{thmbox}
+
+\textbf{Proof of Nash's Theorem:} \\
+Let $m_i = |S_i|$. The space of mixed strategies for player $i$ is the simplex:
+\[
+  \Sigma_i = \left\{ (x_1, \dots, x_{m_i}) \mid x_j \geq 0 \ \forall j, \ \sum_{j=1}^{m_i} x_j = 1 \right\}
+\]
+\textbf{Claim 1:} $\Sigma_i$ is a convex and compact subset of $\mathbb{R}^{m_i}$. \\
+\textbf{Claim 2:} Suppose $A$ and $B$ are convex and compact subsets of $\mathbb{R}^{d_1}$ and $\mathbb{R}^{d_2}$ respectively. Then $A \times B$ is a convex and compact subset of $\mathbb{R}^{d_1 + d_2}$. \\
+From Claims 1 and 2, the set of all mixed strategy profiles $\Sigma = \Sigma_1 \times \Sigma_2 \times \dots \times \Sigma_n$ is a convex and compact subset of $\mathbb{R}^{\sum m_i}$.
+
+We will construct a function $f: \Sigma \to \Sigma$ such that:
+\begin{enumerate}
+    \item[(i)] $f$ is continuous.
+    \item[(ii)] Every fixed point of $f$ is a Nash Equilibrium of $G$.
+\end{enumerate}
+By Brouwer's Fixed Point Theorem, such a function must have a fixed point, which will imply the existence of a Nash Equilibrium.
+
+For a strategy profile $\sigma \in \Sigma$, let $\delta_i^j(\sigma)$ measure the ``gain'' a player gets by deviating to their $j$-th pure strategy $s_i^j$:
+\[
+  \delta_i^j(\sigma) = \max \left\{ 0, \ U_i(s_i^j, \sigma_{-i}) - U_i(\sigma) \right\}
+\]
+\textbf{Claim 3:} $\delta_i^j$ is a continuous function of $\sigma$. \\
+\textit{Proof of Claim 3:} The expected utility $U_i(\sigma)$ is a multilinear function of the probabilities in $\sigma$, hence it is continuous. $U_i(s_i^j, \sigma_{-i})$ is similarly multilinear in $\sigma_{-i}$ and thus continuous in $\sigma$. Since the difference of continuous functions is continuous, and the $\max(0, \cdot)$ function is continuous, $\delta_i^j(\sigma)$ is continuous.
+
+(The full construction of $f$ continues by using these $\delta_i^j$ values to strictly increase the probabilities of pure strategies that yield better-than-average payoffs, normalized so they sum to 1).
+
+\end{document}

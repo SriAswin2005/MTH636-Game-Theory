@@ -1,0 +1,102 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 17
+%  Subgames, Zermelo's Theorem & Chomp
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 17: Subgames \& Zermelo's Theorem}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Strategy Profiles and Paths}
+
+In an extensive form game $\Gamma = \langle N, V, E, n_0, (V_i)_{i \in N}, (u_i)_{i \in N} \rangle$, a strategy for player $i$ is a map $s_i: V_i \to \cup A(n)$.
+
+A \textbf{strategy profile} $s = (s_1, \dots, s_n)$ is a tuple containing a strategy for each player. 
+Every strategy profile uniquely determines a specific path in the game tree, starting from the root $n_0$ and ending at a leaf node $n_k$:
+\[ (n_0, n_1, \dots, n_k) \]
+The utility of the strategy profile is simply defined as the utility at the leaf node reached:
+\[ u(s) := u(n_k) \]
+
+% ============================================================
+\section{Subgames}
+
+\begin{defbox}{Subgame}
+  Let $\Gamma$ be an extensive form game. Consider a node $n \in V$. The \textbf{subgame starting at $n$}, denoted by $\Gamma(n)$, is an extensive form game itself:
+  \[ \Gamma(n) = \langle N, V(n), E(n), n, (V_i(n))_{i \in N}, (u_i)_{i \in N} \rangle \]
+  where:
+  \begin{itemize}
+      \item $N$: The set of players remains the same.
+      \item $V(n)$: The set of all nodes that can be reached from $n$ (descendants of $n$, including $n$).
+      \item $E(n)$: All the edges that connect nodes within $V(n)$.
+      \item $n$: The new root of the subgame.
+      \item $V_i(n) = V_i \cap V(n)$: The nodes controlled by player $i$ within the subgame.
+      \item $u_i$: The restriction of the utility function $u_i$ to the leaves in the new game tree $(V(n), E(n), n)$.
+  \end{itemize}
+\end{defbox}
+
+\textbf{Remarks:}
+\begin{itemize}
+    \item The original game is a subgame of itself: $\Gamma = \Gamma(n_0)$.
+    \item Every leaf node trivially defines a subgame where no player makes a move, and payoffs are immediately realized.
+\end{itemize}
+
+% ============================================================
+\section{Win/Loss/Draw Games \& Zermelo's Theorem}
+
+Consider a particular type of game:
+\begin{itemize}
+    \item Two players.
+    \item Perfect information.
+    \item Finite duration.
+    \item Only three possible outcomes:
+    \begin{enumerate}
+        \item Player 1 wins (payoffs $1, -1$)
+        \item Player 2 wins (payoffs $-1, 1$)
+        \item The game ends in a draw (payoffs $0, 0$)
+    \end{enumerate}
+\end{itemize}
+Examples include Tic-Tac-Toe, Checkers, and Chess (ignoring infinite loops).
+
+\begin{defbox}{Winning and Drawing Strategies}
+  \begin{itemize}
+      \item A \textbf{winning strategy} for Player 1 is a strategy $s_1$ such that $u(s_1, s_2) = (1, -1)$ for \textit{all} possible opponent strategies $s_2 \in S_2$.
+      \item A \textbf{strategy guaranteeing at least a draw} for Player 1 is a strategy $s_1$ such that $u(s_1, s_2) \in \{(1,-1), (0,0)\}$ for all $s_2 \in S_2$.
+  \end{itemize}
+  (Analogous definitions apply for Player 2).
+\end{defbox}
+
+\begin{thmbox}{Zermelo's Theorem (1913) / von Neumann (1928)}
+  In every two-player, finite game of perfect information in which the set of utilities is $\{(1,-1), (-1,1), (0,0)\}$, \textbf{one and only one} of the following holds:
+  \begin{enumerate}
+      \item Player 1 has a winning strategy.
+      \item Player 2 has a winning strategy.
+      \item Both players have strategies guaranteeing at least a draw.
+  \end{enumerate}
+\end{thmbox}
+
+% ============================================================
+\section{Introduction to Chomp (David Gale, 1974)}
+
+To illustrate these concepts, we introduce the game \textbf{Chomp}.
+\begin{itemize}
+    \item Played on an $m \times n$ grid of squares (like a chocolate bar).
+    \item The bottom-left square is "poisoned."
+    \item Players take turns choosing a valid square $(i,j)$. 
+    \item When a square is chosen, that square and all squares above and to the right of it are "eaten" and removed from the board.
+    \item The player forced to eat the poisoned bottom-left square loses.
+\end{itemize}
+Because Chomp is finite, has perfect information, and has no draws, Zermelo's theorem guarantees that either Player 1 or Player 2 must have a winning strategy. We will prove who wins in the next lecture.
+
+\end{document}

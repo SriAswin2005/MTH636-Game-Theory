@@ -1,0 +1,122 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 7
+%  Nash Equilibrium & Best Reply Correspondence
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 7: Nash Equilibrium}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Formal Definition of Nash Equilibrium}
+
+\begin{defbox}{Nash Equilibrium}
+  For a game $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$, a strategy profile $s^*$ is a \textbf{Nash Equilibrium (NE)} if for all $i \in N$ and for all $s_i \in S_i$:
+  \[
+    u_i(s^*) \geq u_i(s_i, s^*_{-i})
+  \]
+  In words: No player $i$ can strictly increase their payoff by unilaterally changing their strategy from $s_i^*$ to some other $s_i$, given that all other players play their part of $s^*_{-i}$.
+\end{defbox}
+
+\begin{exbox}{Example: Battle of the Sexes (Variants)}
+  Consider the following game matrix:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & F & D \\
+    \hline
+    F & \payoff{2}{1} & \payoff{0}{0} \\
+    D & \payoff{0}{0} & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+  Here, both $(F, F)$ and $(D, D)$ are Nash Equilibria. If they are at $(F, F)$, neither wants to deviate to $D$ (yielding 0).
+\end{exbox}
+
+% ============================================================
+\section{Best Reply Correspondence}
+
+To find Nash Equilibria, it is often useful to look at players' best responses.
+
+\begin{defbox}{Best Reply Correspondence}
+  The best reply correspondence for player $i$ is a function $b_i: S_{-i} \to 2^{S_i}$ (mapping to the power set of $S_i$), defined as:
+  \[
+    b_i(s_{-i}) = \arg\max_{t_i \in S_i} u_i(t_i, s_{-i})
+  \]
+  This gives the set of all strategies $t_i$ that maximize player $i$'s payoff given the opponents' profile $s_{-i}$.
+\end{defbox}
+
+\begin{thmbox}{Nash Equilibrium in terms of Best Replies}
+  A strategy profile $s^*$ is a Nash Equilibrium if and only if:
+  \[
+    s_i^* \in b_i(s^*_{-i}) \quad \forall i \in N
+  \]
+\end{thmbox}
+
+% ============================================================
+\section{Finding Nash Equilibria in Specific Games}
+
+\subsection{Beauty Contest Game}
+Recall the Beauty Contest Game: $N = \{1, 2, 3\}$, $S_i = [0, 100]$.
+Target $T(x_1, x_2, x_3) = \frac{2}{3} \left( \frac{x_1 + x_2 + x_3}{3} \right)$.
+Players who are closest to $T$ win. 
+
+Is the profile $(0, 0, 0)$ a Nash Equilibrium? Yes, because if everyone plays 0, the target is 0, and deviating yields a strictly positive number which is further from 0.
+
+What about profiles of the form $(a, a, a)$ where $a \in (0, 100]$? These are \textbf{not} Nash Equilibria, because any player could deviate to a slightly lower number to get closer to $\frac{2}{3}$ of the average and win outright.
+
+\subsection{Second-Price Auction}
+Recall that bidding true valuation weakly dominates all other strategies. Therefore:
+\begin{itemize}
+    \item The profile $(v_1, v_2, \dots, v_n)$ is a Nash Equilibrium.
+    \item What about $(v_1, 0, 0, \dots, 0)$? If $v_1$ is the highest valuation, Player 1 wins and pays 0. No other player can profitably deviate (bidding higher than $v_1$ means they win but pay more than their valuation, giving a negative payoff). So this can also be an NE under certain conditions.
+\end{itemize}
+\textbf{Exercise:} Find all Nash Equilibria of the Second-Price Auction game where $v_1 = 10, v_2 = 11$.
+
+% ============================================================
+\section{Continuous Action Spaces (Cournot-like Game)}
+
+Consider a 2-player game where $N = \{F_1, F_2\}$ and $S_i = [0, 1]$.
+Payoffs are given by:
+\[
+  u_i(a_1, a_2) = (2 - a_1 - a_2)a_i - c_i a_i
+\]
+where $c_1, c_2$ are cost parameters.
+
+To find the Nash Equilibrium $(a_1^*, a_2^*)$, we use the Best Reply functions.
+Player 1 maximizes $u_1(a_1, \bar{a}_2)$ with respect to $a_1$:
+\[
+  \frac{\partial u_1}{\partial a_1} = 2 - 2a_1 - \bar{a}_2 - c_1 = 0 \implies a_1 = \frac{2 - c_1 - \bar{a}_2}{2}
+\]
+Thus, the best reply function is $b_1(\bar{a}_2) = \frac{2 - c_1 - \bar{a}_2}{2}$.
+Similarly, for Player 2: $b_2(\bar{a}_1) = \frac{2 - c_2 - \bar{a}_1}{2}$.
+
+At the Nash Equilibrium, both must be playing best responses to each other:
+\[
+  a_1^* = \frac{2 - c_1 - a_2^*}{2} \quad \text{and} \quad a_2^* = \frac{2 - c_2 - a_1^*}{2}
+\]
+Substitute $a_2^*$ into the equation for $a_1^*$:
+\begin{align*}
+  a_1^* &= \frac{2 - c_1 - \left( \frac{2 - c_2 - a_1^*}{2} \right)}{2} \\
+  2a_1^* &= 2 - c_1 - 1 + \frac{c_2}{2} + \frac{a_1^*}{2} \\
+  4a_1^* &= 2 - 2c_1 + c_2 + a_1^* \\
+  3a_1^* &= 2 - 2c_1 + c_2 \implies a_1^* = \frac{2 - 2c_1 + c_2}{3}
+\end{align*}
+By symmetry, $a_2^* = \frac{2 - 2c_2 + c_1}{3}$.
+
+The equilibrium payoffs are:
+\[
+  u_1(a_1^*, a_2^*) = (a_1^*)^2 \quad \text{and} \quad u_2(a_1^*, a_2^*) = (a_2^*)^2
+\]
+
+\end{document}

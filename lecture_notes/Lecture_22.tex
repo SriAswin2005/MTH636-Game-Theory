@@ -1,0 +1,134 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 22
+%  Extensive Form Games with Imperfect Information
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 22: Extensive Form Games with Imperfect Information}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Motivation: Imperfect Information in Extensive Form}
+
+So far we have studied extensive form games with \emph{perfect information}, where each player observes the full history of play before making a decision. In many real-world situations, however, a player may not know which node in the game tree they currently occupy. We now introduce the framework of \textbf{extensive form games with imperfect information} (and possible chance moves).
+
+\subsection{Illustrative Examples}
+
+\paragraph{Battle of the Sexes -- two versions.}
+Consider the standard Battle of the Sexes scenario with payoffs $(2,1)$ for $(F,F)$, $(0,0)$ for $(F,D)$, $(0,0)$ for $(D,F)$, and $(1,2)$ for $(D,D)$.
+
+\begin{itemize}
+  \item \textbf{Left game (Man moves first):} The root is labelled $M$ (Man). Man chooses $F$ or $D$. Woman (W) observes Man's choice and responds. Since Woman can see Man's move, the two Woman nodes are in \emph{separate} information sets -- this is a game of \textbf{perfect information}.
+  \item \textbf{Right game (Woman moves first):} The root is labelled $W$ (Woman). Woman chooses $F$ or $D$. Man (M) does \emph{not} observe Woman's choice, so his two decision nodes are connected by a dashed oval, indicating a single information set -- this is a game of \textbf{imperfect information}.
+\end{itemize}
+
+In both cases the terminal payoffs are $(2,1)$, $(0,0)$, $(0,0)$, $(1,2)$ at the four leaves.
+
+\paragraph{A richer example with Nature.}
+Consider a game tree rooted at $n_0$ (Player I). Player I chooses $A$, $B$, or $C$.
+\begin{itemize}
+  \item After $A$: reach $n_1$. After $B$: reach $n_2$. Player II has information set $\{n_1, n_2\}$ (dashed oval -- she cannot distinguish $n_1$ from $n_2$). From this information set she plays $\ell$ or $g$. Outcomes: $(4,1)$, $(7,2)$ from $n_1$, and $(6,3)$, $(4,0)$ from $n_2$.
+  \item After $C$: reach $n_3$. Nature (O) moves, playing $\tfrac{1}{4}$ toward $n_4$ and $\tfrac{3}{4}$ toward $n_5$. At $n_4$, Player II chooses $L$ or $R$. At $n_5$, Player I chooses $a$ or $b$.
+  \item There is also an information set $\{n_1, n_2, n_5\}$ visible in the diagram.
+\end{itemize}
+
+% ============================================================
+\section{Formal Definition}
+
+\begin{defbox}{Extensive Form Game with Imperfect Information}
+A game in extensive form (with imperfect information and chance moves) is a tuple
+\[
+  \Gamma = \bigl\langle N,\, V,\, E,\, n_0,\;
+           (V_i)_{i \in N \cup \{0\}},\;
+           \mathcal{H} = (H_i)_{i \in N},\;
+           \mathcal{A} = (A(h))_{h \in \bigcup_i H_i},\;
+           (p_n)_{n \in V_0},\;
+           (u_i)_{i \in N}
+           \bigr\rangle
+\]
+where the components are defined as follows.
+\end{defbox}
+
+\subsection{Components of the Tuple}
+
+\begin{itemize}
+  \item $N$: the set of \textbf{players}.
+
+  \item $(V, E, n_0)$: a \textbf{directed rooted tree}.
+
+  \item $(V_i)_{i \in N \cup \{0\}}$: a \textbf{partition} of the set of non-leaf nodes among the agents and nature. $V_0$ is the set of \emph{nature's nodes} (chance nodes); $V_i$ is the set of nodes at which player $i$ moves.
+
+  \item $\mathcal{H} = (H_i)_{i \in N}$: $H_i$ is a \textbf{partition} of $V_i$. Each set in the partition is called an \textbf{information set}. Each $h \in H_i$ must satisfy:
+    \begin{enumerate}
+      \item[(i)] Each node in $h$ has the \textbf{same number of outgoing edges}.
+      \item[(ii)] Every path in $(V, E, n_0)$ intersects $h$ \textbf{at most once}.
+    \end{enumerate}
+
+  \item $\mathcal{A} = (A(h))_{h \in \bigcup_{i=1}^{n} H_i}$: for each information set $h \in \bigcup_{i} H_i$, $A(h)$ is a \textbf{partition of the edges} coming out from the nodes in $h$, such that for all $a \in A(h)$, $a$ contains exactly one edge outgoing from $n$ for all $n \in h$.
+
+    A set $a \in A(h)$ is called an \textbf{action at} $h$.
+
+  \item $(p_n)_{n \in V_0}$: $p_n$ denotes a \textbf{probability distribution} over the edges outgoing from $n$ (for each chance node $n$).
+
+  \item $(u_i)_{i \in N}$: the \textbf{utility functions} defined at the leaf nodes.
+\end{itemize}
+
+% ============================================================
+\section{Information Sets: Validity Conditions}
+
+\subsection{Invalid vs.\ Valid Game Trees}
+
+The two conditions on information sets -- (i) equal number of outgoing edges at every node in $h$, and (ii) every root-to-leaf path crosses $h$ at most once -- are essential for the game to be well-defined.
+
+\paragraph{Example of an invalid game.}
+Consider a two-player tree: Player I at $n_0$ chooses $L$ or $R$, leading to $n_1$ or $n_2$. From $n_1$, Player II moves and then the game continues to a subtree containing $n_3$ and $n_4$. From $n_2$, the game continues to $n_4$. If $n_3$ and $n_4$ are in the same information set of Player II, then there exists a path from the root that passes through this information set \emph{more than once}, violating condition (ii). This is \textbf{not a valid extensive form game}.
+
+\begin{notebox}
+The annotated note in the lecture reads: ``Not a valid extensive form game.''
+\end{notebox}
+
+\paragraph{Example of a valid game (not satisfying perfect recall).}
+Consider Player I at $n_0$ choosing $L$ or $R$ to reach $n_1$ or $n_2$. Player II has information set $\{n_1, n_2\}$ (she cannot distinguish them). From each she plays $a$, $b$, $d$ (or similar). A second Player II information set groups some descendants together. Every path from the root crosses each information set at most once, so this is a \textbf{valid} extensive form game -- however it \textbf{does not satisfy perfect recall} (noted in red in the lecture).
+
+% ============================================================
+\section{Perfect Recall}
+
+\begin{defbox}{Perfect Recall}
+An extensive form game satisfies \textbf{perfect recall} for player $i$ if for all information sets $h \in H_i$ and for all $u, y \in h$, an action of player $i$ is on the path from the root to $u$ if and only if it is on the path from the root to $y$.
+\end{defbox}
+
+In other words, perfect recall requires that whenever two nodes belong to the same information set of player $i$, the player must have taken exactly the same sequence of actions to reach either node -- she has not ``forgotten'' any earlier choices she made.
+
+\subsection{Example of a Violation of Perfect Recall}
+
+Consider the following game tree:
+\begin{itemize}
+  \item Player I ($n_0$) chooses $L$ or $R$.
+  \item After $L$: Player II ($n_1$) chooses $\ell$ or $r$, reaching $n_3$ or $n_4$.
+  \item After $R$: reach $n_2$, then Player II ($n_2$) chooses $\ell$ or $r$, reaching $n_4$ or $n_5$.
+  \item Nodes $n_3$, $n_4$, $n_5$ are grouped into a single Player II information set.
+  \item Player II chooses $\alpha$ or $\beta$ from this information set.
+\end{itemize}
+
+In this game, the path to $n_4$ can arise via two different routes: $n_0 \xrightarrow{L} n_1 \xrightarrow{r} n_4$ (Player II moved at $n_1$) or $n_0 \xrightarrow{R} n_2 \xrightarrow{\ell} n_4$ (Player II moved at $n_2$). In both cases Player II ends up in the information set $\{n_3, n_4, n_5\}$, but whether she earlier chose $r$ (at $n_1$) or $\ell$ (at $n_2$) differs between the two paths. Thus Player II has ``forgotten'' her own earlier move.
+
+\begin{warnbox}{Violation of Perfect Recall}
+This game \textbf{violates perfect recall} for Player II (noted in red in the lecture). Perfect recall is violated whenever a player cannot remember their own past actions when entering an information set.
+\end{warnbox}
+
+\begin{notebox}
+Perfect recall is a standard assumption in most game-theoretic models. When it holds for all players, Kuhn's theorem guarantees that mixed strategies and behaviour strategies are \emph{outcome-equivalent}.
+\end{notebox}
+
+\end{document}

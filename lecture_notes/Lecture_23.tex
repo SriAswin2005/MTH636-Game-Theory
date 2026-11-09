@@ -1,0 +1,173 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 23
+%  Strategies and Equivalence in Imperfect Information Games
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 23: Strategies in Imperfect Information Games}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Recap: The Formal Game}
+
+We continue with the extensive form game from Lecture 22. Consider the game tree rooted at $n_0$ (Player I), where Player I chooses $A$, $B$, or $C$:
+\begin{itemize}
+  \item After $A$: reach $n_1$; after $B$: reach $n_2$. Player II has information set $h = \{n_1, n_2\}$, playing $\ell$ or $g$ from each. Outcomes: $n_4$ with $(4,1)$, $n_5$ with $(7,2)$ from $n_1$; $n_6$ with $(6,3)$, $n_7$ with $(4,0)$ from $n_2$.
+  \item After $C$: reach $n_3$. Nature (O) moves, $\tfrac{1}{4}$ to $n_7$ (Player II moves $L$/$R$) and $\tfrac{3}{4}$ to $n_8$ (Player I moves $a$/$b$). After Player II's move at $n_7$: $n_{10}$ with $(0,0)$ and $n_{11}$ with $(8,4)$. After Player I's move at $n_8$: $n_{12}$ with $(8,8)$ and $n_{13}$ with $(0,8)$.
+\end{itemize}
+
+The information sets are:
+\[
+  V_1 = \{n_0, n_8\}, \quad V_2 = \{n_1, n_2, n_8\}
+\]
+\[
+  H_1 = \bigl\{\{n_0\},\, \{n_8\}\bigr\}, \quad
+  H_2 = \bigl\{\{n_1, n_2\},\, n_8\bigr\}
+\]
+
+\subsection{Actions at an Information Set}
+
+For the information set $h = \{n_1, n_2\}$:
+\[
+  A(h) = \bigl\{\{\{n_1, n_4\},\, \{n_2, n_6\}\},\quad \{\{n_1, n_5\},\, \{n_2, n_7\}\}\bigr\}
+\]
+That is, the two actions at $h$ are $\ell$ (= choosing the left branch from whichever node in $h$ the player is at) and $g$ (= choosing the right branch), where each action bundles together one edge from each node in $h$.
+
+% ============================================================
+\section{Pure Strategies}
+
+\begin{defbox}{Pure Strategy}
+A \textbf{pure strategy} for player $i$, denoted $s_i$, is a mapping
+\[
+  s_i : H_i \;\longrightarrow\; \bigcup_{h \in H_i} A(h)
+  \quad \text{such that} \quad
+  s_i(h) \in A(h) \quad \forall\, h \in H_i.
+\]
+\end{defbox}
+
+That is, a pure strategy assigns an action to every information set of player $i$, even those that may not be reached under the play induced by $s_i$.
+
+The \textbf{pure strategy set} $S_i$ for player $i$ is the set of all such mappings.
+
+The \textbf{pure strategy profile space} is:
+\[
+  S = S_1 \times S_2 \times \cdots \times S_n.
+\]
+
+The \textbf{utilities at strategy profiles} are defined as the \textbf{expected utilities} (since there may be chance nodes).
+
+% ============================================================
+\section{Mixed Strategies}
+
+\begin{defbox}{Mixed Strategy}
+\textbf{Mixed strategies} are probability distributions over pure strategies. For player $i$, the set of all mixed strategies is denoted $\Sigma_i$.
+\end{defbox}
+
+The \textbf{strategy profile} for mixed strategies is $\sigma = (\sigma_1, \ldots, \sigma_n)$.
+
+\begin{notebox}
+Utilities are defined as convex combinations of utilities at pure strategy profiles.
+\end{notebox}
+
+\subsection{Example}
+
+Consider a two-player game tree: Player I ($n_0$) chooses $T_1$ or $B_1$ (reaching $n_1$ or $n_2$). Player II ($n_2$) has actions $L$ or $R$ (reaching $n_2$'s subtree). Player I also has a second information set containing $\{n_3, n_4\}$ where she plays $T_2$ or $B_2$. Player II has another information set $\{n_3, n_4, n_7\}$ where she plays $\beta_2$.
+
+The pure strategy set of Player I is:
+\[
+  S_1 = \{T_1 T_2,\; T_1 B_2,\; B_1 T_2,\; B_1 B_2\}
+\]
+
+The mixed strategy set of Player I is:
+\[
+  \Sigma_1 = \Delta_4 = \left\{ (n_1, \ldots, n_4) \;\middle|\; n_i \geq 0,\; \sum_{i=1}^{4} n_i = 1 \right\}
+\]
+
+The set of \textbf{behaviour strategies} $B_1$ for Player I (explained below) is:
+\[
+  B_1 = \left\{ (n, 1-n),\, (y, 1-y) \;\middle|\; 0 \leq n \leq 1,\; 0 \leq y \leq 1 \right\}
+\]
+This is the set of behaviour strategies -- one independent randomisation per information set.
+
+% ============================================================
+\section{Behaviour Strategies}
+
+\begin{defbox}{Behaviour Strategy}
+A \textbf{behaviour strategy} for player $i$ is a mapping
+\[
+  b_i : H_i \;\longrightarrow\; \bigcup_{h \in H_i} \Delta\bigl(A(h)\bigr)
+  \quad \text{such that} \quad
+  b_i(h) \in \Delta\bigl(A(h)\bigr) \quad \forall\, h \in H_i.
+\]
+Here $\Delta(S)$ denotes a probability distribution over a set $S$.
+\end{defbox}
+
+Thus a behaviour strategy assigns to each information set an \emph{independent} probability distribution over the available actions at that information set.
+
+\begin{itemize}
+  \item For a behaviour strategy $b_i$, the probability that $b_i$ selects action $a$ at information set $h$ is denoted $b_i(a, h)$.
+  \item A \textbf{behaviour strategy profile} is $b = (b_1, \ldots, b_n)$.
+  \item With a slight abuse of notation, we write $\sigma = (\sigma_i)_{i \in N}$ for a strategy profile where $\sigma_i$ can be either a mixed or behaviour strategy for player $i$.
+\end{itemize}
+
+% ============================================================
+\section{Reaching Probabilities}
+
+\begin{defbox}{Reaching Probability}
+For a mixed/behaviour strategy profile $\sigma = (\sigma_i)_{i \in N}$, and a node $n \in V$, we denote by $\rho(n; \sigma)$ the \textbf{probability that node $n$ will be reached} when the underlying strategy profile is $\sigma$.
+\end{defbox}
+
+\subsection{Example Computation}
+
+Consider the following game tree: Player I ($n_0$) chooses $A$ or $B$ (reaching $n_1$ or $n_2$). Player II has information set $\{n_1\}$ (singleton), and plays $L$ or $R$ (reaching $n_3$ or $n_4$). Player I has a second information set $\{n_3, n_4\}$ where she plays $\ell$ or $r$ (reaching $n_5, n_6, n_7, n_8$).
+
+Suppose:
+\[
+  \sigma_1 = \left[\tfrac{2}{10}(A\ell),\; \tfrac{1}{10}(Ar),\; \tfrac{4}{10}(B\ell),\; \tfrac{2}{10}(Br)\right]
+  \quad \text{(mixed strategy for Player 1)}
+\]
+\[
+  \sigma_2 = \left[\tfrac{1}{2}(L),\; \tfrac{1}{2}(R)\right]
+  \quad \text{(mixed strategy for Player 2)}
+\]
+
+\paragraph{Computing $\rho(n_5; \sigma)$:}
+$n_5$ will be reached when Player 1 plays $b$:
+\[
+  \rho(n_5; \sigma) = \tfrac{2}{10} \times \tfrac{1}{2} = \tfrac{2}{20} = \tfrac{1}{10}
+\]
+
+\paragraph{Computing $\rho(n_2; \sigma)$:}
+$n_2$ will be reached if Player 1 plays either $A\ell$ or $Ar$, \emph{and} Player 2 plays $L$. Also the prob is:
+\[
+  \left[\tfrac{2}{10} + \tfrac{1}{10}\right] \times \tfrac{1}{2} = \tfrac{4}{20}
+\]
+
+% ============================================================
+\section{Equivalence of Mixed and Behaviour Strategies}
+
+\begin{defbox}{Equivalence of Mixed and Behaviour Strategies}
+A \textbf{mixed strategy} $\sigma_i$ and a \textbf{behaviour strategy} $b_i$ of player $i$ are \textbf{equivalent} if for every mixed/behaviour strategy vector $\sigma_{-i}$ of the other players and every vertex $n \in V$,
+\[
+  \rho\bigl(n;\, (\sigma_i, \sigma_{-i})\bigr) \;=\; \rho\bigl(n;\, (b_i, \sigma_{-i})\bigr).
+\]
+\end{defbox}
+
+That is, two strategies (one mixed, one behaviour) are equivalent if they induce identical probability distributions over the nodes of the game tree, regardless of what the other players do.
+
+\begin{takebox}
+\textbf{Key Insight.} This equivalence definition says that $\sigma_i$ and $b_i$ produce the same reaching probabilities for \emph{every} node in the game tree, for \emph{every} possible strategy profile of the opponents. Kuhn's theorem then states that under \textbf{perfect recall}, every mixed strategy has an equivalent behaviour strategy and vice versa.
+\end{takebox}
+
+\end{document}

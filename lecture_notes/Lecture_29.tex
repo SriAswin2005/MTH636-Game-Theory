@@ -1,0 +1,167 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 29
+%  Strategic Form to Extensive Form & Incomplete Information Games
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 29: Strategic Form $\leftrightarrow$ Extensive Form \& Incomplete Information Games}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{From Strategic Form to Extensive Form}
+
+\subsection{Motivation}
+
+Suppose you have a strategic form game $G$.
+
+\begin{itemize}
+  \item \textbf{Question 1:} Can you get an equivalent extensive form game?
+  \[
+    G \;\longrightarrow\; \Gamma \;\longrightarrow\; G \quad (\text{equivalence})
+  \]
+  \item \textbf{Question 2:} If it exists, whether such an extensive form is unique or not?
+\end{itemize}
+
+\subsection{Answer to Question 1}
+
+\noindent\textbf{Answer to Question 1:} Yes. Given
+\[
+  G = \bigl\langle N,\, (S_i)_{i \in N},\, (u_i)_{i \in N} \bigr\rangle,
+\]
+assume that $S_i = \{s_i^1, \ldots, s_i^{m_i}\}$ for each $i$.
+
+\medskip
+We construct an extensive form game $\Gamma$ as follows. The tree has the structure:
+\begin{itemize}
+  \item The root belongs to Player I. She has $m_1$ actions: $s_1^1, s_1^2, \ldots, s_1^{m_1}$.
+  \item Each of Player I's $m_1$ children belongs to Player II (all in a single information set -- Player II cannot observe Player I's move). Player II has $m_2$ actions: $s_2^1, s_2^2, \ldots, s_2^{m_2}$.
+  \item And so on for Player III, $\ldots$, Player $n$, each player having a single information set (so they cannot observe any previous moves).
+  \item Every leaf node corresponds to a unique strategy profile in the strategic form game. The payoffs at that leaf are the utilities would $u_i$ of the corresponding profile.
+\end{itemize}
+
+\begin{notebox}
+Every leaf node corresponds to a unique strategy profile in the strategic form game.
+\end{notebox}
+
+\medskip
+It is easy to see that the corresponding strategic form game of the above extensive form game is $G$ only.
+
+\subsection{Answer to Question 2 (Uniqueness)}
+
+If you change the ordering of the players in the extensive form game, you will get another equivalent form.
+
+\subsubsection*{Example}
+
+Consider the following $2 \times 4$ strategic form game between Player 1 (rows $L$, $R$) and Player 2 (columns $rt$, $rb$, $\ell t$, $\ell b$):
+
+\begin{center}
+\begin{tabular}{c|cccc}
+  1 $\backslash$ 2 & $rt$ & $rb$ & $\ell t$ & $\ell b$ \\\hline
+  $L$ & $(2,-1)$ & $(2,-1)$ & $(2,0)$ & $(2,0)$ \\
+  $R$ & $(2,1)$  & $(1,0)$  & $(2,1)$ & $(1,0)$ \\
+\end{tabular}
+\end{center}
+
+This strategic form game can be represented as an extensive form game in (at least) two ways:
+
+\paragraph{Extensive form with Player 1 moving first:}
+\begin{itemize}
+  \item Player I moves first: $L$ or $R$.
+  \item After $L$: Player II is in an information set and chooses $r$ or $\ell$ (each leading to further choices).
+  \item After $R$: Player II is in an information set and chooses $r$ or $\ell$, etc.
+  \item Player II's strategy space consists of combinations $\{rt, rb, \ell t, \ell b\}$.
+\end{itemize}
+
+The resulting extensive form tree (Player I at root, Player II at second level in a single information set):
+\begin{itemize}
+  \item Root: Player I chooses $L$ or $R$.
+  \item Left branch ($L$): Player II (single info set) chooses $r$ or $\ell$.
+    \begin{itemize}
+      \item[$r$:] leads to leaf with payoffs $(2,-1)$.
+      \item[$\ell$:] leads to leaf with payoffs $(2,0)$.
+    \end{itemize}
+  \item Right branch ($R$): Player II (same info set? or separate) chooses $t$ or $b$ (or $r$ and $\ell$ leading to $t/b$).
+\end{itemize}
+
+\paragraph{Alternative extensive form (Player II depicted first at the single-info-set level):}
+
+A cleaner representation places Player I at the root choosing $L$ or $R$, then Player II at two separate nodes (each a subgame given I's move), both enclosed in a single information set (since Player II does not observe Player I's choice). Terminal payoffs match the matrix entries.
+
+\begin{center}
+\begin{tabular}{c}
+\textit{Extensive form tree (Player I first):}\\[6pt]
+Player I: $L$ or $R$ \\
+$\quad\Downarrow$ \\
+Player II (information set): $n$ (right) or $\ell$ (left) \\
+$\quad\Downarrow$ \\
+Leaves: $(2,-1)$, $(2,0)$ after $L$; $(2,1)$, $(1,0)$ after $R$ with $r,\ell$ respectively.
+\end{tabular}
+\end{center}
+
+\begin{notebox}
+The extensive form representation of a strategic form game is \textbf{not unique}. Different orderings of the players yield different (but equivalent) extensive form games.
+\end{notebox}
+
+% ============================================================
+\section{Incomplete Information Games}
+
+\subsection{Motivation}
+
+This model is due to \textbf{Harsanyi (1967)}.
+
+\medskip
+\noindent\textbf{Motivating Example.} Fix 13 cards. We can calculate the probabilities of the cards the other players are having:
+\[
+  \binom{52}{13}\binom{39}{13}\binom{26}{13}\binom{13}{13}
+  \quad\text{or equivalently}\quad
+  \binom{39}{13}\binom{26}{13}.
+\]
+Since each player's hand is drawn from the remaining cards, the type of each player (which 13 cards they hold) is private information -- other players only know the distribution.
+
+\subsection{Definition}
+
+\begin{defbox}{Incomplete Information Game}
+An incomplete information game is a tuple:
+\[
+  \bigl\langle N,\, (T_i)_{i \in N},\, p,\, S,\, (s_A)_{A \in S \times T_i} \bigr\rangle
+\]
+where:
+\begin{itemize}
+  \item $N$: a finite set of players.
+  \item $T_i$: a finite set of \textbf{types} for player $i$. The set of type vectors (type profiles) is denoted by $T = \bigtimes_{i \in N} T_i$.\\
+    (In the card example, $|T_i| = \binom{52}{13}$; and $|T| = \left[\binom{52}{13}\right]^4$.)
+  \item $p$: a probability distribution over $T$. We assume that
+    \[
+      p(t_i) \;=\; \sum_{t_{-i} \in T_{-i}} p(t_i, t_{-i}) \;>\; 0
+      \qquad \forall\, i \in N,\;\; \forall\, t_i \in T_i.
+    \]
+    (Every type of every player is possible.)
+  \item $S$: a set of \textbf{state games}. Every state game $s \in S$ is itself a vector:
+    \[
+      s = \bigl\langle N,\, (A_i(t_i))_{i \in N, t_i \in T_i},\, (u_i)_{i \in N} \bigr\rangle
+    \]
+    where $A_i$ is a non-empty set of actions available to player $i$, and $u_i : X \times A_i \to \mathbb{R}$ (where the product is taken over $i \in N$) is the utility function of player $i$.
+  \item $s_A$: an element in $S$ -- the state game corresponding to a type profile.
+\end{itemize}
+\end{defbox}
+
+\begin{notebox}
+It is important to note that player $i$'s action depends on \textbf{his own type only}. Specifically, $s_A$ is an element in $S$ where:
+\[
+  s_A = \bigl\langle N,\, (A_i(t_i))_{i \in N,\, t_i \in T_i},\, (u_i(t))_{i \in N} \bigr\rangle.
+\]
+Player $i$'s action is chosen from $A_i(t_i)$, which depends on $t_i$ (player $i$'s own type) only.
+\end{notebox}
+
+\end{document}

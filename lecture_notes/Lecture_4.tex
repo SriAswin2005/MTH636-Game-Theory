@@ -1,0 +1,135 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 4
+%  Weak Dominance, Auctions & Max-Min Strategies
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 4: Weak Dominance, Auctions \& Max-Min Strategies}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Iterative Elimination of Weakly Dominated Strategies}
+
+Recall from the previous lecture that the elimination of strictly dominated strategies one by one is called \textbf{Iterative Elimination of Strictly Dominated Strategies (IESDS)}. If this process gives a unique strategy profile, we call it a solution to the game.
+
+We can apply a similar principle for \emph{weakly} dominated strategies.
+
+\begin{warnbox}{Assumption 1'}
+  A rational player does not use a \textbf{weakly dominated strategy}.
+\end{warnbox}
+
+\begin{defbox}{Rational Outcome}
+  A strategy profile is called \textbf{rational} if it is the unique result of an iterative elimination of weakly dominated strategies.
+\end{defbox}
+
+\begin{notebox}
+  As shown in the previous lecture, the order of elimination matters for weakly dominated strategies. If different orders lead to different unique outcomes, the solution might be ambiguous.
+\end{notebox}
+
+% ============================================================
+\section{Second Price Sealed Bid Auction (Vickrey Auction)}
+
+A classic application of weakly dominated strategies is the second-price sealed-bid auction.
+
+\subsection{Formal Setup}
+\begin{itemize}
+    \item \textbf{Players:} $N = \{1, 2, \dots, n\}$
+    \item \textbf{Strategies (Bids):} $S_i = [0, \infty)$ for each player $i$. Let player $i$'s bid be $b_i$.
+    \item \textbf{Valuations:} Each player has a true valuation $v_i$ for the item.
+    \item \textbf{Payoff Function:} $u_i(b_1, \dots, b_n)$ is defined as:
+    \[
+    u_i(b_1, \dots, b_n) = 
+    \begin{cases}
+      0 & \text{if } b_i < \max_{j \in N} b_j \\[8pt]
+      \dfrac{v_i - \max_{j \neq i} b_j}{\left|\{k \mid b_k = \max_{j \in N} b_j\}\right|} & \text{if } b_i = \max_{j \in N} b_j
+    \end{cases}
+    \]
+\end{itemize}
+
+\begin{intubox}
+  \textbf{How it works:}
+  The highest bidder wins the item but pays the \emph{second-highest} bid ($\max_{j \neq i} b_j$). If there is a tie for the highest bid, the tied players split the surplus equally (represented by the denominator).
+\end{intubox}
+
+\begin{notebox}
+  Since players do not know each other's valuations $v_j$, this is \textbf{not} a complete information game. It is a game of incomplete information.
+\end{notebox}
+
+\subsection{Truthful Bidding is a Weakly Dominant Strategy}
+
+\begin{thmbox}{Vickrey's Theorem}
+  In the second-price sealed-bid auction, \textbf{bidding your own valuation weakly dominates all other strategies.}
+\end{thmbox}
+
+In other words, for player $i$, playing $b_i = v_i$ is always at least as good as any other bid $b'_i$, regardless of what the other players do:
+\[
+  u_i(v_i, b_{-i}) \geq u_i(b'_i, b_{-i}) \quad \forall b_{-i} \in [0, \infty)^{n-1}, \; \forall b'_i \in [0, \infty)
+\]
+
+\textbf{Proof Reference:} See Section 4.6, Theorem 4.15 in Solan's Game Theory textbook for the detailed proof. The intuition is that changing your bid from $v_i$ only changes the outcome when it changes whether you win or lose, and in those cases, deviating from $v_i$ either makes you lose when winning was profitable, or makes you win when the price is higher than your valuation.
+
+% ============================================================
+\section{The Max-Min Approach}
+
+Another way to approach a game is to think defensively. What is the absolute worst that can happen if I play a certain strategy, and how can I make that worst-case scenario as good as possible?
+
+\begin{exbox}{Defensive Play Example}
+  Consider the following game matrix from Player 1's perspective:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc|c}
+    $P_1 \setminus P_2$ & L & R & \textbf{Row Min} \\
+    \hline
+    T & \payoff{2}{1} & \payoff{2}{-20} & \textbf{\color{warnred} 2} \\
+    M & \payoff{3}{0} & \payoff{-10}{1} & -10 \\
+    B & \payoff{-100}{2} & \payoff{3}{3} & -100 \\
+  \end{tabular}
+  \end{center}
+  For each strategy, Player 1 looks at the minimum possible payoff:
+  \begin{itemize}
+      \item If T is played: min(2, 2) = 2
+      \item If M is played: min(3, -10) = -10
+      \item If B is played: min(-100, 3) = -100
+  \end{itemize}
+  The maximum of these minimums is 2, achieved by playing T. Strategy T guarantees Player 1 a payoff of at least 2, regardless of Player 2's action.
+\end{exbox}
+
+\subsection{Formal Definitions}
+
+Suppose player $i$ plays strategy $s_i$. The minimum amount he/she will get is:
+\[
+  \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i})
+\]
+
+\begin{defbox}{Max-Min Value}
+  The \textbf{max-min value} of player $i$, denoted $\underline{v}_i$, is the highest payoff player $i$ can guarantee for themselves:
+  \[
+    \underline{v}_i = \max_{s_i \in S_i} \left[ \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i}) \right]
+  \]
+\end{defbox}
+
+\begin{defbox}{Max-Min Strategy}
+  Suppose $s_i^* \in \arg\max_{s_i \in S_i} \left[ \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i}) \right]$. 
+  
+  Then $s_i^*$ is called a \textbf{max-min strategy} for player $i$.
+\end{defbox}
+
+\begin{takebox}
+  By playing a max-min strategy, a player can ensure they receive at least their max-min value, no matter how the opponents play:
+  \[
+    u_i(s_i^*, s_{-i}) \geq \underline{v}_i \quad \forall s_{-i} \in S_{-i}
+  \]
+\end{takebox}
+
+\end{document}

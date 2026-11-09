@@ -1,0 +1,128 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 2
+%  Outcomes, Preferences, Utility, and Normal Form Games
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 2: Preferences, Utility, and Normal Form Games}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Revisiting the Beauty Contest Game}
+
+Recall the Beauty Contest Game with $N = \{1, 2, 3\}$. Each player chooses a number between $0$ and $100$. The target is $\frac{2}{3}$ of the average, and the player whose choice is closest to the target wins.
+
+The set of possible \textbf{outcomes} (denoted by $O$) includes:
+\begin{itemize}
+    \item Player 1 is the sole winner.
+    \item Player 2 is the sole winner.
+    \item Player 3 is the sole winner.
+    \item Players 1 and 2 are joint winners.
+    \item Players 1 and 3 are joint winners.
+    \item Players 2 and 3 are joint winners.
+    \item All are winners.
+\end{itemize}
+
+\subsection{Preferences over Outcomes}
+Player 1 has a preference relation over these outcomes. Naturally, Player 1 prefers to win alone rather than share the win, and prefers to share the win rather than not win at all. We denote this preference relation by $\succsim_1$.
+
+\begin{itemize}
+    \item Player 1 is the sole winner $\succ_1$ Players 1 and 2 are joint winners $\sim_1$ Players 1 and 3 are joint winners $\succ_1$ All are winners $\succ_1$ all the other outcomes.
+\end{itemize}
+
+Formally, a preference relation $\succsim_i$ is a subset of $O \times O$. When we write $(x, y) \in {\succsim_i}$, or simply $x \succsim_i y$, it means Player $i$ \textbf{weakly prefers} outcome $x$ over outcome $y$.
+
+% ============================================================
+\section{Utility Functions}
+
+\begin{defbox}{Utility Function}
+  Suppose $O$ is the set of outcomes. Then a \textbf{utility function} $u$ is a mapping from $O$ to $\mathbb{R}$.
+\end{defbox}
+
+\begin{defbox}{Representation of a Preference}
+  A utility function $u$ \textbf{represents} a preference relation $\succsim$ over $O$ if for all $x, y \in O$:
+  \[
+    x \succsim y \iff u(x) \geq u(y)
+  \]
+\end{defbox}
+
+\begin{thmbox}{Existence of a Utility Representation}
+  Suppose $O$ is finite. Then a preference relation $\succsim$ can be represented by a utility function if and only if the preference is \textbf{complete} and \textbf{transitive}.
+  
+  \textit{Note: If $O$ is infinite, a similar result holds but requires additional continuity assumptions.}
+\end{thmbox}
+
+% ============================================================
+\section{Normal (Strategic) Form Games}
+
+\begin{defbox}{Normal Form Game}
+  A normal form (or strategic form) game is a 3-tuple $\langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$ where:
+  \begin{itemize}
+      \item $N$ is a finite set of players.
+      \item $S_i$ is the set of strategies available to player $i$.
+      \item $u_i : \prod_{j \in N} S_j \to \mathbb{R}$ is the utility function for player $i$, which maps a strategy profile to a real-valued payoff.
+  \end{itemize}
+\end{defbox}
+
+\subsection{Formalizing the Beauty Contest Game}
+Using this definition, we can formally define the Beauty Contest Game:
+\begin{itemize}
+    \item $N = \{1, 2, 3\}$
+    \item $S_1 = [0, 100]$, $S_2 = [0, 100]$, $S_3 = [0, 100]$
+    \item Utility functions:
+    \[
+      u_1(x_1, x_2, x_3) = \begin{cases} 
+        \frac{1}{|W(x_1, x_2, x_3)|} & \text{if } 1 \in W(x_1, x_2, x_3) \\ 
+        0 & \text{otherwise} 
+      \end{cases}
+    \]
+    where $W(x_1, x_2, x_3) = \arg\min_{i \in N} \left|x_i - \frac{2}{3}\bar{x}\right|$ is the set of winning players.
+\end{itemize}
+
+% ============================================================
+\section{Classic 2x2 Games}
+
+\begin{exbox}{Prisoner's Dilemma}
+  $N = \{P_1, P_2\}$, $S_1 = S_2 = \{C, D\}$ (Cooperate, Defect)
+  
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & C & D \\
+    \hline
+    C & \payoff{-1}{-1} & \payoff{-5}{0} \\
+    D & \payoff{0}{-5} & \payoff{-3}{-3} \\
+  \end{tabular}
+  \end{center}
+  
+  In this game, players will play $(D, D)$ because for both of them, choosing $D$ strictly dominates choosing $C$.
+\end{exbox}
+
+\begin{exbox}{Battle of the Sexes}
+  $N = \{\text{Man}, \text{Woman}\}$, $S_M = S_W = \{F, D\}$ (Football, Dance)
+  
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|cc}
+    $M \setminus W$ & F & D \\
+    \hline
+    F & \payoff{2}{1} & \payoff{0}{0} \\
+    D & \payoff{0}{0} & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+  
+  This is a classic coordination game where players wish to coordinate on the same event but have differing preferences over which event to attend.
+\end{exbox}
+
+\end{document}

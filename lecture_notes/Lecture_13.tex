@@ -1,0 +1,137 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 13
+%  The Indifference Principle and Computing Nash Equilibria
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 13: The Indifference Principle and Finding NE}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{The Indifference Principle}
+
+\begin{thmbox}{The Indifference Principle}
+  Suppose $\sigma^*$ is a Nash Equilibrium. For any player $i$, if there are two pure strategies $s_i^1, s_i^2 \in S_i$ that are played with strictly positive probability (i.e., $\sigma_i^*(s_i^1) > 0$ and $\sigma_i^*(s_i^2) > 0$), then:
+  \[
+    U_i(s_i^1, \sigma_{-i}^*) = U_i(s_i^2, \sigma_{-i}^*)
+  \]
+\end{thmbox}
+
+\textbf{Proof Idea:}
+Suppose for contradiction that $U_i(s_i^1, \sigma_{-i}^*) > U_i(s_i^2, \sigma_{-i}^*)$. 
+Player $i$ could define a new mixed strategy $\bar{\sigma}_i$ by taking all the probability mass assigned to $s_i^2$ and shifting it to $s_i^1$:
+\[
+  \bar{\sigma}_i(s_i) = \begin{cases} 
+    \sigma_i^*(s_i) & \text{if } s_i \neq s_i^1, s_i^2 \\ 
+    0 & \text{if } s_i = s_i^2 \\ 
+    \sigma_i^*(s_i^1) + \sigma_i^*(s_i^2) & \text{if } s_i = s_i^1 
+  \end{cases}
+\]
+By evaluating the expected utility $U_i(\bar{\sigma}_i, \sigma_{-i}^*)$, one can show that Player $i$ obtains a strictly higher expected payoff than $U_i(\sigma_i^*, \sigma_{-i}^*)$, which contradicts the assumption that $\sigma^*$ is a Nash Equilibrium.
+
+\begin{notebox}
+  \textbf{Corollary:} For any Nash Equilibrium $\sigma^*$, the expected utility $U_i(\sigma^*)$ is exactly equal to the expected utility of \textbf{any} pure strategy $s_i$ in its support:
+  \[
+    U_i(\sigma^*) = U_i(s_i, \sigma_{-i}^*) \quad \forall s_i \in S_i \text{ such that } \sigma_i^*(s_i) > 0
+  \]
+\end{notebox}
+
+% ============================================================
+\section{Computing Mixed NE using Indifference}
+
+\begin{exbox}{Computing a Mixed NE}
+  Consider the following game:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & L ($y$) & R ($1-y$) \\
+    \hline
+    T ($x$) & \payoff{1}{-1} & \payoff{0}{2} \\
+    B ($1-x$) & \payoff{0}{1} & \payoff{2}{0} \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+There is no pure strategy NE, nor is there an NE where one player plays a pure strategy and the other plays a proper mixed strategy. Thus, any NE must have $0 < x < 1$ and $0 < y < 1$.
+
+Using the Indifference Principle for Player 1:
+\begin{align*}
+  U_1(T, y) &= U_1(B, y) \\
+  1(y) + 0(1-y) &= 0(y) + 2(1-y) \\
+  y &= 2 - 2y \implies 3y = 2 \implies y = \frac{2}{3}
+\end{align*}
+
+Using the Indifference Principle for Player 2:
+\begin{align*}
+  U_2(x, L) &= U_2(x, R) \\
+  -1(x) + 1(1-x) &= 2(x) + 0(1-x) \\
+  1 - 2x &= 2x \implies 4x = 1 \implies x = \frac{1}{4}
+\end{align*}
+
+The unique Nash Equilibrium is $\sigma_1^* = (1/4, 3/4)$ and $\sigma_2^* = (2/3, 1/3)$.
+
+% ============================================================
+\section{Algorithm for Finding All NE of a Two-Player Game}
+
+To find all Nash Equilibria of a general two-player finite game, we can systematically search over all possible \textbf{supports}.
+Let $S_1$ and $S_2$ be the finite sets of pure strategies, with $|S_1| = m_1$ and $|S_2| = m_2$.
+
+For every possible subset $Y_1 \subseteq S_1$ and $Y_2 \subseteq S_2$ (there are $(2^{m_1}-1) \times (2^{m_2}-1)$ such pairs of supports), we check if there exists an NE $(\sigma_1^*, \sigma_2^*)$ such that $\text{supp}(\sigma_1^*) = Y_1$ and $\text{supp}(\sigma_2^*) = Y_2$.
+
+Such a profile is an NE if and only if it satisfies the following system of linear equations and inequalities:
+
+\begin{enumerate}
+    \item \textbf{Indifference within the support (Player 1):} \\
+    For some fixed $s_1^o \in Y_1$,
+    \[ \sum_{s_2 \in Y_2} \sigma_2^*(s_2) u_1(s_1^o, s_2) = \sum_{s_2 \in Y_2} \sigma_2^*(s_2) u_1(s_1, s_2) \quad \forall s_1 \in Y_1 \]
+    \item \textbf{Indifference within the support (Player 2):} \\
+    For some fixed $s_2^o \in Y_2$,
+    \[ \sum_{s_1 \in Y_1} \sigma_1^*(s_1) u_2(s_1, s_2^o) = \sum_{s_1 \in Y_1} \sigma_1^*(s_1) u_2(s_1, s_2) \quad \forall s_2 \in Y_2 \]
+    \item \textbf{No profitable deviation outside the support (Player 1):}
+    \[ \sum_{s_2 \in Y_2} \sigma_2^*(s_2) u_1(s_1^o, s_2) \geq \sum_{s_2 \in Y_2} \sigma_2^*(s_2) u_1(s_1, s_2) \quad \forall s_1 \notin Y_1 \]
+    \item \textbf{No profitable deviation outside the support (Player 2):}
+    \[ \sum_{s_1 \in Y_1} \sigma_1^*(s_1) u_2(s_1, s_2^o) \geq \sum_{s_1 \in Y_1} \sigma_1^*(s_1) u_2(s_1, s_2) \quad \forall s_2 \notin Y_2 \]
+    \item \textbf{Valid probabilities (sum to 1):}
+    \[ \sum_{s_1 \in Y_1} \sigma_1^*(s_1) = 1, \quad \sum_{s_2 \in Y_2} \sigma_2^*(s_2) = 1 \]
+    \item \textbf{Valid probabilities (strictly positive on support):}
+    \[ \sigma_1^*(s_1) > 0 \quad \forall s_1 \in Y_1, \quad \sigma_2^*(s_2) > 0 \quad \forall s_2 \in Y_2 \]
+    \item \textbf{Zero probability outside support:}
+    \[ \sigma_1^*(s_1) = 0 \quad \forall s_1 \notin Y_1, \quad \sigma_2^*(s_2) = 0 \quad \forall s_2 \notin Y_2 \]
+\end{enumerate}
+
+\subsection{Simplifying the Search via Dominance}
+
+Before applying the exhaustive search, one should iteratively eliminate strictly dominated strategies to reduce the sizes of $S_1$ and $S_2$. 
+
+\begin{exbox}{Strict Dominance by a Mixed Strategy}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|ccc}
+    $P_1 \setminus P_2$ & L & C & R \\
+    \hline
+    T & \payoff{6}{2} & \payoff{0}{6} & \payoff{4}{4} \\
+    M & \payoff{2}{12} & \payoff{4}{3} & \payoff{2}{5} \\
+    B & \payoff{0}{6} & \payoff{10}{0} & \payoff{2}{2} \\
+  \end{tabular}
+  \end{center}
+  Notice that the pure strategy $M$ for Player 1 is strictly dominated by the mixed strategy $\sigma_1 = \left(\frac{1}{2} T, 0 M, \frac{1}{2} B\right)$:
+  \begin{itemize}
+      \item Against L: $\frac{1}{2}(6) + \frac{1}{2}(0) = 3 > 2$
+      \item Against C: $\frac{1}{2}(0) + \frac{1}{2}(10) = 5 > 4$
+      \item Against R: $\frac{1}{2}(4) + \frac{1}{2}(2) = 3 > 2$
+  \end{itemize}
+  Since $M$ is strictly dominated, it can never be in the support of any Nash Equilibrium, and we can immediately eliminate it to simplify the game to a $2 \times 3$ game.
+\end{exbox}
+
+\end{document}

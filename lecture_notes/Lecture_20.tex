@@ -1,0 +1,188 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 20
+%  Nash Equilibrium in Extensive Form, SPE & Backward Induction
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 20: Nash Equilibrium, SPE \& Backward Induction}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Extensive Form Games with Chance -- Recap}
+
+Recall that a general extensive form game (possibly with a chance player) is described by the tuple:
+\[
+  \Gamma = \langle N,\; V,\; E,\; n_0,\; (V_i)_{i \in N \cup \{0\}},\; (p_n)_{n \in V_0},\; (u_i)_{i \in N} \rangle
+\]
+
+\subsection{Example: Sequential Battle of the Sexes with Chance}
+
+Consider the following game tree. Nature (player $0$) moves first with probability $\tfrac{1}{2}$--$\tfrac{1}{2}$, choosing between two ``types'': Man (M) or Woman (W) plays first. Subsequently the other player responds.
+
+\medskip
+\noindent\textbf{Game Tree Description.}
+\begin{itemize}
+  \item The root (chance node) splits with probability $\tfrac{1}{2}$ to the left subtree (Man moves first) and $\tfrac{1}{2}$ to the right subtree (Woman moves first).
+  \item \textbf{Left subtree} (Man moves): Man chooses $F$ or $D$.
+    \begin{itemize}
+      \item If Man plays $F$: Woman chooses $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+      \item If Man plays $D$: Woman chooses $F$ (payoff $(0,1)$) or $D$ (payoff $(1,2)$).
+    \end{itemize}
+  \item \textbf{Right subtree} (Woman moves): Woman chooses $F$ or $D$.
+    \begin{itemize}
+      \item If Woman plays $F$: Man chooses $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+      \item If Woman plays $D$: Man chooses $F$ (payoff $(0,0)$) or $D$ (payoff $(1,2)$).
+    \end{itemize}
+\end{itemize}
+
+\medskip
+\noindent Consider the strategy profile $\bigl((F,F,D),\,(D,F,D)\bigr)$, i.e., Man plays $F$ in the left subtree and plays $(F,D)$ in the right subtree; Woman plays $(D,F,D)$.
+
+\noindent\textbf{Expected utilities:}
+\begin{align*}
+  U_M\!\bigl((F,F,D),(D,F,D)\bigr)
+    &= \tfrac{1}{2}\cdot x_0 + \tfrac{1}{2}\cdot x_1 = \tfrac{1}{2}\\
+  U_W\!\bigl((F,F,D),(D,F,D)\bigr)
+    &= \tfrac{1}{2}\cdot x_0 + \tfrac{1}{2}\cdot x_2 = 1
+\end{align*}
+
+% ============================================================
+\section{Nash Equilibrium in Extensive Form Games}
+
+\begin{defbox}{Nash Equilibrium (Extensive Form)}
+  A strategy profile $s^*$ is a \textbf{Nash Equilibrium (NE)} if, for all $i \in N$ and all $s_i \in S_i$:
+  \[
+    u_i(s^*) \geq u_i(s_i,\, s^*_{-i})
+  \]
+\end{defbox}
+
+Given strategy sets $S_1, \ldots, S_n$, the corresponding \textbf{strategic (normal) form} game is:
+\[
+  \langle N,\; (S_i)_{i \in N},\; (\hat{u}_i)_{i \in N} \rangle
+\]
+
+\begin{thmbox}{NE Equivalence (Result K-1)}
+  For an extensive form game $\Gamma$, a strategy profile $s^*$ is a Nash Equilibrium of $\Gamma$ \textbf{if and only if} $s^*$ is a Nash Equilibrium of the corresponding strategic form game.
+\end{thmbox}
+
+% ============================================================
+\section{Illustrative Example: NE vs.\ SPE}
+
+Consider the following extensive form game. Man (M) moves first, choosing $F$ or $D$.
+\begin{itemize}
+  \item If Man plays $F$: Woman (W) chooses $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+  \item If Man plays $D$: Woman (W) chooses $F$ (payoff $(0,0)$) or $D$ (payoff $(0,2)$). (The underlined value $(0,2)$ denotes a Nash-relevant payoff.)
+\end{itemize}
+
+\medskip
+\noindent The corresponding normal form matrix (Man's strategies: $F$, $D$; Woman's strategies: $(F,F)$, $(F,D)$, $(D,F)$, $(D,D)$) is:
+
+\medskip
+\begin{center}
+\begin{tabular}{c|cccc}
+  & $(F,F)$ & $(F,D)$ & $(D,F)$ & $(D,D)$ \\\hline
+  $F$ & \payoff{2}{1} & \payoff{2}{1} & \payoff{0}{0} & \payoff{0}{0} \\
+  $D$ & \payoff{0}{0} & \payoff{1}{2} & \payoff{0}{0} & \payoff{1}{2} \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent Analysing the Nash Equilibria and SPE status of various strategy profiles:
+
+\begin{center}
+\begin{tabular}{lll}
+  \hline
+  Strategy profile & NE? & SPE? \\\hline
+  $\bigl(F,\,(D,F)\bigr)$ & Not an NE & -- (W has a true deviation) \\
+  $\bigl(F,\,(F,F)\bigr)$ & NE & \textbf{not} SPE \\
+  $\bigl(F,\,(F,D)\bigr)$ & NE & SPE \\
+  $\bigl(D,\,(D,D)\bigr)$ & NE & \textbf{not} SPE \\
+  $\bigl(D,\,(F,D)\bigr)$ & Not an NE & -- (M has a true deviation) \\\hline
+\end{tabular}
+\end{center}
+
+\begin{notebox}
+  $\bigl(F,(F,F)\bigr)$ is an NE but \textbf{not} an SPE: at Man's node under $D$, Woman would prefer $D$ over $F$ but she is committed to $(F,F)$, which is non-credible off the equilibrium path.
+
+  $\bigl(D,(D,D)\bigr)$ is an NE but \textbf{not} an SPE: if Man deviates to $F$, Woman's best response is $F$ (payoff $1 > 0$), so threatening to play $D$ after $F$ is a non-credible threat.
+\end{notebox}
+
+% ============================================================
+\section{Subgame Perfect Equilibrium (SPE)}
+
+\begin{defbox}{Subgame Perfect Equilibrium}
+  A strategy profile $s^*$ is called a \textbf{Subgame Perfect Equilibrium (SPE)} if, for every subgame of the game, $s^*$ restricted to that subgame is a Nash Equilibrium of that subgame.
+\end{defbox}
+
+\begin{notebox}
+  Every SPE is also a Nash Equilibrium of the whole game. The converse is not true in general.
+\end{notebox}
+
+% ============================================================
+\section{Backward Induction Equilibrium}
+
+\textbf{Backward induction} is an algorithm for finding equilibria in finite extensive form games with perfect information. One works from the leaves of the game tree back to the root, at each node selecting the action that maximises the current player's payoff.
+
+\subsection{Example 1: Two-player Sequential Game}
+
+\noindent\textbf{Original game tree.} Man (M) moves first: $F$ or $D$.
+\begin{itemize}
+  \item $F$ branch: Woman (W) chooses $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+  \item $D$ branch: Woman (W) chooses $F$ (payoff $(0,0)$) or $D$ (payoff $(1,3)$).
+\end{itemize}
+
+\noindent\textbf{Backward induction step.}
+\begin{itemize}
+  \item At Woman's node after $F$: payoff $(2,1)$ vs.\ $(0,0)$ $\Rightarrow$ Woman plays $\mathbf{F}$ (payoff $1 > 0$).
+  \item At Woman's node after $D$: payoff $(0,0)$ vs.\ $(1,3)$ $\Rightarrow$ Woman plays $\mathbf{D}$ (payoff $3 > 0$).
+\end{itemize}
+
+\noindent After resolving Woman's choices, Man faces: $F \to (2,1)$, $D \to (1,3)$.
+Man chooses $\mathbf{F}$ (payoff $2 > 1$).
+
+\[
+  \boxed{\text{Backward Induction Equilibrium: } \bigl(F,\,(F,D)\bigr)}
+\]
+
+\subsection{Example 2: Game with Chance Node and Multiple Subgames}
+
+\noindent\textbf{Game tree.} Player I moves first, choosing $A$, $B$, or $C$.
+\begin{itemize}
+  \item $A$: Player II moves (node $\mathrm{II}$), choosing $l$ (payoff $(4,1)$) or $g$ (payoff $(7,2)$).
+  \item $B$: Player II moves (node $\mathrm{II}$), choosing $l'$ (payoff $(6,3)$) or $g'$ (payoff $(4,0)$).
+  \item $C$: Chance node splits $\tfrac{1}{4}$/$\tfrac{3}{4}$.
+    \begin{itemize}
+      \item With prob.\ $\tfrac{1}{4}$: Player D moves, choosing $L$ (payoff $(0,0)$) or $R$ (payoff $(8,4)$).
+      \item With prob.\ $\tfrac{3}{4}$: Player I moves, choosing $A'$ (payoff $(8,8)$) or $b$ (payoff $(0,8)$).
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Backward induction.}
+\begin{itemize}
+  \item Under $A$: Player II prefers $g$ (payoff $2 > 1$). Resolved payoff: $(7,2)$.
+  \item Under $B$: Player II prefers $l'$ (payoff $3 > 0$). Resolved payoff: $(6,3)$.
+  \item Under $C$, prob.\ $\tfrac{1}{4}$ branch: Player D prefers $R$ (payoff $(8,4)$). Resolved: $(8,4)$.
+  \item Under $C$, prob.\ $\tfrac{3}{4}$ branch: Player I prefers $A'$ (payoff $8 = 8$). Resolved: $(8,8)$.
+  \item Expected payoff under $C$: $\tfrac{1}{4}(8,4) + \tfrac{3}{4}(8,8) = (8,7)$.
+\end{itemize}
+
+\noindent Player I now chooses among $(7,2)$, $(6,3)$, $(8,7)$: Player I prefers $C$ (payoff $8$).
+
+\noindent After the second round of backward induction, Player I's node reduces to choosing $A\to(7,2)$, $B\to(6,3)$, $C\to(8,7)$. Player I chooses $\mathbf{C}$.
+
+\[
+  \boxed{\bigl((C,\,a),\;(g,\,l',\,R)\bigr) \text{ is the Backward Induction Equilibrium.}}
+\]
+
+\end{document}

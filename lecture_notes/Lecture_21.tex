@@ -1,0 +1,186 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 21
+%  Kuhn's Theorem, SPE Existence & Applications
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 21: Kuhn's Theorem \& SPE Existence}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Existence of Nash Equilibria and SPE in Finite Games}
+
+\begin{thmbox}{Kuhn's Theorem}
+  Every extensive form game with \textbf{perfect information} has at least one Nash Equilibrium in pure strategies.
+\end{thmbox}
+
+\begin{thmbox}{SPE Existence Theorem}
+  Every extensive form game with \textbf{perfect information} has at least one Subgame Perfect Equilibrium (SPE) in pure strategies.
+\end{thmbox}
+
+\begin{notebox}
+  This SPE can be obtained using the \textbf{backward induction principle} -- i.e., the backward induction equilibrium is always a SPE.
+\end{notebox}
+
+% ============================================================
+\section{Proof Sketch of SPE Existence via Backward Induction}
+
+The proof proceeds by constructing a strategy profile $s^v$ via backward induction and then showing it constitutes a SPE. We outline the construction below.
+
+\medskip
+\noindent\textbf{Setup.} Consider the game tree rooted at $n_0$. At the root, Nature (or a player) chooses from branches $p_1, p_2, \ldots, p_k$, leading to subtrees rooted at $n_1, n_2, \ldots, n_k$, respectively. For each subtree rooted at $n_\ell$, we inductively obtain a strategy tuple:
+\[
+  s^{n_\ell} = (s_1^{n_\ell},\; \ldots,\; s_n^{n_\ell})
+\]
+where $s_i^{n_\ell}$ is player $i$'s strategy within the subtree rooted at $n_\ell$.
+
+\subsection{Construction of the Equilibrium Strategy}
+
+\textbf{Case (i): $n_0 \in V_0$ (Nature's node).}
+
+For player $i$, define the strategy $s_i^v$ as follows: \emph{play $s_i^{n_\ell}$ if the game reaches $n_\ell$}. Let
+\[
+  s^v = (s_1^v,\; \ldots,\; s_n^v).
+\]
+We then show that $s^v$ is a SPE.
+
+\medskip
+\textbf{Case (ii): $n_0 \in V_{i_0}$, $i_0 \in N$ (some player's node).}
+
+For player $i \neq i_0$: if the game reaches $n_\ell$, play $s_i^{n_\ell}$. Call this strategy $s_i^v$.
+
+For player $i = i_0$: at node $n_0$, choose $n_{\ell_0}$ such that
+\[
+  U_{i_0}(s^{x_{\ell_0}}) \;\geq\; U_{i_0}(s^{n_\ell}) \quad \text{for all } \ell \in \{1, \ldots, k\},
+\]
+i.e., choose the branch $n_{\ell_0}$ that maximises player $i_0$'s payoff. Then if the game goes to $n_\ell$, follow strategy $s_{i_0}^{n_\ell}$.
+
+\begin{notebox}
+  The exact (formal) proof can be found in \textbf{Solani's book}.
+\end{notebox}
+
+% ============================================================
+\section{Worked Example: SPE via Backward Induction}
+
+Consider the following extensive form game. Nature (N) moves first at the root $n_0$, choosing Left ($L$) or Right ($R$). Player M (Man) then moves in each subtree.
+
+\medskip
+\noindent\textbf{Left subtree} (after $L$): Man (M) moves, choosing $F$ or $D$.
+\begin{itemize}
+  \item $F$: Woman (W) moves, choosing $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+  \item $D$: Woman (W) moves, choosing $F$ (payoff $(0,0)$) or $D$ (payoff $(1,2)$).
+\end{itemize}
+
+\noindent\textbf{Right subtree} (after $R$): Woman (W) moves, choosing $F$ or $D$.
+\begin{itemize}
+  \item $F$: Man (M) moves, choosing $F$ (payoff $(2,1)$) or $D$ (payoff $(0,0)$).
+  \item $D$: Man (M) moves, choosing $F$ (payoff $(0,0)$) or $D$ (payoff $(1,2)$).
+\end{itemize}
+
+\subsection{Backward Induction in the Left Subtree}
+
+\noindent Applying backward induction in the left subtree (subgame rooted after $L$):
+\begin{itemize}
+  \item Woman's node after $M$ plays $F$: Woman chooses $F$ (payoff $1 > 0$). Resolved payoff: $(2,1)$.
+  \item Woman's node after $M$ plays $D$: Woman chooses $D$ (payoff $2 > 0$). Resolved payoff: $(1,2)$.
+  \item Man's node: compares $F \to (2,1)$ and $D \to (1,2)$. Man chooses $F$ (payoff $2 > 1$).
+\end{itemize}
+\noindent The backward induction equilibrium within the left subgame is $\bigl(F, (F,D)\bigr)$ with payoff $(2,1)$.
+
+\subsection{Backward Induction in the Right Subtree}
+
+\noindent Applying backward induction in the right subtree (subgame rooted after $R$):
+\begin{itemize}
+  \item Man's node after $W$ plays $F$: Man chooses $F$ (payoff $2 > 0$). Resolved payoff: $(2,1)$.
+  \item Man's node after $W$ plays $D$: Man chooses $D$ (payoff $1 > 0$). Resolved payoff: $(1,2)$.
+  \item Woman's node: compares $F \to (2,1)$ and $D \to (1,2)$. Woman chooses $D$ (payoff $2 > 1$).
+\end{itemize}
+\noindent The backward induction equilibrium within the right subgame is $\bigl(D, (F,D)\bigr)$ with payoff $(1,2)$.
+
+\subsection{SPE for the Whole Game}
+
+Combining the backward induction outcomes of both subgames:
+\begin{itemize}
+  \item Man's strategy: $M - (L,\; F,\; (F,D))$, i.e., play $F$ in the left subgame and $(F,D)$ in the right subgame.
+  \item Woman's strategy: $W - (F,D,\; D)$, i.e., play $(F,D)$ in the left subgame and $D$ in the right subgame.
+\end{itemize}
+
+\noindent Concisely stated:
+\[
+  M:\; \bigl(L,\; F,\; (F,D)\bigr), \qquad W:\; (F,D,\; D)
+\]
+forms the \textbf{SPE for the whole game}.
+
+\begin{notebox}
+  Player M's expected utility: $U_M\bigl((L,F,(F,D)),\,(F,D,D)\bigr) = 2$.
+\end{notebox}
+
+% ============================================================
+\section{Application: Chess and Determined Games}
+
+\subsection{Structure of Chess as an Extensive Form Game}
+
+Chess is a two-player, perfect information, zero-sum game. The game tree has:
+\begin{itemize}
+  \item A root node $O$.
+  \item Subtrees for Player 1 ($P\text{-}1$), a ``Draw'' node ($D$), Player 2 ($P\text{-}2$), and Player 1 ($P\text{-}1$) again as the main branches.
+\end{itemize}
+
+The payoff matrix (from Player 1's perspective) takes the form:
+
+\medskip
+\begin{center}
+\begin{tabular}{c|ccccc}
+   & $s_2^1$ & $\cdots$ & $s_h^2$ \\\hline
+  $s_1^1$ & $(1,-1)$ & $\cdots$ & \\
+  $s_2^1$ & $(0,0)$ & $\cdots$ & \\
+  $\vdots$ & & & \\
+  $s_\ell^1$ & $(1,-1)$ & $(1_{\ell}=1)$ & $\cdots$ & $(1,-1)$ \\
+  $\vdots$ & & & \\
+  $s_m^1$ & $(-1,1)$ & $\cdots$ & \\
+\end{tabular}
+\end{center}
+
+\noindent Here the payoffs represent: $(1,-1)$ = Player 1 wins, $(0,0)$ = Draw, $(-1,1)$ = Player 2 wins.
+
+\subsection{Zermelo's Theorem Applied to Chess}
+
+By the SPE existence theorem (Kuhn's Theorem), chess -- being a finite, two-player, perfect information game -- must have a pure strategy SPE. Because the game is zero-sum, this means:
+
+\begin{thmbox}{Determinacy of Chess}
+  Chess is a \textbf{determined} game: either Player 1 has a winning strategy, or Player 2 has a winning strategy, or both players can force a draw.
+\end{thmbox}
+
+Formally, the minimax values satisfy:
+\[
+  \underline{v} = \bar{v} = 1 \quad \text{(for Chess, the value exists)}
+\]
+where $\underline{v}$ is the maximin value and $\bar{v}$ is the minimax value. \textbf{For Chess}, we know:
+\[
+  \underline{v} = \bar{v} = 1
+\]
+
+\begin{notebox}
+  While Zermelo's theorem guarantees that a winning (or drawing) strategy \emph{exists} for one of the players, it does \emph{not} tell us \emph{which} player has a winning strategy or what that strategy is. Finding such a strategy for Chess remains an open computational problem.
+\end{notebox}
+
+\begin{takebox}
+  The key takeaway of Lectures 20--21 is the refinement chain:
+  \[
+    \text{SPE} \;\subset\; \text{Nash Equilibrium}
+  \]
+  SPE eliminates non-credible threats by requiring rationality at \emph{every} information set, not just along the equilibrium path. Backward induction provides a constructive method to find SPE in games with perfect information, and Kuhn's theorem guarantees such equilibria exist in pure strategies.
+\end{takebox}
+
+\end{document}

@@ -1,0 +1,25 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.xdv
+*.nav
+*.snm
+*.vrb
+
+# Tectonic local binaries & downloads
+lecture_notes/tectonic/
+**/tectonic/
+tectonic.exe
+tectonic.zip
+
+# Python & OS
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+*.tmp

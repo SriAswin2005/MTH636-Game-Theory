@@ -1,0 +1,180 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 30
+%  Incomplete Information Games (Harsanyi)
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 30: Incomplete Information Games (Harsanyi)}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Incomplete Information Games -- The Harsanyi Framework}
+
+So far we have studied games of \textbf{complete information}, where every player knows the payoff functions of every other player. In reality, players often have \textbf{private information} -- for example, a player may know her own costs, valuations, or ``type'', but not those of the others. Harsanyi's framework formalises such situations.
+
+\begin{defbox}{Harsanyi Game of Incomplete Information}
+A \textbf{Harsanyi game of incomplete information} is a tuple
+\[
+  \langle N,\; (T_i)_{i \in N},\; p,\; S,\; (u_t)_{t \in \bigtimes_{i \in N} T_i} \rangle
+\]
+where:
+\begin{itemize}
+  \item $N$ is the finite set of players.
+  \item $T_i$ is the \textbf{type set} of player $i$, representing the private information player $i$ may hold.
+  \item $p$ is a probability distribution over the \textbf{type profile space} $T = \prod_{i \in N} T_i$, called the \textbf{common prior}.
+  \item $S$ is a collection of action sets -- one for each type profile.
+  \item $u_t$ (or $u_i$) are the utility functions, which depend on the action vector \emph{and} the type profile.
+\end{itemize}
+\end{defbox}
+
+% ============================================================
+\section{A Cards Game Example}
+
+To illustrate the framework concretely, consider a four-player card game:
+
+\begin{exbox}{Card Game with Incomplete Information}
+\begin{itemize}
+  \item $N = \{1, 2, 3, 4\}$.
+  \item $T_i = \text{the 13 cards that player }i\text{ may be dealt}$, so
+        \[
+          |T_i| = \binom{52}{13}.
+        \]
+  \item The type profile space is $T = T_1 \times T_2 \times T_3 \times T_4$, with
+        \[
+          |T| = \left[\binom{52}{13}\right]^4.
+        \]
+  \item The common prior $p$ assigns probability
+        \[
+          p(t) =
+          \begin{cases}
+            \dfrac{1}{\dbinom{52}{13}\dbinom{39}{13}\dbinom{26}{13}} & \text{if $t$ is a valid deal (cards drawn without replacement),} \\[8pt]
+            0 & \text{otherwise.}
+          \end{cases}
+        \]
+  \item $S$ is a collection of actions (plays/bids) for each type profile.
+\end{itemize}
+\end{exbox}
+
+\begin{notebox}
+  In this example each player $i$ observes \emph{only} their own hand $t_i$, not the hands of the other players.
+\end{notebox}
+
+% ============================================================
+\section{Strategies in Incomplete Information Games}
+
+Because a player does not know the full type profile, a strategy must specify what action to take \emph{for every possible type the player might have}.
+
+\begin{defbox}{Strategy in a Harsanyi Game}
+A \textbf{(pure) strategy} for player $i$ is a function
+\[
+  s_i : T_i \;\longrightarrow\; \bigcup_{t_i \in T_i} A_i(t_i),
+\]
+where $A_i(t_i)$ is the action set available to player $i$ when her type is $t_i$, and we require $s_i(t_i) \in A_i(t_i)$ for every $t_i \in T_i$.
+
+The component game corresponding to type profile $t$ is denoted $S_t$: it is the game where the action set of player $i$ depends on $t_i$ only.
+\end{defbox}
+
+% ============================================================
+\section{How the Game Proceeds}
+
+\begin{enumerate}
+  \item \textbf{Nature} selects a type profile $t \in T$ according to the common prior $p$.
+  \item Each player $i$ observes \textbf{only their own type} $t_i$.
+  \item Each player $i$ plays an action from the set of actions available at their type, i.e., player $i$ plays $a_i \in A_i(t_i)$.
+  \item At the end, every player receives their utility, which depends on the \textbf{action vector} $a = (a_1, \ldots, a_n)$ and the \textbf{type profile} $t = (t_1, \ldots, t_n)$.
+\end{enumerate}
+
+% ============================================================
+\section{Example: Battle of the Sexes with Incomplete Information}
+
+\begin{exbox}{Battle of the Sexes -- Incomplete Information Version}
+Consider the following variant of Battle of the Sexes.
+
+\medskip
+\noindent\textbf{Players and types:}
+\begin{itemize}
+  \item $N = \{1 \text{ (Man)}, 2 \text{ (Woman)}\}$.
+  \item The Man has \textbf{one type}: $T_1 = \{t_1\}$ (he has no private information).
+  \item The Woman has \textbf{two types}: $T_2 = \{t_2^1, t_2^2\}$, representing two possible preference configurations ($y$ = prefers Football, $n$ = prefers Ballet).
+\end{itemize}
+
+\medskip
+\noindent\textbf{Payoff matrices by type profile:}
+
+\medskip
+Type $y$ (Woman prefers Football):
+\[
+  \begin{array}{r|cc}
+              & F   & B   \\ \hline
+    F         & 2,1 & 0,0 \\
+    B         & 0,0 & 1,2 \\
+  \end{array}
+\]
+
+\medskip
+Type $n$ (Woman prefers Ballet):
+\[
+  \begin{array}{r|cc}
+              & F   & B   \\ \hline
+    F         & 2,0 & 0,2 \\
+    B         & 0,1 & 1,0 \\
+  \end{array}
+\]
+
+\medskip
+\noindent\textbf{Common prior:} The Man attaches probability $\tfrac{1}{2}$ to each type of the Woman, and the Woman knows this:
+\[
+  p(1, y) = p(1, n) = \tfrac{1}{2}.
+\]
+
+\medskip
+\noindent\textbf{Beliefs:} After player $i$ realises her type $t_i$, she can compute the conditional distribution
+\[
+  p(t_{-i} \mid t_i) \quad \text{for every } t_{-i} \in T_{-i}.
+\]
+This quantity $p(t_{-i} \mid t_i)$ is player $i$'s \textbf{belief} about the types of the other players given her own type.
+
+\medskip
+\noindent\textbf{Strategies:} Since $T_1 = \{t_1\}$, a strategy for the Man is simply a single action. For the Woman, a strategy is a function $s_2 : \{t_2^1, t_2^2\} \to \{F, B\}$. For example,
+\[
+  s_2 : \{t_2^1, t_2^2\} \;\longrightarrow\; A_1(t_2^1) \cup A_1(t_2^2)
+\]
+with the requirement that $s_2(t_2^1) \in A_2(t_2^1)$ and $s_2(t_2^2) \in A_2(t_2^2)$.
+
+\medskip
+\noindent\textbf{Extensive form representation:} The game can be drawn as an extensive form game with:
+\begin{itemize}
+  \item A chance node at the root selecting type profile $(y, n)$ with equal probabilities $\tfrac{1}{2}$.
+  \item Under type $y$: the Woman (W) chooses $F$ or $B$, then the Man (M) -- in the same information set for both branches -- chooses $F$ or $B$.
+  \item Under type $n$: the same structure with a different payoff table.
+  \item The Man's decision nodes under $(1,y)$ and $(1,n)$ are linked by an \textbf{information set} (dashed line), because he does not observe the Woman's type.
+  \item Terminal payoffs: $(2,1),(0,0),(0,0),(1,2)$ under type $y$, and $(2,0),(0,1),(0,2),(1,0)$ under type $n$.
+\end{itemize}
+
+The four type profiles are: $(y_M, y_W),\ (y_M, n_W),\ (n_M, y_W),\ (n_M, n_W)$.
+
+\end{exbox}
+
+% ============================================================
+\section{Theorem: Harsanyi's Equivalence}
+
+\begin{thmbox}{Harsanyi's Representation Theorem}
+Every Harsanyi game of incomplete information can be described (represented) as an \textbf{extensive form game} with \textbf{chance moves} and \textbf{information sets} (i.e., with imperfect information).
+\end{thmbox}
+
+\begin{notebox}
+This is a deep result: it means the two modelling approaches -- the Harsanyi ``type space'' formulation and the standard extensive form -- are equivalent in expressive power. Any situation of incomplete information can be captured by an extensive form game where Nature moves first to select the type profile, and players have information sets reflecting their inability to distinguish certain histories.
+\end{notebox}
+
+\end{document}

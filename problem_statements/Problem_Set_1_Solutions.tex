@@ -1,0 +1,224 @@
+% ============================================================
+%  MTH636 – Game Theory
+%  Practice Problem Set 1 - Solutions (Guided)
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+% Input the beautifully formatted preamble from the lecture notes
+\input{../lecture_notes/preamble.tex}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} Practice Problem Set 1}\\[6pt]
+  {\Large\sffamily Guided Solutions \& Concepts}\\[4pt]
+\end{center}
+\vspace{0.3cm}
+\hrule height 1.5pt
+\vspace{0.6cm}
+
+% ============================================================
+\section*{Part 1: Nash Equilibrium}
+
+% ------------------------------------------------------------
+\begin{exbox}{Question 1: Strict Nash Equilibrium}
+A Nash equilibrium $s^*$ is strict if every deviation undertaken by a player yields a definite loss for that player, i.e., $u_i(s^*) > u_i(s_i, s^*_{-i})$ for each player $i \in N$ and each strategy $s_i \neq s_i^*$. \\
+(a) Prove that if iterative elimination of strictly dominated strategies (IESDS) results in a unique strategy vector $s^*$, then $s^*$ is a strict Nash equilibrium. \\
+(b) Find a game that has at least one equilibrium, but in which iterative elimination of dominated strategies yields a game with no equilibria.
+\end{exbox}
+
+\begin{defbox}{Required Knowledge: IESDS and Equilibria}
+\textbf{IESDS:} The process of repeatedly removing strategies that are strictly worse than another strategy (or mixture of strategies) regardless of what opponents do. \\
+\textbf{Key Theorem:} If IESDS yields a unique surviving profile $s^*$, that profile is the unique Nash Equilibrium. Furthermore, a strictly dominated strategy can never be played in a Nash Equilibrium. However, eliminating \textit{weakly} dominated strategies can accidentally eliminate Nash Equilibria.
+\end{defbox}
+
+\textbf{Solution (a):}
+\begin{proof}
+Suppose for contradiction that $s^*$ is not strict. Then there exists a player $i$ and a strategy $s_i \neq s_i^*$ such that $u_i(s_i, s_{-i}^*) \geq u_i(s_i^*, s_{-i}^*)$. 
+Since $s^*$ is the unique survivor of IESDS, the strategy $s_i$ must have been strictly dominated and eliminated at some step $k$ by some mixed strategy $\sigma_i$. 
+Because a strictly dominating strategy is strictly better against \textit{all} surviving opponent profiles at step $k$, and $s_{-i}^*$ survives until the very end (and thus is present at step $k$), we must have $u_i(\sigma_i, s_{-i}^*) > u_i(s_i, s_{-i}^*)$.
+If $\sigma_i$ places weight on other strategies that get eliminated later, those strategies themselves are strictly dominated by others. Chaining these strict dominations down to the final surviving strategy $s_i^*$ yields:
+$u_i(s_i^*, s_{-i}^*) \geq u_i(\sigma_i, s_{-i}^*) > u_i(s_i, s_{-i}^*)$.
+This directly contradicts $u_i(s_i, s_{-i}^*) \geq u_i(s_i^*, s_{-i}^*)$. Thus, $s^*$ must be a strict Nash Equilibrium.
+\end{proof}
+
+\textbf{Solution (b):}
+Eliminating \textit{strictly} dominated strategies preserves all NE. Therefore, the question refers to eliminating \textit{weakly} dominated strategies. Consider this game:
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc}
+  & L & R \\
+\hline
+T & 1,1 & 0,0 \\
+B & 0,0 & 0,0 \\
+\end{tabular}
+\end{center}
+The profile $(B,R)$ is a Nash equilibrium (payoffs 0,0; neither player can strictly improve). However, $B$ is weakly dominated by $T$, and $R$ is weakly dominated by $L$. If we iteratively eliminate the weakly dominated strategies $B$ and $R$, we lose the equilibrium $(B,R)$.
+
+% ------------------------------------------------------------
+\vspace{0.5cm}
+\begin{exbox}{Question 2: Three-Player Game}
+Player 1 chooses a row (A or B), Player 2 chooses a column (a or b), and Player 3 chooses a matrix ($\alpha, \beta$, or $\gamma$). Find all the equilibria of this game.
+\end{exbox}
+
+\begin{notebox}
+\textbf{Required Knowledge: Finding NE in 3-Player Games} \\
+To find a Pure NE in a 3D matrix, check each cell. For a cell to be an NE, no single player can unilaterally deviate and strictly increase their payoff. 
+\begin{itemize}
+    \item \textbf{P1 (Row):} Can they get a higher number by moving up or down within the same column and matrix?
+    \item \textbf{P2 (Column):} Can they get a higher number by moving left or right within the same row and matrix?
+    \item \textbf{P3 (Matrix):} Can they get a higher number by switching to a different matrix, keeping the row and column the same?
+\end{itemize}
+\end{notebox}
+
+\textbf{Solution:} We check the payoff configurations (P1, P2, P3) for unilateral deviations.
+\begin{itemize}
+    \item \textbf{(B, a, $\alpha$)}: Payoffs (2,0,0). P1 deviation to A gives 0. P2 deviation to b gives 0. P3 deviation to $\beta$ or $\gamma$ gives 0. No strict improvement for anyone. \textbf{This is a Pure NE.}
+    \item \textbf{(B, a, $\gamma$)}: Payoffs (0,5,0). P1 to A gets 0. P2 to b gets 0. P3 to $\alpha$ or $\beta$ gets 0. \textbf{This is a Pure NE.}
+    \item \textbf{(A, b, $\alpha$)}: Payoffs (0,0,0). P1 to B gets 0. P2 to a gets 0 (payoff is 0 in A,a,$\alpha$). P3 to $\beta$ or $\gamma$ gets 0. \textbf{This is a Pure NE.}
+    \item \textbf{(A, b, $\gamma$)}: Payoffs (0,0,0). Similarly, no unilateral strict deviations exist. \textbf{This is a Pure NE.}
+\end{itemize}
+
+% ------------------------------------------------------------
+\vspace{0.5cm}
+\begin{exbox}{Question 3 \& 4: Equilibria and Domination}
+\textbf{Q3:} Find a game $G$ such that eliminating one strategy yields an equilibrium not in $G$. \\
+\textbf{Q4:} Find a game and an equilibrium where for each player the strategy is dominated.
+\end{exbox}
+
+\begin{defbox}{Required Knowledge: Threats and Weak Domination}
+A strategy can act as a "threat" that blocks a profile from being an equilibrium. If that threat is removed, the blocked profile becomes an equilibrium. 
+Furthermore, a strategy played in a Nash Equilibrium can \textbf{never} be strictly dominated, but it \textbf{can} be weakly dominated.
+\end{defbox}
+
+\textbf{Solution (Q3):} Consider a game where strategy $M$ serves as a threat that prevents $(T,L)$ from being an equilibrium.
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc}
+  & L & R \\
+\hline
+T & 1,1 & 0,0 \\
+B & 0,0 & 2,2 \\
+M & 3,0 & 0,0 \\
+\end{tabular}
+\end{center}
+In $G$, $(T,L)$ is not a NE because Player 1 would deviate to $M$ to get 3 instead of 1. If we eliminate strategy $M$, the remaining game is a standard coordination game where $(T,L)$ \textbf{is} a valid Nash Equilibrium.
+
+\textbf{Solution (Q4):} As seen in Q1(b), consider the matrix:
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc}
+  & L & R \\
+\hline
+T & 1,1 & 0,0 \\
+B & 0,0 & 0,0 \\
+\end{tabular}
+\end{center}
+The profile $(B,R)$ is a Nash Equilibrium because no player can strictly improve (deviating yields 0). However, $B$ is weakly dominated by $T$, and $R$ is weakly dominated by $L$.
+
+% ------------------------------------------------------------
+\newpage
+\begin{exbox}{Question 5: Symmetric Games}
+A two-player game is symmetric if $S_1 = S_2 = S$ and $u_1(s_1,s_2) = u_2(s_2,s_1)$. Suppose $(s_1,s_2)$ is an equilibrium. Is $(s_2,s_1)$ also an equilibrium?
+\end{exbox}
+
+\begin{notebox}
+\textbf{Required Knowledge: Symmetry} \\
+In a symmetric game, the game looks identical from either player's perspective. If an asymmetric profile $(A,B)$ is stable, the mirrored profile $(B,A)$ must logically also be stable.
+\end{notebox}
+
+\textbf{Solution:} Yes. Since $(s_1, s_2)$ is an NE, Player 1 has no incentive to deviate: 
+\[ u_1(s_1, s_2) \geq u_1(s_1', s_2) \quad \forall s_1' \in S \]
+By the symmetry condition, $u_1(x,y) = u_2(y,x)$. Substituting this into the inequality gives:
+\[ u_2(s_2, s_1) \geq u_2(s_2, s_1') \quad \forall s_1' \in S \]
+This exactly means that Player 2 has no incentive to deviate from $(s_2, s_1)$. A perfectly mirrored argument shows Player 1 also has no incentive to deviate. Thus $(s_2, s_1)$ is an NE.
+
+% ------------------------------------------------------------
+\vspace{0.5cm}
+\begin{exbox}{Question 6: Continuous Effort Game}
+Utility: $U_i(e_1, e_2) = \frac{1}{2} e_1^{\alpha_1} e_2^{\alpha_2} - c e_i$. Find all pure Nash Equilibria.
+\end{exbox}
+
+\begin{defbox}{Required Knowledge: Continuous Strategies (Calculus)}
+When strategies are continuous numbers (like effort $e_i \geq 0$), you find the Best Response by taking the partial derivative of the utility function with respect to the player's own strategy, and setting it to 0. 
+\[ \frac{\partial U_i}{\partial e_i} = 0 \]
+This gives a system of equations. Note: Always check boundary conditions (e.g., $e_i = 0$) manually!
+\end{defbox}
+
+\textbf{Solution:} 
+To find the interior pure NE, we find the Best Response functions by setting partial derivatives to zero:
+\begin{align}
+\frac{\partial U_1}{\partial e_1} &= \frac{1}{2}\alpha_1 e_1^{\alpha_1 - 1} e_2^{\alpha_2} - c = 0 \\
+\frac{\partial U_2}{\partial e_2} &= \frac{1}{2}\alpha_2 e_1^{\alpha_1} e_2^{\alpha_2 - 1} - c = 0 
+\end{align}
+From (1), we get $\frac{1}{2} e_1^{\alpha_1} e_2^{\alpha_2} = \frac{c e_1}{\alpha_1}$. From (2), we get $\frac{1}{2} e_1^{\alpha_1} e_2^{\alpha_2} = \frac{c e_2}{\alpha_2}$.
+Equating these gives $\frac{c e_1}{\alpha_1} = \frac{c e_2}{\alpha_2} \implies \frac{e_1}{\alpha_1} = \frac{e_2}{\alpha_2} \implies e_2 = \frac{\alpha_2}{\alpha_1} e_1$.
+Substitute this back into (1) to solve for the unique strictly positive NE $(e_1^*, e_2^*)$.
+
+\textbf{Boundary Check:} Is $(0,0)$ a Nash Equilibrium? If Player 2 puts in $e_2 = 0$, Player 1's utility becomes $U_1 = 0 - c e_1$. To maximize this, Player 1 must choose $e_1 = 0$. Thus, $(0,0)$ is also a Nash Equilibrium.
+
+% ------------------------------------------------------------
+\vspace{0.5cm}
+\begin{exbox}{Question 7: Hotelling's Location Game}
+Pete's and Caribou Coffee choose locations $x_1, x_2 \in [0,1]$. Customers go to the closest store. Prove $x_1=x_2=1/2$ is the unique NE, and that 3 chains have no NE.
+\end{exbox}
+
+\begin{notebox}
+\textbf{Required Knowledge: Spatial Competition} \\
+In location games, market share is determined by the midpoint between stores. Players will always move towards their opponent to "steal" the hinterland behind them, eventually converging at the center.
+\end{notebox}
+
+\textbf{Solution:} 
+(ii) If both locate at $x=1/2$, they split the market exactly (payoff $1/2$). If Pete unilaterally moves to $x < 1/2$, he captures $[0, x]$ plus half the distance to $1/2$. His total market share becomes $x + \frac{1/2 - x}{2} = \frac{1}{4} + \frac{x}{2}$. Since $x < 1/2$, this is strictly less than $1/2$. Thus, deviation reduces payoff. $x_1=x_2=1/2$ is a unique NE. \\
+(iii) With three chains, suppose they are sorted $x_1 \leq x_2 \leq x_3$. The middle chain $x_2$ is getting squeezed. The chains on the edges can always marginally jump just inside the middle chain to drastically increase their market share. There is no configuration where at least one chain wouldn't want to jump over another.
+
+% ------------------------------------------------------------
+\vspace{0.5cm}
+\begin{exbox}{Question 8 \& 9: 2x2 NE properties \& Minmax Value}
+\textbf{Q8:} Prove: A 2x2 game with exactly one pure NE cannot have another mixed NE. \\
+\textbf{Q9:} Prove: For any NE $\sigma^*$, $U_i(\sigma^*) \geq \bar{v}_i$ where $\bar{v}_i$ is the minmax value.
+\end{exbox}
+
+\begin{defbox}{Required Knowledge: Minmax Value (Security Level)}
+The minmax value $\bar{v}_i = \min_{\sigma_{-i}} \max_{\sigma_i} U_i(\sigma_i, \sigma_{-i})$ is the lowest payoff the opponents can \textit{force} Player i to receive, assuming Player i plays optimally. A Nash Equilibrium must always give a player at least their security level.
+\end{defbox}
+
+\textbf{Solution (Q8):} True. In a generic $2 \times 2$ game, the best response correspondences are straight lines. They can intersect exactly once (1 pure NE), three times (2 pure, 1 mixed), or overlap entirely (infinite NEs). It is topologically impossible for them to cross exactly twice (1 pure, 1 mixed).
+
+\textbf{Solution (Q9):} True. By the definition of a Nash Equilibrium, $U_i(\sigma^*) = \max_{\sigma_i} U_i(\sigma_i, \sigma_{-i}^*)$. 
+The minmax value looks at the minimum over \textit{all possible} opponent strategies $\sigma_{-i}$. 
+Therefore, the value at the specific equilibrium strategy $\sigma_{-i}^*$ must be greater than or equal to the absolute minimum:
+\[ U_i(\sigma^*) = \max_{\sigma_i} U_i(\sigma_i, \sigma_{-i}^*) \geq \min_{\sigma_{-i}} \max_{\sigma_i} U_i(\sigma_i, \sigma_{-i}) = \bar{v}_i \]
+
+% ============================================================
+\newpage
+\section*{Part 2: Two-Player Zero-Sum Games}
+
+\begin{exbox}{Zero-Sum Properties}
+1(a). Prove any two saddle points of a matrix $A$ have the same value. \\
+1(b). If (1,1) and (4,4) are saddle points, show A has at least two other saddle points. \\
+4. If the value of $A$ is 0, prove the value of $-A$ is also 0. \\
+5. If $A$ is symmetric ($A = -A^T$), prove the value is 0.
+\end{exbox}
+
+\begin{notebox}
+\textbf{Required Knowledge: Saddle Points and Values} \\
+A Saddle Point $(i,j)$ is a Pure NE in a zero-sum game. It must be the \textbf{minimum of its row} and the \textbf{maximum of its column}. \\
+Zero-Sum Property: The value of the game from P1's perspective is $V(A)$. From P2's perspective (who plays the negative of the matrix), $V(-A) = -V(A)$.
+\end{notebox}
+
+\textbf{Solution 1(a):} Let $(i,j)$ and $(k,l)$ be saddle points. Since $(i,j)$ is a minimum in its row and a maximum in its column (and similarly for $(k,l)$):
+\[ a_{ij} \leq a_{il} \quad \text{(min in row } i \text{)} \]
+\[ a_{il} \leq a_{kl} \quad \text{(max in col } l \text{)} \]
+\[ a_{kl} \leq a_{kj} \quad \text{(min in row } k \text{)} \]
+\[ a_{kj} \leq a_{ij} \quad \text{(max in col } j \text{)} \]
+This creates the chain $a_{ij} \leq a_{il} \leq a_{kl} \leq a_{kj} \leq a_{ij}$, which forces $a_{ij} = a_{kl}$.
+
+\textbf{Solution 1(b):} The inequalities in 1(a) actually forced $a_{ij} = a_{il} = a_{kl} = a_{kj}$. Because $(i,l)$ equals the saddle point values, and sits in the same rows/cols, it satisfies the min/max conditions and is also a saddle point. This is the \textbf{Rectangle Property}. Thus, $(1,4)$ and $(4,1)$ are also saddle points.
+
+\textbf{Solution 4:} Yes. By the definition of zero-sum games, the value of the inverted game is the negative of the original game: $V(-A) = -V(A)$. Since $V(A) = 0$, $V(-A) = -0 = 0$.
+
+\textbf{Solution 5:} The value of the game for Player 1 playing matrix $A$ is $V(A)$. Since the game is symmetric ($A = -A^T$), the game looks physically identical from Player 2's perspective. Player 2's value must be the same as Player 1's. But in a zero-sum game, the sum of values is zero: $V_1 + V_2 = 0$. 
+Thus $V(A) + V(A) = 0 \implies 2V(A) = 0 \implies V(A) = 0$. Because the payoff structures are symmetric, any strategy that guarantees 0 for Player 1 will identically guarantee 0 for Player 2, so their max-min strategy sets coincide.
+
+\end{document}

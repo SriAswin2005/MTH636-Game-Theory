@@ -1,0 +1,86 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 16
+%  Extensive Form Games & Perfect Information
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 16: Extensive Form Games \& Perfect Information}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Directed Rooted Trees}
+
+To formally define an extensive form game, we first need to define the underlying graph structure.
+
+\begin{defbox}{Directed Rooted Tree}
+  A \textbf{directed rooted tree} is a triplet $T = (V, E, n_0)$ where:
+  \begin{itemize}
+      \item $V$ is a finite set of elements called \textbf{nodes} or vertices (with $|V| \geq 2$).
+      \item $E \subseteq V \times V$ are the \textbf{edges}. An edge $e = (n,y) \in E$ is an outgoing edge of $n$ and an incoming edge of $y$.
+      \item $n_0 \in V$ is called the \textbf{root} of the tree. For every $n \in V \setminus \{n_0\}$, there is a unique path from $n_0$ to $n$. The root $n_0$ has no incoming edges.
+  \end{itemize}
+\end{defbox}
+
+\begin{itemize}
+    \item \textbf{Leaves ($Z$):} Nodes that do not have any outgoing edges. Denoted by $Z \subseteq V$.
+    \item \textbf{Children ($C(n)$):} For a node $n \in V$, the children are $C(n) = \{y \in V \mid (n,y) \in E\}$.
+    \item \textbf{Actions ($A(n)$):} For a node $n \in V$, the available actions are the outgoing edges $A(n) = \{e \in E \mid e = (n,y) \text{ for some } y \in V\}$.
+\end{itemize}
+
+% ============================================================
+\section{Formal Definition of Extensive Form Games}
+
+\begin{defbox}{Extensive Form Game (Perfect Information)}
+  An extensive form game is a tuple $\Gamma = \langle N, V, E, n_0, (V_i)_{i \in N}, (u_i)_{i \in N} \rangle$ where:
+  \begin{itemize}
+      \item $N$ is a finite set of players.
+      \item $(V, E, n_0)$ is a directed rooted tree.
+      \item $(V_i)_{i \in N}$ is a partition of the non-leaf nodes (the nodes where decisions are made), i.e., a partition of the set $V \setminus Z$.
+      \item $(u_i)_{i \in N}$ is a collection of utility functions, where $u_i : Z \to \mathbb{R}$ assigns a payoff to every leaf node for player $i$.
+  \end{itemize}
+\end{defbox}
+
+Let $J: V \setminus Z \to N$ be a function such that $J(n) = i$ if $n \in V_i$. 
+The game proceeds in the following way:
+\begin{enumerate}
+    \item Player $J(n_0)$ initiates the game by choosing a possible action from $A(n_0)$. Equivalently, he chooses a node $n_1 \in C(n_0)$.
+    \item If $n_1$ is a leaf, the game ends there. Otherwise, player $J(n_1)$ chooses a node $n_2 \in C(n_1)$.
+    \item In this way, the game continues until a leaf node is reached, at which point payoffs are distributed according to $(u_i)$.
+\end{enumerate}
+
+\begin{notebox}
+\textbf{Perfect Information:}
+These games are perfect information games. The players know exactly what has happened before making their moves (they know exactly which node they are at).
+\end{notebox}
+
+% ============================================================
+\section{Strategies in Extensive Form Games}
+
+\begin{defbox}{Pure Strategy}
+  A pure strategy for player $i$, denoted $s_i$, is a mapping which maps each node $n \in V_i$ (the nodes player $i$ controls) to an element of $A(n)$ (an available action at that node). 
+  
+  Equivalently, it maps $n$ to a child node in $C(n)$.
+  \[ s_i : V_i \to \bigcup_{n \in V_i} A(n) \]
+  such that $s_i(n) \in A(n)$ for all $n \in V_i$.
+\end{defbox}
+
+\textbf{Crucial Note:} A strategy must define an action for \textit{every} node in $V_i$, even for nodes that might never be reached if the player follows that very strategy earlier in the tree. This is necessary to evaluate deviations and subgames.
+
+\begin{exbox}{Strategy Example}
+  If Player 1 controls nodes $n_0$ and $n_4$, a valid strategy $s_1$ must specify a choice at both nodes. For example:
+  \[ s_1(n_0) = R \quad \text{and} \quad s_1(n_4) = A \]
+  This strategy is denoted as $(R, A)$. Even if playing $R$ at $n_0$ means node $n_4$ is never reached, the strategy still requires specifying action $A$ at node $n_4$.
+\end{exbox}
+
+\end{document}

@@ -1,0 +1,230 @@
+% ============================================================
+%  MTH636 -- Game Theory
+%  Notes Preamble — Color-Coded, TikZ-Enhanced
+% ============================================================
+
+% --- Core packages ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm, top=2.8cm, bottom=2.8cm]{geometry}
+\usepackage{microtype}
+
+% --- Math ---
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{bm}        % bold math
+\usepackage{cancel}    % strike-through in math
+
+% --- Color & Boxes ---
+\usepackage[dvipsnames, svgnames, x11names, table]{xcolor}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins, theorems}
+
+% --- TikZ & Diagrams ---
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds,
+                decorations.pathreplacing, calc, matrix, trees}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% --- Tables ---
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{makecell}
+
+% --- Typography & Layout ---
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+
+% --- Color Palette ---
+\definecolor{defblue}{HTML}{1A5276}      % Definition header
+\definecolor{defbluebg}{HTML}{D6EAF8}    % Definition background
+\definecolor{thmgreen}{HTML}{1E8449}     % Theorem header
+\definecolor{thmbg}{HTML}{D5F5E3}        % Theorem background
+\definecolor{exorange}{HTML}{B7770D}     % Example header
+\definecolor{exbg}{HTML}{FEF9E7}         % Example background
+\definecolor{warnred}{HTML}{922B21}      % Warning/Key Insight header
+\definecolor{warnbg}{HTML}{FADBD8}       % Warning background
+\definecolor{noticegray}{HTML}{2C3E50}   % Note header
+\definecolor{noticebg}{HTML}{EBF5FB}     % Note background
+\definecolor{taketawayyellow}{HTML}{7D6608} % Key Takeaway header
+\definecolor{takeawaybg}{HTML}{FDFEFE}   % Takeaway background
+\definecolor{accentpurple}{HTML}{6C3483} % Accent / proof
+\definecolor{lightgray}{HTML}{F2F3F4}    % shading
+
+% ============================================================
+%  TCOLORBOX ENVIRONMENTS
+% ============================================================
+
+% -- Definition (Blue) --
+\newtcolorbox{defbox}[2][]{
+  enhanced, breakable,
+  colback=defbluebg, colframe=defblue, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Definition: #2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=defblue, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Theorem / Proposition (Green) --
+\newtcolorbox{thmbox}[2][]{
+  enhanced, breakable,
+  colback=thmbg, colframe=thmgreen, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Theorem: #2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=thmgreen, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Proposition (Green variant) --
+\newtcolorbox{propbox}[2][]{
+  enhanced, breakable,
+  colback=thmbg, colframe=thmgreen!70!black, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Proposition: #2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=thmgreen!70!black, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Example (Orange/Yellow) --
+\newtcolorbox{exbox}[2][]{
+  enhanced, breakable,
+  colback=exbg, colframe=exorange, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Example: #2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=exorange, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Key Insight / Warning (Red) --
+\newtcolorbox{warnbox}[2][]{
+  enhanced, breakable,
+  colback=warnbg, colframe=warnred, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Key Insight: #2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=warnred, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Note (Gray-Blue) --
+\newtcolorbox{notebox}[1][]{
+  enhanced, breakable,
+  colback=noticebg, colframe=noticegray!60, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Note},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=noticegray!60, rounded corners},
+  arc=4pt, boxrule=0.8pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Key Takeaway --
+\newtcolorbox{takebox}[1][]{
+  enhanced, breakable,
+  colback=takeawaybg, colframe=taketawayyellow, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Key Takeaway},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=taketawayyellow, rounded corners},
+  arc=4pt, boxrule=1.2pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% -- Intuition --
+\newtcolorbox{intubox}[1][]{
+  enhanced, breakable,
+  colback=accentpurple!8, colframe=accentpurple!60, coltitle=white,
+  fonttitle=\bfseries\sffamily,
+  title={Intuition},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accentpurple!80, rounded corners},
+  arc=4pt, boxrule=0.8pt,
+  left=6pt, right=6pt, top=8pt, bottom=6pt,
+  #1
+}
+
+% ============================================================
+%  PAYOFF MATRIX HELPER
+%  Usage: inside tabular, use \payoff{a}{b} for (a,b)
+% ============================================================
+\newcommand{\payoff}[2]{$(#1,\;#2)$}
+\newcommand{\nash}[2]{\underline{$#1$},\underline{$#2$}}  % underline NE payoffs
+\newcommand{\Nset}{\mathbb{N}}
+\newcommand{\Rset}{\mathbb{R}}
+\newcommand{\Sset}{\mathcal{S}}
+\newcommand{\Ui}{u_i}
+
+% ============================================================
+%  SECTION FORMATTING
+% ============================================================
+\titleformat{\section}
+  {\large\bfseries\sffamily\color{defblue}}
+  {\thesection}{1em}{}[\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\sffamily\color{thmgreen!80!black}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\itshape\sffamily\color{exorange!80!black}}
+  {\thesubsubsection}{1em}{}
+
+% ============================================================
+%  HEADER / FOOTER
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\small\color{defblue} MTH636 -- Game Theory}
+\fancyhead[R]{\sffamily\small\color{defblue} \leftmark}
+\fancyfoot[C]{\sffamily\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ============================================================
+%  HYPERREF SETUP
+% ============================================================
+\hypersetup{
+  colorlinks=true,
+  linkcolor=defblue,
+  urlcolor=thmgreen,
+  citecolor=accentpurple,
+  bookmarksnumbered=true,
+  pdftitle={MTH636 Game Theory Notes},
+  pdfauthor={MTH636 Student Notes}
+}
+
+% ============================================================
+%  MISC HELPERS
+% ============================================================
+\newcommand{\BR}{\text{BR}}        % Best Response
+\newcommand{\NE}{\text{NE}}        % Nash Equilibrium
+\newcommand{\SPNE}{\text{SPNE}}    % Subgame Perfect NE
+\newcommand{\Dom}{\text{dom}}      % Dominance
+\newcommand{\mixs}[1]{\sigma_{#1}} % Mixed strategy
+\newcommand{\pures}[1]{s_{#1}}     % Pure strategy

@@ -1,0 +1,180 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 3
+%  Dominated Strategies & Iterated Elimination
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 3: Dominated Strategies \& Iterated Elimination}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Strictly Dominated Strategies}
+
+\begin{defbox}{Strictly Dominated Strategy}
+  A strategy $s_i$ of player $i$ is \textbf{strictly dominated} by another strategy $t_i$ of the same player if, for all possible strategy profiles of the other players $s_{-i} \in S_{-i}$, playing $t_i$ always yields a strictly higher payoff than playing $s_i$. Mathematically:
+  \[
+    u_i(s_i, s_{-i}) < u_i(t_i, s_{-i}) \quad \forall s_{-i} \in S_{-i}
+  \]
+\end{defbox}
+
+\begin{warnbox}{Rationality Assumptions}
+  \begin{itemize}[leftmargin=*]
+    \item \textbf{Assumption 1:} A rational player will \emph{never} play a strictly dominated strategy.
+    \item \textbf{Assumption 2:} All players in a game are rational.
+  \end{itemize}
+\end{warnbox}
+
+Let $S_{-i} = \prod_{j \neq i} S_j$ denote the set of all possible combinations of strategies for all players other than $i$.
+
+\subsection{Iterated Elimination of Strictly Dominated Strategies (IESDS)}
+
+\begin{exbox}{IESDS Process}
+  Consider the following game:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|ccc}
+    $P_1 \setminus P_2$ & L & M & R \\
+    \hline
+    T & \payoff{1}{0} & \payoff{1}{2} & \payoff{0}{1} \\
+    B & \payoff{0}{3} & \payoff{0}{1} & \payoff{2}{0} \\
+  \end{tabular}
+  \end{center}
+
+  \textbf{Step 1:} Look at Player 2's strategies (L, M, R).
+  \begin{itemize}
+    \item If P1 plays T, P2 gets 0 (L), 2 (M), 1 (R).
+    \item If P1 plays B, P2 gets 3 (L), 1 (M), 0 (R).
+  \end{itemize}
+  Notice that for Player 2, strategy \textbf{M strictly dominates R} because $2 > 1$ and $1 > 0$. Since Player 2 is rational, they will never play R. We eliminate column R:
+  
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & L & M \\
+    \hline
+    T & \payoff{1}{0} & \payoff{1}{2} \\
+    B & \payoff{0}{3} & \payoff{0}{1} \\
+  \end{tabular}
+  \end{center}
+
+  \textbf{Step 2:} Now look at Player 1's strategies (T, B) in the reduced game.
+  \begin{itemize}
+    \item T yields payoffs (1, 1).
+    \item B yields payoffs (0, 0).
+  \end{itemize}
+  For Player 1, strategy \textbf{T strictly dominates B} ($1 > 0$ and $1 > 0$). Player 1 knows Player 2 is rational and won't play R. Thus, we eliminate row B:
+
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & L & M \\
+    \hline
+    T & \payoff{1}{0} & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+
+  \textbf{Step 3:} Back to Player 2. In this further reduced game:
+  \begin{itemize}
+    \item L yields 0.
+    \item M yields 2.
+  \end{itemize}
+  Strategy \textbf{M strictly dominates L} ($2 > 0$). Eliminate column L.
+
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|c}
+    $P_1 \setminus P_2$ & M \\
+    \hline
+    T & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+  
+  \textbf{Result:} The unique prediction is that Player 1 plays T and Player 2 plays M. This relies on Player 1 knowing that Player 2 is rational.
+\end{exbox}
+
+% ============================================================
+\section{Common Knowledge and Complete Information}
+
+\begin{defbox}{Common Knowledge}
+  A fact is \textbf{Common Knowledge} among the players in a game if for any finite chain of players $i_1, i_2, \dots, i_k$, the following holds:
+  Player $i_1$ knows that Player $i_2$ knows that $\dots$ Player $i_k$ knows the fact.
+\end{defbox}
+
+\begin{warnbox}{Assumption 3}
+  \textbf{Rationality of the players is common knowledge.}
+\end{warnbox}
+
+\begin{defbox}{Game of Complete Information}
+  A game is called a game of \textbf{complete information} if the structure of the game (the players, their strategies, and their payoff functions) is common knowledge among all players.
+\end{defbox}
+
+\begin{thmbox}{Order Independence of IESDS}
+  The order of elimination of \emph{strictly} dominated strategies does not matter, in the sense that the final game obtained after removing all strictly dominated strategies does not depend on the order of elimination.
+\end{thmbox}
+
+% ============================================================
+\section{Weakly Dominated Strategies}
+
+\begin{defbox}{Weakly Dominated Strategy}
+  A strategy $s_i$ of player $i$ is \textbf{weakly dominated} by another strategy $t_i$ of the same player if:
+  \begin{enumerate}
+      \item $u_i(s_i, s_{-i}) \leq u_i(t_i, s_{-i}) \quad \forall s_{-i} \in S_{-i}$
+      \item $\exists t_{-i} \in S_{-i}$ such that $u_i(s_i, t_{-i}) < u_i(t_i, t_{-i})$
+  \end{enumerate}
+  (i.e., $t_i$ is always at least as good as $s_i$, and is strictly better against at least one strategy profile of the opponents).
+\end{defbox}
+
+\subsection{Iterated Elimination of Weakly Dominated Strategies}
+
+Unlike strict domination, the order of elimination \emph{does} matter for weakly dominated strategies. 
+
+\begin{exbox}{Order Dependence Example}
+  Consider the following game:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|ccc}
+    $P_1 \setminus P_2$ & L & C & R \\
+    \hline
+    T & \payoff{1}{2} & \payoff{2}{3} & \payoff{0}{3} \\
+    M & \payoff{2}{2} & \payoff{2}{1} & \payoff{3}{2} \\
+    B & \payoff{2}{1} & \payoff{0}{0} & \payoff{1}{0} \\
+  \end{tabular}
+  \end{center}
+  
+  Let's observe different valid elimination sequences:
+
+  \textbf{Sequence 1: Eliminate T, R, B, C}
+  \begin{enumerate}
+      \item For P1, \textbf{M weakly dominates T} (since $2 > 1$, $2 = 2$, and $3 > 0$). Eliminate T.
+      \item For P2, against \{M, B\}, \textbf{L weakly dominates R} (payoffs 2,1 vs 2,0). Eliminate R.
+      \item For P1, against \{L, C\}, \textbf{M strictly dominates B} (payoffs 2,2 vs 2,0). Eliminate B.
+      \item For P2, against \{M\}, \textbf{L strictly dominates C} (payoffs 2 vs 1). Eliminate C.
+      \item \textbf{Result:} (M, L).
+  \end{enumerate}
+
+  \textbf{Sequence 2: Eliminate B, L, C, T}
+  \begin{enumerate}
+      \item For P1, \textbf{M weakly dominates B} (since $2 = 2$, $2 > 0$, $3 > 1$). Eliminate B.
+      \item For P2, against \{T, M\}, \textbf{R weakly dominates L} (payoffs 3,2 vs 2,2). Eliminate L.
+      \item For P2, against \{T, M\}, \textbf{R weakly dominates C} (payoffs 3,2 vs 3,1). Eliminate C.
+      \item For P1, against \{R\}, \textbf{M strictly dominates T} (payoffs 3 vs 0). Eliminate T.
+      \item \textbf{Result:} (M, R).
+  \end{enumerate}
+\end{exbox}
+
+\begin{takebox}
+  While the Iterated Elimination of Strictly Dominated Strategies (IESDS) yields a unique result regardless of the order of elimination, the \textbf{Iterated Elimination of Weakly Dominated Strategies is order-dependent}. Different elimination paths can lead to entirely different predictions.
+\end{takebox}
+
+\end{document}

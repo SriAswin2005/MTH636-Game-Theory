@@ -1,0 +1,130 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 11
+%  Computing Mixed Strategies (Graphical Method)
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 11: Computing Max-Min Strategies graphically}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Max-Min Strategies in Mixed Games}
+
+For a finite two-player zero-sum game, we know the value $V$ exists in mixed strategies:
+\[
+  V = \max_{\sigma_1 \in \Sigma_1} \min_{s_2 \in S_2} U(\sigma_1, s_2) = \min_{\sigma_2 \in \Sigma_2} \max_{s_1 \in S_1} U(s_1, \sigma_2)
+\]
+
+\begin{defbox}{Optimal Strategies}
+  \begin{itemize}
+      \item For Player 1, a \textbf{max-min strategy} is a mixed strategy $\sigma_1^*$ such that:
+      \[
+        U(\sigma_1^*, \sigma_2) \geq V \quad \forall \sigma_2 \in \Sigma_2
+      \]
+      \item For Player 2, a \textbf{min-max strategy} is a mixed strategy $\sigma_2^*$ such that:
+      \[
+        U(\sigma_1, \sigma_2^*) \leq V \quad \forall \sigma_1 \in \Sigma_1
+      \]
+  \end{itemize}
+\end{defbox}
+
+% ============================================================
+\section{The Graphical Method ($2 \times 2$ Games)}
+
+When Player 1 has exactly two pure strategies, we can find the max-min strategy by graphing the expected payoffs.
+
+\begin{exbox}{A $2 \times 2$ Game Example}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & L ($y$) & R ($1-y$) \\
+    \hline
+    T ($x$) & 5 & 0 \\
+    B ($1-x$) & 3 & 4 \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+Let Player 1 play T with probability $x$ and B with probability $1-x$.
+Player 1's expected payoff against P2's pure strategies:
+\begin{align*}
+  U(x, L) &= 5x + 3(1-x) = 2x + 3 \\
+  U(x, R) &= 0x + 4(1-x) = 4 - 4x
+\end{align*}
+
+We graph these two lines for $x \in [0,1]$. For any chosen $x$, Player 2 will respond by choosing the column that yields the \textbf{lower} payoff for Player 1. Thus, Player 1's guaranteed payoff for a given $x$ is the \textbf{lower envelope} of the two lines:
+\[
+  \min \{2x + 3, 4 - 4x\}
+\]
+Player 1 wants to maximize this minimum (find the peak of the lower envelope). This peak occurs where the two lines intersect:
+\[
+  2x + 3 = 4 - 4x \implies 6x = 1 \implies x^* = \frac{1}{6}
+\]
+The unique max-min strategy for Player 1 is $x^* = 1/6$.
+The \textbf{Value} of the game is $V = 2(1/6) + 3 = 10/3 = 3\frac{1}{3}$.
+
+\vspace{0.3cm}
+By symmetry, to find Player 2's min-max strategy $y$ (probability of L), we graph P1's payoffs against P1's pure strategies:
+\begin{align*}
+  U(T, y) &= 5y + 0(1-y) = 5y \\
+  U(B, y) &= 3y + 4(1-y) = 4 - y
+\end{align*}
+Player 2 wants to minimize the \textbf{upper envelope} (because P1 will maximize).
+The intersection is $5y = 4 - y \implies 6y = 4 \implies y^* = 2/3$.
+
+% ============================================================
+\section{The Graphical Method ($2 \times n$ Games)}
+
+The graphical method also works if one player has 2 strategies and the other has $n$.
+
+\begin{exbox}{A $2 \times 3$ Game Example}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|ccc}
+    $P_1 \setminus P_2$ & L & M & R \\
+    \hline
+    T ($x$) & 2 & 5 & -1 \\
+    B ($1-x$) & 1 & -2 & 5 \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+Player 1's expected payoff against P2's three pure strategies:
+\begin{align*}
+  U(x, L) &= 2x + 1(1-x) = x + 1 \\
+  U(x, M) &= 5x - 2(1-x) = 7x - 2 \\
+  U(x, R) &= -x + 5(1-x) = 5 - 6x
+\end{align*}
+
+Graphing these three lines for $x \in [0,1]$, we look at the \textbf{lower envelope}.
+The highest point on the lower envelope occurs at the intersection of the lines for $L$ and $R$. (The line for $M$ is strictly above this intersection point, so it does not restrict Player 1's maximum guaranteed payoff).
+\[
+  x + 1 = 5 - 6x \implies 7x = 4 \implies x^* = \frac{4}{7}
+\]
+The unique max-min strategy for Player 1 is $x^* = 4/7$.
+The \textbf{Value} of the game is $V = U(x^*, R) = 5 - 6(4/7) = 35/7 - 24/7 = 11/7$.
+
+\subsection{Finding Player 2's Mixed Strategy}
+Player 2 must construct a mixed strategy $\sigma_2^* = (\sigma_2(L), \sigma_2(M), \sigma_2(R))$ such that Player 1 can never get more than $V = 11/7$.
+Because the line for pure strategy $M$ is strictly above the value $11/7$ at $x^*$, Player 2 should never play $M$ (it would give P1 a higher payoff). Thus, $\sigma_2(M) = 0$.
+
+Let $\sigma_2(L) = q$ and $\sigma_2(R) = 1-q$.
+Player 1's expected payoff against this mix must be $\leq 11/7$ for any pure strategy P1 plays:
+\begin{align*}
+  \text{If P1 plays T:} \quad & 2q + (-1)(1-q) \leq \frac{11}{7} \implies 3q - 1 \leq \frac{11}{7} \implies 3q \leq \frac{18}{7} \implies q \leq \frac{6}{7} \\
+  \text{If P1 plays B:} \quad & 1q + 5(1-q) \leq \frac{11}{7} \implies 5 - 4q \leq \frac{11}{7} \implies 4q \geq \frac{24}{7} \implies q \geq \frac{6}{7}
+\end{align*}
+Therefore, $q = 6/7$. Player 2's unique min-max strategy is $[6/7 \text{ (L)}, 0 \text{ (M)}, 1/7 \text{ (R)}]$.
+
+\end{document}

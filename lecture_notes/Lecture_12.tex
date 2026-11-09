@@ -1,0 +1,115 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 12
+%  Equivalence of Minimax and Nash, Indifference Principle
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 12: NE and the Indifference Principle}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Minimax Strategies and Nash Equilibrium}
+
+For general two-player zero-sum games, finding max-min strategies can be framed as a Linear Programming problem (see Solan's book, Section 5.2.5). There is a profound connection between max-min strategies and Nash Equilibrium.
+
+\begin{thmbox}{Equivalence Theorem for Zero-Sum Games}
+  For a two-player zero-sum game, a strategy profile $(\sigma_1^*, \sigma_2^*)$ is a max-min strategy profile if and only if $(\sigma_1^*, \sigma_2^*)$ is a Nash Equilibrium.
+\end{thmbox}
+
+\textbf{Proof Idea:}
+If $V$ is the value of the game, a max-min profile means $U(\sigma_1^*, \sigma_2) \geq V$ for all $\sigma_2$ and $U(\sigma_1, \sigma_2^*) \leq V$ for all $\sigma_1$. 
+Setting $\sigma_2 = \sigma_2^*$ and $\sigma_1 = \sigma_1^*$ yields $U(\sigma_1^*, \sigma_2^*) = V$.
+Therefore:
+\[
+  U(\sigma_1^*, \sigma_2^*) = V \geq U(\sigma_1, \sigma_2^*) \quad \forall \sigma_1 \in \Sigma_1
+\]
+\[
+  U(\sigma_1^*, \sigma_2^*) = V \leq U(\sigma_1^*, \sigma_2) \quad \forall \sigma_2 \in \Sigma_2
+\]
+This precisely satisfies the definition of a Nash Equilibrium. The proof in the other direction follows a similar bounding logic to show that the existence of an NE implies $\underline{V} = \overline{V} = V$.
+
+\begin{thmbox}{Security Level Theorem}
+  Suppose $\sigma^*$ is a Nash Equilibrium of any strategic form game (not necessarily zero-sum). Then every player achieves at least their max-min value (security level):
+  \[
+    U_i(\sigma^*) \geq \underline{V}_i \quad \forall i \in N
+  \]
+\end{thmbox}
+
+% ============================================================
+\section{Computing NE via Best Response}
+
+Let's compute the mixed Nash Equilibrium for a non-zero-sum game using best response correspondences.
+
+\begin{exbox}{Battle of the Sexes}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & L ($y$) & R ($1-y$) \\
+    \hline
+    T ($x$) & (2,1) & (0,0) \\
+    B ($1-x$) & (0,0) & (1,2) \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+\textbf{Player 1's Expected Utility:}
+\begin{align*}
+  U_1(x, y) &= x[2y + 0] + (1-x)[0 + 1(1-y)] \\
+  &= 2xy + 1 - y - x + xy = x(3y - 1) + (1-y)
+\end{align*}
+To maximize this, Player 1 looks at the coefficient of $x$, which is $(3y - 1)$.
+\begin{itemize}
+    \item If $3y - 1 > 0 \implies y > 1/3$, P1 wants $x$ to be as large as possible ($x=1$).
+    \item If $3y - 1 < 0 \implies y < 1/3$, P1 wants $x$ to be as small as possible ($x=0$).
+    \item If $3y - 1 = 0 \implies y = 1/3$, P1 is indifferent, any $x \in [0,1]$ is a best response.
+\end{itemize}
+
+\textbf{Player 2's Expected Utility:}
+\begin{align*}
+  U_2(x, y) &= y[1x + 0] + (1-y)[0 + 2(1-x)] \\
+  &= xy + 2 - 2x - 2y + 2xy = y(3x - 2) + 2 - 2x
+\end{align*}
+Looking at the coefficient of $y$, which is $(3x - 2)$:
+\begin{itemize}
+    \item If $x > 2/3$, P2 wants $y=1$.
+    \item If $x < 2/3$, P2 wants $y=0$.
+    \item If $x = 2/3$, P2 is indifferent, any $y \in [0,1]$ is a best response.
+\end{itemize}
+
+If we graph these two best response correspondences, they intersect at three points:
+1. $(x=0, y=0)$ $\implies$ Pure NE: $(B, R)$
+2. $(x=1, y=1)$ $\implies$ Pure NE: $(T, L)$
+3. $(x=2/3, y=1/3)$ $\implies$ \textbf{Mixed NE:} P1 plays T with prob $2/3$, P2 plays L with prob $1/3$.
+
+% ============================================================
+\section{The Indifference Principle}
+
+Notice in the previous example that in the mixed equilibrium, each player makes the \textit{other} player indifferent between their pure strategies. This is a fundamental property of all mixed strategy Nash Equilibria.
+
+\begin{thmbox}{Support of a Mixed Strategy}
+  Suppose $\sigma^*$ is a Nash Equilibrium. Suppose for Player $i$, the mixed strategy $\sigma_i^*$ assigns strictly positive probability to two pure strategies, $s_i^1$ and $s_i^2$ (i.e., they are in the \textbf{support} of $\sigma_i^*$).
+  
+  Then, the expected utility of playing either pure strategy against the opponents' equilibrium profile $\sigma_{-i}^*$ must be exactly the same:
+  \[
+    U_i(s_i^1, \sigma_{-i}^*) = U_i(s_i^2, \sigma_{-i}^*)
+  \]
+\end{thmbox}
+
+\begin{notebox}
+  \textbf{Corollary:} For any Nash Equilibrium $\sigma^*$, the expected utility $U_i(\sigma^*)$ is exactly equal to the expected utility of \textbf{any} pure strategy $s_i \in S_i$ that is played with strictly positive probability (i.e., $\sigma_i^*(s_i) > 0$).
+  
+  If one pure strategy yielded a strictly higher expected payoff than another, the player would just shift all their probability to the better one, contradicting that $\sigma^*$ is an equilibrium!
+\end{notebox}
+
+\end{document}

@@ -1,0 +1,112 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 9
+%  Mixed Strategies and Expected Utility
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 9: Mixed Strategies}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Motivation for Mixed Strategies}
+
+In many games, if players are restricted to pure, deterministic strategies, they might not be able to guarantee a high payoff, and the game might not have a Nash Equilibrium or a Value.
+
+\begin{exbox}{Advantage of Randomization}
+  Consider the following zero-sum game for Player 1:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc|c}
+    $P_1 \setminus P_2$ & L & R & \textbf{Min} \\
+    \hline
+    T & 4 & 1 & 1 \\
+    B & 2 & 3 & \textbf{2} \\
+    \hline
+  \end{tabular}
+  \end{center}
+  In pure strategies, Player 1's max-min value is $\underline{v}_1 = 2$ (by playing B).
+  
+  What if Player 1 plays a \textbf{mixed strategy}? Suppose Player 1 plays T with probability $1/4$ and B with probability $3/4$.
+  \begin{itemize}
+      \item If P2 plays L, P1's expected payoff is: $\frac{1}{4}(4) + \frac{3}{4}(2) = 1 + 1.5 = 2.5$
+      \item If P2 plays R, P1's expected payoff is: $\frac{1}{4}(1) + \frac{3}{4}(3) = 0.25 + 2.25 = 2.5$
+  \end{itemize}
+  By randomizing this way, Player 1 guarantees a payoff of $2.5$, which is strictly greater than the pure max-min value of $2$.
+\end{exbox}
+
+% ============================================================
+\section{Formalizing Mixed Strategies}
+
+\begin{defbox}{Mixed Strategy}
+  Let $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$ be a strategic form game in which the set of strategies $S_i$ of all players is \textbf{finite}. 
+  
+  A \textbf{mixed strategy} of Player $i$ is a probability distribution over their pure strategies $S_i$. 
+  The set of all mixed strategies of Player $i$ is denoted by $\Sigma_i$:
+  \[
+    \Sigma_i = \left\{ \sigma_i : S_i \to [0,1] \;\middle|\; \sum_{s_i \in S_i} \sigma_i(s_i) = 1 \right\}
+  \]
+\end{defbox}
+
+If $S_i = \{T, B\}$, a mixed strategy can be written as $\sigma_1 = (p, 1-p)$, meaning play $T$ with probability $p$ and $B$ with probability $1-p$.
+
+\begin{defbox}{Mixed Extension of a Game}
+  The \textbf{mixed extension} of the game $G$ is a new game:
+  \[
+    \Gamma = \langle N, (\Sigma_i)_{i \in N}, (U_i)_{i \in N} \rangle
+  \]
+  where $\Sigma_i$ is the set of mixed strategies for Player $i$, and $U_i$ is the \textbf{expected utility} function, defined as:
+  \[
+    U_i(\sigma_1, \sigma_2, \dots, \sigma_n) = \sum_{(s_1, \dots, s_n) \in S} u_i(s_1, \dots, s_n) \sigma_1(s_1) \sigma_2(s_2) \cdots \sigma_n(s_n)
+  \]
+\end{defbox}
+
+% ============================================================
+\section{Nash Equilibrium in Mixed Strategies}
+
+\begin{defbox}{Mixed Strategy Nash Equilibrium}
+  Every Nash Equilibrium of the mixed extension $\Gamma$ is called a \textbf{Nash Equilibrium in mixed strategies} of the original game $G$.
+  
+  A profile $\sigma^* = (\sigma_1^*, \dots, \sigma_n^*)$ is an NE in mixed strategies if:
+  \[
+    U_i(\sigma^*) \geq U_i(\sigma_i, \sigma_{-i}^*) \quad \forall i \in N, \forall \sigma_i \in \Sigma_i
+  \]
+\end{defbox}
+
+\begin{thmbox}{Checking NE via Pure Deviations}
+  A profile $\sigma^*$ is a mixed strategy Nash Equilibrium if and only if no player can gain by deviating to a \textbf{pure strategy}:
+  \[
+    U_i(\sigma^*) \geq U_i(s_i, \sigma_{-i}^*) \quad \forall i \in N, \forall s_i \in S_i
+  \]
+\end{thmbox}
+
+\textbf{Proof Intuition:}
+Consider any mixed deviation $\sigma_i$. The expected utility $U_i(\sigma_i, \sigma_{-i}^*)$ is just a weighted average (convex combination) of the utilities of the pure strategies:
+\[
+  U_i(\sigma_i, \sigma_{-i}^*) = \sum_{s_i \in S_i} \sigma_i(s_i) U_i(s_i, \sigma_{-i}^*)
+\]
+If $U_i(\sigma^*) \geq U_i(s_i, \sigma_{-i}^*)$ for every pure strategy $s_i$, then any weighted average of these pure strategy payoffs will also be less than or equal to $U_i(\sigma^*)$.
+\[
+  \sum_{s_i \in S_i} \sigma_i(s_i) U_i(s_i, \sigma_{-i}^*) \leq \sum_{s_i \in S_i} \sigma_i(s_i) U_i(\sigma^*) = U_i(\sigma^*) \sum \sigma_i(s_i) = U_i(\sigma^*)
+\]
+
+% ============================================================
+\section{Linearity of Expected Utility}
+
+Expected utility is \textbf{multilinear} in the probabilities. If we hold all other players' mixed strategies fixed, the expected utility $U_i$ is a linear function of Player $j$'s mixed strategy $\sigma_j$:
+\[
+  U_i(\dots, \lambda\sigma_j + (1-\lambda)\sigma_j', \dots) = \lambda U_i(\dots, \sigma_j, \dots) + (1-\lambda) U_i(\dots, \sigma_j', \dots)
+\]
+This linearity is the fundamental property that allows us to solve for mixed equilibria using indifference conditions (as we will see).
+
+\end{document}

@@ -1,0 +1,214 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 27
+%  Mixed & Behavioral Strategies; SPE Theorem and Remarks
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 27: Mixed \& Behavioral Strategies; SPE Theorem}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Strategies in Extensive Form Games}
+
+Recall that in an extensive form game $\Gamma$ each player $i$ has a
+collection of information sets $H_i$. A \emph{pure strategy} for player $i$
+assigns an action to every information set. We now extend this to mixed and
+behavioral strategies.
+
+\begin{defbox}{Pure, Mixed, and Behavioral Strategies}
+  Let $H_i$ be the set of information sets for player $i$, and let $A(h)$
+  denote the set of actions available at information set $h$.
+  \begin{itemize}
+    \item \textbf{Pure strategy:}
+      $s_i : H_i \to \bigcup_{h \in H_i} A(h)$ \quad such that
+      $s_i(h) \in A(h)$ for all $h \in H_i$.
+
+    \item \textbf{Behavioral strategy:}
+      $b_i : H_i \to \bigcup_{h \in H_i} \Delta A(h)$ \quad such that
+      $b_i(h) \in \Delta A(h)$ for all $h \in H_i$. \\
+      (A behavioral strategy assigns an \emph{independent} probability
+      distribution over actions at \emph{each} information set.)
+
+    \item \textbf{Mixed strategy (over pure strategies):}
+      $\sigma_i : S_i \to [0,1]$ \quad such that
+      $\sum_{s_i \in S_i} \sigma_i(s_i) = 1$.\\
+      (A mixed strategy is a probability distribution over the set of
+      \emph{all} pure strategies $S_i$.)
+  \end{itemize}
+\end{defbox}
+
+\begin{notebox}
+  A \textbf{mixed strategy} randomises over complete plans of action (pure
+  strategies), while a \textbf{behavioral strategy} randomises independently
+  at each information set. In games of \emph{perfect recall}, the two
+  concepts are equivalent (Kuhn's Theorem).
+\end{notebox}
+
+\subsection*{Example -- Mixed vs.\ Behavioral Strategies}
+
+Consider a game where Player I moves at the root $n_0$ (actions $A$ and $B$)
+and then again inside an information set $\{n_1, n_3\}$ (actions $\ell$ and
+$r$), and Player II has an information set with actions $L$ and $R$.
+
+\medskip
+\noindent Suppose Player I's \emph{mixed strategy} puts weight:
+\begin{align*}
+  \sigma_1(Al) &= 0.5, & \sigma_1(Ar) &= 0.1,\\
+  \sigma_1(Bl) &= 0.3, & \sigma_1(Br) &= 0.1.
+\end{align*}
+(These are the probabilities on the four pure strategies $Al, Ar, Bl, Br$.)
+
+\medskip
+\noindent The corresponding \emph{behavioral strategy} $b_1$ is read off by
+conditioning:
+\begin{itemize}
+  \item At the root: $\Pr[\text{play }A] = 0.5 + 0.1 = 0.6$, \quad
+        $\Pr[\text{play }B] = 0.3 + 0.1 = 0.4$.
+  \item Inside the information set $\{n_1,n_3\}$:
+        $b_1'(\ell) = 0.5$, $b_1'(r) = 0.5$.
+\end{itemize}
+
+\medskip
+\noindent Given a mixed strategy $\sigma_i$, its \textbf{induced behavioral
+strategy} $\bar{\sigma}_i$ is defined as follows.  Let
+$\bar{\sigma}_i(h)$ be:
+\begin{itemize}
+  \item $\sigma_i$ outside $\Gamma_n$ (i.e.\ inherited from the mixed
+        strategy in the rest of the game), and
+  \item $\bar{\sigma}_i$ inside $\Gamma_n$ (re-normalised conditional
+        on reaching $h$).
+\end{itemize}
+
+Formally, if $\sigma_i(A) = \sigma_i(A) \cdot \Gamma_n$-weight, then
+\[
+  \bar{\sigma}_i(A) = \sigma_i(A),\quad
+  \bar{\sigma}_i(B) = \sigma_i(B),\quad
+  \bar{\sigma}_i(\ell) = \frac{\sigma_i(\ell)}{\sigma_i(\ell)+\sigma_i(r)},\quad
+  \bar{\sigma}_i(r) = \frac{\sigma_i(r)}{\sigma_i(\ell)+\sigma_i(r)}.
+\]
+
+% ============================================================
+\section{Subgame Perfect Equilibrium -- Main Theorem}
+
+\begin{thmbox}{SPE and Reached Subgames (Theorem)}
+  Let $\sigma^*$ be a Nash Equilibrium (either in mixed strategies or in
+  behavioral strategies) of a game $\Gamma$, and let $\Gamma_n$ be a subgame
+  of the game.  If $\rho(n;\, \sigma^*) > 0$ (i.e.\ node $n$ is reached
+  with positive probability under $\sigma^*$), then $\sigma^*$ is also a
+  Nash Equilibrium for the subgame $\Gamma_n$.
+\end{thmbox}
+
+\begin{proof}
+  Suppose $\sigma$ restricted to $\Gamma_n$ is \emph{not} an NE of
+  $\Gamma_n$. Then there exists a player $i$ and a strategy $\sigma_i'$ in
+  the subgame $\Gamma_n$ such that $\sigma_i'$ gives player $i$ strictly more
+  utility in $\Gamma_n$.
+
+  Construct a new strategy for player $i$ in the full game:
+  \[
+    \bar{\sigma}_i =
+    \begin{cases}
+      \sigma_i  & \text{outside } \Gamma_n, \\
+      \sigma_i' & \text{inside } \Gamma_n.
+    \end{cases}
+  \]
+
+  Since $\rho(n;\, \sigma^*) > 0$, we have
+  $\rho\!\bigl(n;\, (\bar{\sigma}_i,\, \sigma_{-i})\bigr) > 0$.
+  From here one can show that
+  \[
+    u_i(\sigma^*) < u_i\!\bigl(\bar{\sigma}_i,\, \sigma_{-i}\bigr),
+  \]
+  which contradicts the assumption that $\sigma^*$ is an NE of $\Gamma$.
+  Therefore $\sigma^*$ restricted to $\Gamma_n$ must be an NE of $\Gamma_n$.
+
+  \medskip
+  \noindent (The full proof can be found in Solan's book.)
+\end{proof}
+
+% ============================================================
+\section{Corollary and Remarks}
+
+\begin{propbox}{Corollary -- Sufficient Condition for SPE}
+  Suppose $\sigma$ is an NE of a game $\Gamma$, and under $\sigma$ all
+  strategies of all players are given positive probabilities, and all chance
+  nodes give positive probability to all edges coming out of them.  Then
+  $\sigma$ is an SPE.
+\end{propbox}
+
+\begin{notebox}
+  The corollary says: if \emph{every} subgame is on the equilibrium path
+  (reached with positive probability), then every NE automatically satisfies
+  the SPE condition.  This is because the theorem guarantees NE in all
+  reached subgames, and under the corollary's conditions all subgames are
+  reached.
+\end{notebox}
+
+\subsection*{Example Illustrating the Corollary}
+
+Consider the following extensive form game. Player I moves at the root
+(actions $A$, $B$, $C$). After $A$, Player II moves (information set
+$\{v_1\}$, actions $\ell$ and $r$). After $B$, Player II moves
+(information set $\{v_2\}$, actions $\ell$ and $r$). The chance node
+$O$ following $C$ assigns probability $\tfrac{1}{4}$ to one branch and
+$\tfrac{3}{4}$ to another.
+
+\medskip
+\noindent Payoffs from left to right (terminal nodes):
+\begin{align*}
+  &(4,1),\;(7,2) \quad \text{from } A,\ell \text{ and } A,r,\\
+  &(6,3),\;(4,0) \quad \text{from } B,\ell \text{ and } B,r,\\
+  &(0,0),\;(8,4),\;(8,8),\;(0,3)\quad\text{from }C\text{ branches.}
+\end{align*}
+
+\noindent After resolving the chance node at $C$:
+\[
+  \frac{1}{4}(8,4) + \frac{3}{4}(8,8) = (8,7).
+\]
+
+\noindent The reduced game (after replacing chance node with expected
+payoffs) is:
+\begin{center}
+  \begin{tabular}{c|cc}
+           & $\ell$        & $r$           \\
+    \hline
+    $A$    & \payoff{4}{1} & \payoff{7}{2} \\
+    $B$    & \payoff{6}{3} & \payoff{4}{0} \\
+    $C$    & \payoff{8}{7} & \payoff{8}{7} \\
+  \end{tabular}
+\end{center}
+
+\noindent\textbf{Nash Equilibria:} $(C, \ell)$ and $(C, r)$ are both NE.
+
+\noindent\textbf{Backward Induction Equilibria:}
+$(C_A,\, \ell R)$ and $(C_A,\, rR)$ are the two backward induction
+equilibria of the game.
+
+\begin{thmbox}{Remarks}
+  \begin{description}
+    \item[R-1.] \textbf{Every backward induction equilibrium is an SPE.}
+
+    \item[R-2.] \textbf{For any extensive form game, there always exists an
+          SPE.}\\
+          \emph{Proof:} We will discuss this in the next class.
+  \end{description}
+\end{thmbox}
+
+\begin{intubox}
+  Backward induction -- working from the terminal nodes backwards -- always
+  produces an SPE. Moreover, the existence of an SPE for \emph{any} finite
+  extensive form game (even with imperfect information) is guaranteed.
+\end{intubox}
+
+\end{document}

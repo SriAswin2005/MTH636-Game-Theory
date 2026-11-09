@@ -1,0 +1,107 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 10
+%  Existence Theorems & Infinite Strategy Spaces
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 10: Existence of Equilibria}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Fundamental Theorems of Game Theory}
+
+Two of the most important theorems in game theory guarantee the existence of solutions, provided that we allow players to use mixed strategies and the game is finite.
+
+\begin{thmbox}{Von Neumann's Minimax Theorem (1928)}
+  Every two-player zero-sum game where both players have \textbf{finitely many pure strategies} has a \textbf{value} in mixed strategies.
+  
+  That is, $\underline{V} = \overline{V}$ when players are allowed to randomize.
+\end{thmbox}
+
+\begin{thmbox}{Nash's Existence Theorem (1950)}
+  Every strategic form game where all players have \textbf{finitely many pure strategies} has at least one \textbf{Nash Equilibrium} in mixed strategies.
+\end{thmbox}
+
+\begin{notebox}
+  These theorems require the set of pure strategies to be \textbf{finite}. If the strategy space is infinite (e.g., choosing any real number, or choosing any integer), an equilibrium or value is \textbf{not guaranteed} to exist, even in mixed strategies.
+\end{notebox}
+
+% ============================================================
+\section{Counterexample: Infinite Strategy Spaces}
+
+Let's see an example where Von Neumann's Minimax Theorem fails because the strategy spaces are infinite.
+
+\begin{exbox}{The Integer Game}
+  $N = \{1, 2\}$. Both players independently choose a natural number: $S_1 = S_2 = \mathbb{N} = \{1, 2, 3, \dots\}$.
+  The player who picks the larger number wins:
+  \[
+    u_1(s_1, s_2) = 
+    \begin{cases} 
+      1 & \text{if } s_1 > s_2 \\
+      0 & \text{if } s_1 = s_2 \\
+      -1 & \text{if } s_1 < s_2
+    \end{cases}
+  \]
+  This is a zero-sum game.
+\end{exbox}
+
+\subsection{Pure Strategy Value}
+\begin{itemize}
+    \item \textbf{Player 1's Max-Min:} $\sup_{s_1} \inf_{s_2} u_1(s_1, s_2) = -1$. (No matter what $s_1$ Player 1 chooses, P2 can always pick $s_2 = s_1 + 1$ to make P1 lose).
+    \item \textbf{Player 2's Min-Max:} $\inf_{s_2} \sup_{s_1} u_1(s_1, s_2) = 1$.
+\end{itemize}
+Since $-1 \neq 1$, there is no value in pure strategies.
+
+\subsection{Mixed Strategy Value}
+Does it have a value in mixed strategies? 
+Let $\Sigma_i$ be the set of probability distributions over $\mathbb{N}$.
+Fix any mixed strategy $\sigma_1 \in \Sigma_1$ for Player 1. Since probabilities must sum to 1, most of the probability mass must be concentrated on smaller numbers. 
+For any $\epsilon > 0$, there exists an integer $k$ such that Player 1 plays a number $\leq k$ with probability $> 1-\epsilon$:
+\[
+  \sigma_1(\{1, 2, \dots, k\}) > 1 - \epsilon
+\]
+If Player 2 simply plays the pure strategy $s_2 = k+1$, Player 2 wins against all of P1's numbers from $1$ to $k$, and only potentially loses to numbers $> k$.
+\[
+  U_1(\sigma_1, s_2 = k+1) = \underbrace{\sigma_1(\{k+2, \dots\})}_{\text{P1 wins}} (1) + \underbrace{\sigma_1(\{1, \dots, k\})}_{\text{P1 loses}} (-1)
+\]
+Since $\sigma_1(\{1, \dots, k\}) > 1-\epsilon$, the probability P1 wins is less than $\epsilon$.
+\[
+  U_1(\sigma_1, k+1) < \epsilon(1) + (1-\epsilon)(-1) = -1 + 2\epsilon
+\]
+Since this is true for any $\epsilon$, the infimum over all of P2's strategies is $\leq -1$.
+\[
+  \inf_{\sigma_2 \in \Sigma_2} U_1(\sigma_1, \sigma_2) \leq -1 \quad \implies \quad \sup_{\sigma_1} \inf_{\sigma_2} U_1(\sigma_1, \sigma_2) = -1
+\]
+By symmetry for Player 2, $\inf_{\sigma_2} \sup_{\sigma_1} U_1(\sigma_1, \sigma_2) = 1$.
+Thus, \textbf{the value does not exist even in mixed strategies}.
+
+% ============================================================
+\section{Simplifying Minimax for Mixed Strategies}
+
+For finite two-player zero-sum games, finding the mixed max-min value involves continuous optimization over the simplex $\Sigma_i$.
+
+\begin{thmbox}{Minimizing over Pure Strategies}
+  When calculating the max-min value in mixed strategies, the inner minimization over all mixed strategies $\sigma_2$ can be replaced by a minimization over just the \textbf{pure} strategies $s_2$:
+  \[
+    \underline{V} = \max_{\sigma_1 \in \Sigma_1} \min_{\sigma_2 \in \Sigma_2} U(\sigma_1, \sigma_2) = \max_{\sigma_1 \in \Sigma_1} \min_{s_2 \in S_2} U(\sigma_1, s_2)
+  \]
+  Similarly:
+  \[
+    \overline{V} = \min_{\sigma_2 \in \Sigma_2} \max_{\sigma_1 \in \Sigma_1} U(\sigma_1, \sigma_2) = \min_{\sigma_2 \in \Sigma_2} \max_{s_1 \in S_1} U(s_1, \sigma_2)
+  \]
+\end{thmbox}
+
+\textbf{Why?} Because $U(\sigma_1, \sigma_2)$ is a weighted average of $U(\sigma_1, s_2)$ for all pure $s_2$. A weighted average can never be strictly less than the absolute minimum of its components. So the worst-case response by an opponent will always just be to put 100\% probability on the single pure strategy that hurts you the most.
+
+\end{document}

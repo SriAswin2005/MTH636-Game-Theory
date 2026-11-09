@@ -1,0 +1,192 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 28
+%  Behavior vs. Mixed Strategies & SPE Existence
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 28: Behavior Strategies, Mixed Strategies \& SPE Existence}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Outcome Equivalence of Behavior and Mixed Strategies}
+
+\begin{thmbox}{Outcome Equivalence Result}
+In an extensive form game, every behavior strategy is outcome equivalent to a mixed strategy.
+\end{thmbox}
+
+\begin{proof}
+Consider player $i$ and a behavior strategy $b_i$. Suppose player $i$ has $m$ many information sets $h_1, \ldots, h_m$.
+
+Define the mixed strategy $\sigma_i$ induced by $b_i$ as follows:
+\[
+  \sigma_i(s_i) \;=\; \prod_{j=1}^{m} \beta_i\!\bigl(s_i(h_j),\, h_j\bigr)
+  \qquad \forall\, s_i \in S_i.
+\]
+
+\subsection*{Validity of the Induced Mixed Strategy}
+
+We first check that $\sigma_i$ is indeed a valid (probability) mixed strategy.
+
+\medskip
+\noindent\textbf{Non-negativity:} Since $\beta_i(s_i(h_j), h_j) \geq 0$ for all $j = 1, \ldots, m$, we have
+\[
+  \sigma_i(s_i) \;\geq\; 0.
+\]
+
+\noindent\textbf{Sums to one:}
+\begin{align*}
+  \sum_{s_i \in S_i} \sigma_i(s_i)
+  &= \sum_{s_i \in S_i} \prod_{j=1}^{m} \beta_i\!\bigl(s_i(h_j),\, h_j\bigr) \\[4pt]
+  &= \prod_{j=1}^{m} \sum_{s_i \in S_i} \beta_i\!\bigl(s_i(h_j),\, h_j\bigr) \\[4pt]
+  &= \prod_{j=1}^{m} (1) \qquad \text{(since $\beta_i$ is a behavior strategy)} \\[4pt]
+  &= 1.
+\end{align*}
+
+Hence $\sigma_i$ is a valid mixed strategy.
+
+\subsection*{Outcome Equivalence}
+
+Fix a leaf node $z$ and suppose $h_1, \ldots, h_k$ are the information sets of player $i$ on the path from the root to $z$. Also assume $a_1, \ldots, a_k$ are the actions of player $i$ at those information sets.
+
+\medskip
+\noindent Under $b_i$, player $i$'s contribution to the probability of reaching $z$ is:
+\[
+  \prod_{j=1}^{k} \beta_i(a_j,\, h_j).
+\]
+
+\noindent Under $\sigma_i$, the contribution becomes:
+\[
+  \sum_{\substack{s_i \in S_i \\ s_i(h_j) = a_j \\ \forall\, j = 1,\ldots,k}} \sigma_i(s_i).
+\]
+
+Expanding using the definition of $\sigma_i$:
+\begin{align*}
+  &= \sum_{\substack{s_i \in S_i \\ s_i(h_j) = a_j \\ \forall\, j = 1,\ldots,k}}
+     \prod_{\ell=1}^{m} \beta_i\!\bigl(s_i(h_\ell),\, h_\ell\bigr) \\[6pt]
+  &= \sum_{\substack{s_i \in S_i \\ s_i(h_j) = a_j \\ \forall\, j = 1,\ldots,k}}
+     \prod_{\ell=1}^{k} \beta_i\!\bigl(s_i(h_\ell),\, h_\ell\bigr)
+     \prod_{\ell=k+1}^{m} \beta_i\!\bigl(s_i(h_\ell),\, h_\ell\bigr) \\[6pt]
+  &= \sum_{\substack{s_i \in S_i \\ s_i(h_j) = a_j \\ \forall\, j = 1,\ldots,k}}
+     \prod_{\ell=1}^{k} \beta_i(a_\ell;\, h_\ell)
+     \prod_{\ell=k+1}^{m} \beta_i\!\bigl(s_i(h_\ell);\, h_\ell\bigr) \\[6pt]
+  &= \prod_{\ell=1}^{k} \beta_i(a_\ell;\, h_\ell)
+     \sum_{\substack{s_i \in S_i \\ s_i(h_j) = a_j \\ \forall\, j = 1,\ldots,k}}
+     \prod_{\ell=k+1}^{m} \beta_i\!\bigl(s_i(h_\ell);\, h_\ell\bigr) \\[6pt]
+  &= \prod_{\ell=1}^{k} \beta_i(a_\ell;\, h_\ell)
+     \prod_{\ell=k+1}^{m} \sum_{s_i \in S_i} \beta_i\!\bigl(s_i(h_\ell);\, h_\ell\bigr) \\[6pt]
+  &= \prod_{\ell=1}^{k} \beta_i(a_\ell;\, h_\ell) \cdot \prod_{\ell=k+1}^{m} (1) \\[6pt]
+  &= \prod_{\ell=1}^{k} \beta_i(a_\ell;\, h_\ell) \\[4pt]
+  &= \prod_{j=1}^{k} \beta_i(a_j,\, h_j).
+\end{align*}
+
+Therefore $\sigma_i$ and $\beta_i$ are outcome equivalent.
+
+\medskip
+For the other part (every mixed strategy is outcome equivalent to a behavior strategy), a proof can be found in Solan's book.
+\end{proof}
+
+% ============================================================
+\section{Existence of SPE in Extensive Form Games with Imperfect Information}
+
+\begin{thmbox}{Existence of SPE}
+Every extensive form game with imperfect information has a Subgame Perfect Equilibrium (SPE).
+\end{thmbox}
+
+\begin{intubox}
+The method is \textbf{backward induction over subgames}. This will always result in an SPE.
+\end{intubox}
+
+\subsection{Example: Sequential Game with Imperfect Information}
+
+Consider the following extensive form game. Player I moves first and chooses $A$ or $C$. If $A$ is chosen, Player II (who has an imperfect information set grouping two nodes) chooses $\ell$ or $r$ (from each of her two decision nodes). If $C$ is chosen, a chance node assigns probability $\tfrac{1}{4}$ to one branch and $\tfrac{3}{4}$ to another. The terminal payoffs are:
+
+\begin{itemize}
+  \item Under branch $A$: if II plays $\ell\ell$: $(4,1)$; if II plays $\ell r$: $(4,1)$ (from the left node's $\ell$) and $(7,2)$ (from the right node's $r$); etc.
+  \item Specifically the four outcomes under Player I choosing $A$ and Player II's choices $(\ell,\ell)$, $(\ell,r)$, $(r,\ell)$, $(r,r)$ at her two-node information set yield terminal payoffs:
+    $(4,1)$, $(7,2)$, $(6,3)$, $(4,10)$.
+  \item Under branch $C$: with prob $\tfrac{1}{4}$, outcome $(8,4)$; with prob $\tfrac{3}{4}$, outcome $(8,8)$.
+\end{itemize}
+
+\noindent Expected payoff from branch $C$:
+\[
+  \tfrac{1}{4}(8,4) + \tfrac{3}{4}(8,8) = (8,\, \tfrac{1}{4}\cdot 4 + \tfrac{3}{4}\cdot 8) = (8,7).
+\]
+
+When solving by backward induction, Player I compares the payoff achievable under $A$ (given Player II's best response in her information set) with the payoff $(8,7)$ from $C$.
+
+\medskip
+In the reduced tree (after computing the continuation value), Player I chooses $A$ (giving access to the information-set subgame) or $C$ (giving $(8,7)$ directly).
+
+\subsection{Backward Induction and SPE: Battle of the Sexes Example}
+
+Consider the Man/Woman (M/W) sequential Battle of the Sexes game:
+\begin{itemize}
+  \item Man (M) moves first: $F$ (Football) or $D$ (Dance).
+  \item Woman (W) observes and moves: $F$ or $D$ at each of her nodes.
+\end{itemize}
+
+\noindent The terminal payoffs are (Man, Woman):
+\[
+  (2,1),\quad (0,0),\quad (0,0),\quad (1,2)
+\]
+at the four leaves (corresponding to $(F,F)$, $(F,D)$, $(D,F)$, $(D,D)$).
+
+\medskip
+\noindent Nash equilibria of this game include:
+\begin{itemize}
+  \item $\bigl(F,\,(F,F)\bigr)$ -- this is an \textbf{NE} (Man plays $F$, Woman plays $F$ regardless).
+  \item $\bigl(F,\,(F,D)\bigr)$ -- this is an \textbf{SPE} (Woman plays $F$ after $F$ and $D$ after $D$, which is sequentially rational).
+\end{itemize}
+
+\begin{notebox}
+$(F,(F,D))$ is the unique SPE found by backward induction. The NE $(F,(F,F))$ is not an SPE because after the Man plays $D$, the Woman playing $F$ is not a best response in that subgame (she would get $0$ instead of $2$ by playing $D$).
+\end{notebox}
+
+% ============================================================
+\section{Imperfect Information Game with Chance Nodes -- Further SPE Analysis}
+
+\noindent Returning to the imperfect information example, consider a more elaborate tree where after Player I plays $A$ or $C$:
+\begin{itemize}
+  \item After $A$: Player II has a single information set (imperfect information -- she cannot distinguish the two nodes). Her actions are $\ell$ or $r$ at each node. Terminal payoffs:
+    $(4,3)$,\; $(7,2)$,\; $(6,3)$,\; $(4,10)$.
+  \item After $C$: a chance node (prob $\tfrac{1}{4}$ left, prob $\tfrac{3}{4}$ right). 
+    Left subtree: Player II moves with actions $L,R$ yielding $(0_0)$, $(8_4)$.
+    Right subtree: Player I moves with actions $a,b$ yielding $(8_8)$, $\left(\tfrac{0}{8}\right)$.
+\end{itemize}
+
+Working by backward induction over the subgames yields an SPE in which $(Ca,\, rR)$ is an SPE.
+
+\begin{notebox}
+\textbf{Perfect Bayesian Equilibrium} is another refinement (not covered in this syllabus).
+\end{notebox}
+
+% ============================================================
+\section{From Strategic Form to Extensive Form}
+
+\begin{itemize}
+  \item \textbf{Question:} Given a strategic form game $G$, can we obtain an equivalent extensive form game $\Gamma$?
+\end{itemize}
+
+Formally:
+\[
+  G \;\longrightarrow\; \Gamma \;\longrightarrow\; G \quad \text{(equivalence)}
+\]
+
+Let
+\[
+  G = \bigl\langle N,\, (S_i)_{i \in N},\, (u_i)_{i \in N} \bigr\rangle
+\]
+and assume that $S_i = \{s_i^1, \ldots, s_i^{m_i}\}$ for each $i$.
+
+\end{document}

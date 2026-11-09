@@ -1,0 +1,192 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 31
+%  Incomplete Information Games -- Extensive Form, Strategies,
+%  Utility, Bayesian Nash Equilibrium
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 31: Strategies, Utility \& Bayesian Nash Equilibrium}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Extensive Form Representation of Harsanyi Games}
+
+Recall from Lecture 30 that every Harsanyi game of incomplete information can be written as an extensive form game with imperfect information and chance nodes.
+
+\begin{thmbox}{Harsanyi's Representation Theorem (restated)}
+Every Harsanyi game of incomplete information can be written as an \textbf{extensive form game} with imperfect information and chance nodes.
+\end{thmbox}
+
+\noindent For the extensive form representation:
+\begin{itemize}
+  \item The number of \textbf{information sets} for player $i$ is $|T_i|$ -- one information set per possible type of player $i$.
+  \item The game will have \textbf{perfect recall} for all players. This means we may use \textbf{behavior strategies}.
+\end{itemize}
+
+% ============================================================
+\section{Types of Strategies}
+
+Since the extensive form game has perfect recall, three kinds of strategies are relevant:
+
+\subsection{Pure Strategies}
+
+\begin{defbox}{Pure Strategy in a Harsanyi Game}
+A \textbf{pure strategy} for player $i$ is a function
+\[
+  s_i : T_i \;\longrightarrow\; \bigcup_{t_i \in T_i} A_i(t_i),
+\]
+where $s_i(t_i) \in A_i(t_i)$ for every $t_i \in T_i$.
+\end{defbox}
+
+\subsection{Mixed Strategies}
+
+\begin{defbox}{Mixed Strategy in a Harsanyi Game}
+A \textbf{mixed strategy} for player $i$ is a probability distribution over the pure strategies of player $i$.
+\end{defbox}
+
+\subsection{Behavior Strategies}
+
+\begin{defbox}{Behavior Strategy in a Harsanyi Game}
+A \textbf{behavior strategy} for player $i$ is a function
+\[
+  b_i : T_i \;\longrightarrow\; \bigcup_{t_i \in T_i} \Delta A_i(t_i),
+\]
+where $b_i(t_i) \in \Delta A_i(t_i)$ for every $t_i \in T_i$.
+
+Here $\Delta A_i(t_i)$ denotes the set of probability distributions (mixed actions) over $A_i(t_i)$.
+\end{defbox}
+
+\begin{notebox}
+  In the extensive form, a behavior strategy for player $i$ assigns, to each information set (i.e.\ each type $t_i \in T_i$), a probability distribution over the available actions at that information set:
+  \[
+    \tilde{s}_i : H_i \;\longrightarrow\; \bigcup_{h \in H_i} A(h), \quad \tilde{s}_i(h_i) \in A(h_i).
+  \]
+  This corresponds exactly to $b_i(t_i) \in \Delta A_i(t_i)$ in the type-space notation.
+\end{notebox}
+
+% ============================================================
+\section{Utility in Harsanyi Games}
+
+\subsection{Utility at a Type Profile (Ex Ante)}
+
+Consider a behavior strategy profile $b = (b_1, \ldots, b_n)$.
+
+For a type profile $t = (t_1, \ldots, t_n)$ and an action profile $a = (a_1, \ldots, a_n)$ with $a_i \in A_i(t_i)$ for all $i \in \{1,\ldots,n\}$, the \textbf{utility of player $i$ at type profile $t$} is:
+\[
+  V_i(t; b) = \sum_{\substack{a \,\in\, \bigtimes_{i \in N} A_i(t_i)}}
+  b_1(t_1; a_1) \times b_2(t_2; a_2) \times \cdots \times b_n(t_n; a_n) \cdot u_i(t, a),
+\]
+where $b_j(t_j; a_j)$ denotes the probability assigned by player $j$'s behavior strategy to action $a_j$ when her type is $t_j$.
+
+\begin{notebox}
+This is the \textbf{ex-ante utility} at type profile $t$ -- the expected utility before the randomisation (i.e.\ before the mixed actions are realised), but after the type profile is fixed. It is called the utility at the \emph{ex-ante stage}, before the randomisation takes place.
+\end{notebox}
+
+\subsection{Total (Ex Ante) Utility}
+
+The \textbf{total (ex-ante) utility} of player $i$ under behavior strategy profile $b$ is:
+\[
+  V_i(b) = \sum_{t \in T} p(t)\, V_i(t; b).
+\]
+
+\subsection{Interim Utility}
+
+After player $i$ knows her own type $t_i$ (but before learning the types of others), she can compute her \textbf{interim (conditional) utility}:
+\[
+  U_i(b \mid t_i) = \sum_{t_{-i} \in T_{-i}} p(t_{-i} \mid t_i)\, U_i\!\left((t_i, t_{-i}),\, b\right).
+\]
+This is called player $i$'s \textbf{interim utility} -- she knows her own type $t_i$ and takes expectation over the opponents' types using the conditional belief $p(t_{-i} \mid t_i)$.
+
+\subsection{Relationship Between Ex-Ante and Interim Utility}
+
+The following chain of equalities shows that the ex-ante utility can be decomposed through the interim utility:
+
+\begin{align*}
+  V_i(b)
+  &= \sum_{t \in T} p(t)\, V_i(t; b) \\[4pt]
+  &= \sum_{t \in T} p(t_{-i} \mid t_i)\, p(t_i)\, V_i(t; b) \\[4pt]
+  &= \sum_{t_i \in T_i} \sum_{t_{-i} \in T_{-i}} p(t_i) \Bigl( p(t_{-i} \mid t_i)\, V_i(t; b) \Bigr) \\[4pt]
+  &= \sum_{t_i \in T_i} p(t_i) \sum_{t_{-i} \in T_{-i}} p(t_{-i} \mid t_i)\, V_i(t; b) \\[4pt]
+  &= \sum_{t_i \in T_i} p(t_i)\, U\!\left(b \mid t_i\right).
+\end{align*}
+
+\begin{takebox}
+  The ex-ante utility is a weighted sum of interim utilities:
+  \[
+    V_i(b) = \sum_{t_i \in T_i} p(t_i)\, U_i(b \mid t_i).
+  \]
+  This is analogous to the law of total expectation.
+\end{takebox}
+
+% ============================================================
+\section{Nash Equilibrium and Bayesian Nash Equilibrium}
+
+\subsection{Nash Equilibrium (NE)}
+
+\begin{defbox}{Nash Equilibrium in a Harsanyi Game}
+A strategy profile $\sigma^* = (\sigma_i)_{i \in N}$ is a \textbf{Nash Equilibrium (NE)} if
+\[
+  V_i(\sigma^*) \geq V_i(\sigma_i,\, \sigma_{-i}^*) \quad \forall\, i \in N \text{ and all } \sigma_i \in B_i,
+\]
+where $B_i$ denotes the set of all behavior strategies for player $i$.
+\end{defbox}
+
+\subsection{Bayesian Nash Equilibrium (BNE)}
+
+The Nash Equilibrium above is the \emph{ex-ante} equilibrium concept. A more refined concept -- the \textbf{Bayesian Nash Equilibrium} -- requires optimality \emph{at the interim stage}, i.e., for every type the player might be.
+
+\begin{defbox}{Bayesian Nash Equilibrium (BNE)}
+A strategy profile $\sigma^*$ is a \textbf{Bayesian Nash Equilibrium (BNE)} if
+\[
+  U_i(\sigma^* \mid t_i) \geq U_i\!\left((a_i, \sigma_{-i}^*) \mid t_i\right)
+  \quad \forall\, i \in N,\ \forall\, t_i \in T_i,\ \forall\, a_i \in A_i(t_i).
+\]
+That is, for every player $i$, for every type $t_i$, and for every possible deviation $a_i$, the equilibrium strategy $\sigma_i^*$ is at least as good as any deviation -- when evaluated using the interim (conditional) utility given type $t_i$.
+\end{defbox}
+
+\begin{notebox}
+In the case where $T_i$ has multiple elements, say $t_1, t_{n}, t_2$ (as in an example with three types), the total utility decomposes as:
+\[
+  U_i(\sigma) = p(t_1)\, U_i(\sigma \mid t_1) + p(t_n)\, U_i(\sigma \mid t_n) + p(t_2)\, U_i(\sigma \mid t_2).
+\]
+\end{notebox}
+
+% ============================================================
+\section{Key Results}
+
+\begin{propbox}{Every BNE is also an NE}
+Every Bayesian Nash Equilibrium is also a Nash Equilibrium.
+\end{propbox}
+\begin{proof}
+See Solan's book.
+\end{proof}
+
+\begin{thmbox}{Existence of NE in Behavior Strategies}
+For an incomplete information game (in the Harsanyi sense), a Nash Equilibrium exists in \textbf{behavior strategies}.
+\end{thmbox}
+\begin{proof}
+The corresponding extensive form game has a Nash Equilibrium in mixed strategies. Since the game has perfect recall, every mixed strategy is equivalent to a behavior strategy. Therefore a behavior strategy Nash Equilibrium exists.
+\end{proof}
+
+\begin{intubox}
+  The key steps in the existence proof are:
+  \begin{enumerate}
+    \item The Harsanyi game $\Rightarrow$ extensive form with chance nodes and information sets.
+    \item The extensive form game has a Nash Equilibrium in mixed strategies (by Nash's theorem, since the game is finite).
+    \item Perfect recall $\Rightarrow$ every mixed strategy is equivalent to a behavior strategy (Kuhn's theorem).
+    \item Therefore a \emph{behavior strategy} NE exists.
+  \end{enumerate}
+\end{intubox}
+
+\end{document}

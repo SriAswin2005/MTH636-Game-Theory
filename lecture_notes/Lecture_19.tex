@@ -1,0 +1,78 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 19
+%  Normal Form Representation \& Subgame Perfect Equilibrium
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 19: Normal Form equivalence \& SPE}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Normal Form Representation of Extensive Form Games}
+
+Suppose $\Gamma$ is an extensive form game (potentially with chance nodes). We can always translate it into an equivalent normal form game:
+\[ \Gamma = \langle N, V, E, n_0, (V_i)_{i \in N \cup \{0\}}, (p_n)_{n \in V_0}, (u_i)_{i \in N} \rangle \]
+
+The equivalent normal form game is given by $\langle N, (S_i)_{i \in N}, (\hat{u}_i)_{i \in N} \rangle$, where:
+\begin{itemize}
+    \item $N$ is the same set of players.
+    \item $S_i$ is the set of pure strategies for player $i$ derived from the extensive form game (recall $s_i : V_i \to \cup A(n)$).
+    \item $\hat{u}_i(s)$ is the expected utility of the strategy profile $s = (s_1, \dots, s_n)$.
+\end{itemize}
+
+\subsection{Utility Computation}
+If the game has \textbf{no chance nodes}, a strategy profile $s$ uniquely traces a path to exactly one leaf node $\pi$. In this case:
+\[ \hat{u}_i(s) = u_i(\pi) \]
+
+If the game \textbf{has chance nodes}, a strategy profile $s$ no longer leads to a single leaf. Instead, because Nature introduces randomness at $V_0$ nodes, the profile $s$ induces a probability distribution over several possible leaf nodes. 
+In this case, utilities are calculated as the \textbf{expected} utility according to the probability distribution over the leaf nodes $\pi$.
+For example, if player 1 plays $L$ and player 2 plays $T$, and a chance node assigns 50/50 probability to reaching leaf $n_3$ or $n_4$, then:
+\[ \hat{u}_1(L, T) = \frac{1}{2}u_1(n_3) + \frac{1}{2}u_1(n_4) \]
+
+\textbf{Note on Zermelo's Theorem:}
+When chance nodes are introduced, Zermelo/Von Neumann's theorem (which guaranteed a pure winning or drawing strategy) generally \textit{does not hold}. This is because the introduction of expected utilities smooths the discrete $\{1, -1, 0\}$ outcomes into fractional expected payoffs, breaking the deterministic Win/Loss/Draw structure.
+
+% ============================================================
+\section{Nash Equilibrium vs Subgame Perfect Equilibrium}
+
+Once translated into normal form, we can find the Nash Equilibria using the standard definition:
+\begin{defbox}{Nash Equilibrium}
+  A strategy profile $s^*$ is a Nash Equilibrium if:
+  \[ u_i(s^*) \geq u_i(s_i, s_{-i}^*) \quad \forall i \in N, \ \forall s_i \in S_i \]
+\end{defbox}
+
+\subsection{The Problem with Normal Form NE}
+Consider the Sequential Battle of the Sexes from Lecture 15:
+\begin{itemize}
+    \item Man chooses $F$ or $D$ first.
+    \item Woman observes and chooses $F$ or $D$.
+\end{itemize}
+The normal form matrix has a Nash Equilibrium at $(D, DD)$ which yields payoffs $(1,2)$. 
+
+However, let's analyze the strategy $DD$ ("I will play Dance if you play Football, and I will play Dance if you play Dance"). 
+If the Man actually chose Football ($F$), the game moves to the subgame where the Woman must choose. Her payoffs are $(2,1)$ for choosing $F$ and $(0,0)$ for choosing $D$. 
+Clearly, in that subgame, she would rationally choose $F$ to get 1 instead of 0. 
+
+Thus, her strategy to play $D$ in response to $F$ is a \textbf{non-credible threat}. She is threatening to tank both of their payoffs to $(0,0)$ to scare the Man into playing $D$ initially. While $(D, DD)$ is mathematically a Nash Equilibrium of the whole game, it relies on irrational behavior in a specific subgame.
+
+\subsection{Subgame Perfect Equilibrium (SPE)}
+To eliminate non-credible threats, we refine our equilibrium concept for extensive form games.
+
+\begin{defbox}{Subgame Perfect Equilibrium (SPE)}
+  A strategy profile is a Subgame Perfect Equilibrium (SPE) if it constitutes a Nash Equilibrium in \textbf{every} subgame of the original game.
+\end{defbox}
+
+By demanding that players act rationally not just overall, but from \textit{every single decision node} (even ones off the equilibrium path), SPE effectively rules out empty threats. In the example above, $(D, DD)$ is an NE, but \textbf{not} an SPE. The profile $(F, FD)$ is both an NE and an SPE.
+
+\end{document}

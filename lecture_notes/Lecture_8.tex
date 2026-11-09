@@ -1,0 +1,92 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 8
+%  Iterated Elimination and Nash Equilibrium
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 8: Iterated Elimination \& Nash Equilibria}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Iterated Elimination of Strictly Dominated Strategies (IESDS)}
+
+Recall that for a game $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$, a strategy profile $s^*$ is a Nash Equilibrium if $u_i(s^*) \geq u_i(s_i, s^*_{-i})$ for all $i \in N, s_i \in S_i$.
+
+Suppose we create a new game $\hat{G} = \langle N, (S'_i)_{i \in N}, (u_i)_{i \in N} \rangle$ by removing a \textbf{strictly dominated strategy} $\bar{s}_k$ for some player $k$. So:
+\[
+  S_i' = S_i \text{ for } i \neq k, \quad \text{and} \quad S_k' = S_k \setminus \{\bar{s}_k\}
+\]
+
+\begin{thmbox}{IESDS and Nash Equilibria}
+  The set of Nash Equilibria in $G$ and in $\hat{G}$ remain \textbf{exactly the same}.
+  \begin{enumerate}
+      \item \textbf{IESDS cannot remove any Nash Equilibrium:} If an NE were removed, it must have had $\bar{s}_k$ as its $k$-th component. But a strictly dominated strategy can never be a best response, so it can never be part of a Nash Equilibrium.
+      \item \textbf{IESDS cannot create new Nash Equilibria:} Could a profile $s^*$ be an NE in $\hat{G}$ but not in $G$? If it wasn't an NE in $G$, some player must have had a profitable deviation. Since all strategies except $\bar{s}_k$ are still in $\hat{G}$, the only way the deviation is missing is if the profitable deviation was to $\bar{s}_k$ itself! But $\bar{s}_k$ is strictly dominated by some $t_k \in S'_k$, meaning $t_k$ would be an even better deviation that is still available in $\hat{G}$. Thus, no new NE is created.
+  \end{enumerate}
+\end{thmbox}
+
+% ============================================================
+\section{Iterated Elimination of Weakly Dominated Strategies}
+
+The strong guarantee of IESDS \textbf{does not hold} for weakly dominated strategies.
+
+\begin{warnbox}{Weakly Dominated Strategies can remove NE}
+  Consider the following game:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    & L & R \\
+    \hline
+    T & \payoff{0}{0} & \payoff{2}{1} \\
+    B & \payoff{3}{2} & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+  \textbf{Nash Equilibria of Original Game:} Both $(B, L)$ and $(T, R)$ are Nash Equilibria.
+  
+  \textbf{Elimination:}
+  \begin{itemize}
+      \item For Player 2, R weakly dominates L (payoffs: $1 \geq 0$ and $2 \geq 2$).
+      \item If we eliminate L, we are left with the right column.
+      \item In the reduced game (T vs R yields 2, B vs R yields 1), T strictly dominates B for Player 1. We eliminate B.
+      \item We are left with only $(T, R)$.
+  \end{itemize}
+  By eliminating weakly dominated strategies, we \textbf{lost} the Nash Equilibrium $(B, L)$!
+\end{warnbox}
+
+\textbf{Question:} Can iterated elimination of weakly dominated strategies create \textit{new} Nash Equilibria that were not NE in the original game? (No, but proving it requires care).
+
+% ============================================================
+\section{Introduction to Mixed Strategies}
+
+Until now, we assumed players choose a specific strategy deterministically (Pure Strategies). But what if players can randomize?
+
+Consider a choice between:
+\begin{itemize}
+    \item Option A: Receive Rs 100 for sure.
+    \item Option B: Receive Rs 500 with probability $1/4$, and Rs 0 with probability $3/4$.
+\end{itemize}
+We assume players are \textbf{rational} and evaluate probability distributions using \textbf{Expected Utility}.
+The expected value of B is $\frac{1}{4}(500) + \frac{3}{4}(0) = 125$. If utility is linear in money, the player prefers B over A.
+
+\subsection{Affine Transformations of Utilities}
+Suppose we have a game $G$ with payoffs $u_i$. We create an equivalent game $\hat{G}$ by applying a function to the utilities: $\hat{u}_i = v_i \circ u_i$.
+\begin{itemize}
+    \item If $v_i$ is a general strictly increasing monotonic transformation, it preserves preferences over \textbf{pure} strategies, but it \textbf{does not} preserve preferences over \textbf{mixed} (randomized) strategies, because it changes the expected values relative to each other.
+    \item To preserve preferences over mixed strategies, we must only allow \textbf{Positive Affine Transformations}:
+    \[
+      v_i(x) = a_i x + b_i \quad \text{where } a_i > 0
+    \]
+\end{itemize}
+
+\end{document}

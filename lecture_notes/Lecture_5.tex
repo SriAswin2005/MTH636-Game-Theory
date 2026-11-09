@@ -1,0 +1,128 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 5
+%  Auctions (Cont.) & Max-Min Strategies (Cont.)
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 5: Auctions (Cont.) \& Max-Min Strategies}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Auctions (Continued)}
+
+Recall from the previous class regarding the \textbf{Second-Price Sealed-Bid Auction}:
+\[
+  u_i(v_i, b_{-i}) \geq u_i(b'_i, b_{-i}) \quad \forall b_{-i} \in [0, \infty)^{n-1}, \; \forall b'_i \in [0, \infty)
+\]
+This states that bidding your true valuation $v_i$ weakly dominates any other bid $b'_i$.
+
+\begin{exbox}{3-Player Auction Example}
+  Suppose there are three players. For Player 1, their true valuation is $v_1 = 11$.
+  Assume the other bids are $b_2 = 10$ and $b_3 = 8$.
+  \begin{itemize}
+      \item If Player 1 bids $b_1 = 11$ (truthful), they win and pay $\max(10, 8) = 10$. Their payoff is $11 - 10 = 1$.
+      \item If they bid lower, say $b_1 = 9$, they lose to Player 2 (who bid 10) and get a payoff of $0$.
+      \item If they bid higher, say $b_1 = 15$, they still win and still pay 10. Payoff is still $1$.
+  \end{itemize}
+  Thus, deviating from the true valuation either doesn't change the payoff or strictly hurts the player.
+\end{exbox}
+
+\begin{warnbox}{First-Price \& Third-Price Auctions}
+  \begin{itemize}
+      \item The above theorem \textbf{does not hold in a First-Price Auction}. In a first-price auction, if you bid your true valuation and win, your payoff is $v_i - v_i = 0$. You are always incentivized to bid lower than your valuation (shade your bid) to obtain a positive surplus.
+      \item \textbf{Exercise:} Assume $n \geq 3$ and check if the theorem holds for a \textbf{Third-Price Auction} (where the winner pays the third-highest bid).
+  \end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Max-Min Value and Max-Min Strategies (Continued)}
+
+A player plays a strategy $s_i$. The worst-case payoff they could get is:
+\[
+  \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i})
+\]
+For player $i$, by playing a specific strategy, they can ensure they get at least:
+\[
+  \max_{s_i \in S_i} \left( \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i}) \right)
+\]
+This value is called the \textbf{max-min value} for player $i$, often denoted $\underline{v}_i$.
+
+And any strategy $s_i^*$ that achieves this, i.e., 
+\[
+  s_i^* \in \arg\max_{s_i \in S_i} \left( \min_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i}) \right)
+\]
+is called a \textbf{max-min strategy} for player $i$. If a player plays a max-min strategy, he/she will get at least his max-min value.
+
+\subsection{Infinite Strategy Spaces}
+If the strategy spaces are infinite, we use \textit{supremum} and \textit{infimum} instead of max and min. The max-min value is defined as:
+\[
+  \sup_{s_i \in S_i} \inf_{s_{-i} \in S_{-i}} u_i(s_i, s_{-i})
+\]
+
+\begin{exbox}{Guessing Game / Average Game}
+  Players submit numbers $x_1, x_2, x_3$. The target $T = T(x_1, x_2, x_3)$ is some function (e.g., the average). 
+  The payoff $u_i(x_1, x_2, x_3)$ is $0$ if someone else is closer to the target, and $\frac{1}{|\text{winners}|}$ if there is a tie for being closest.
+  
+  What is Player 1's max-min value?
+  \begin{itemize}
+      \item If $x_1 = 10$, the opponents can always choose $x_2, x_3$ such that Player 1 loses. So $\inf_{x_2, x_3} u_1(10, x_2, x_3) = 0$.
+      \item If $x_1 = 0$, similarly $\inf_{x_2, x_3} u_1(0, x_2, x_3) = 0$.
+  \end{itemize}
+  The max-min value is $0$. Therefore, \textbf{any} strategy is a max-min strategy, because no strategy can guarantee a payoff strictly greater than $0$.
+\end{exbox}
+
+\begin{notebox}
+  For the \textbf{second-price auction}, the max-min value is $0$. Bidding your valuation guarantees at least 0 (you never pay more than your valuation). Playing anything less than your valuation is also a max-min strategy (since it also prevents you from losing money, guaranteeing at least 0).
+\end{notebox}
+
+% ============================================================
+\section{Max-Min Values and Dominated Strategies}
+
+Suppose Player $i$'s max-min value is $\underline{v}_i$ in game $G$. Let $G'$ be a new game obtained by removing a dominated strategy.
+
+\begin{thmbox}{Effect of Eliminating Strategies}
+  \begin{enumerate}
+      \item If we remove a strategy $t_i$ of \textbf{Player $i$} that is dominated by some other strategy, Player $i$'s max-min value in $G'$ is \textbf{still exactly} $\underline{v}_i$. (Removing a bad option for yourself doesn't hurt your guaranteed payoff).
+      \item If we remove a strategy $t_j$ of \textbf{Player $j$} (an opponent) that is dominated, Player $i$'s max-min value in $G'$ \textbf{may increase} (or stay the same, but it will not decrease). (Removing options from your opponent restricts how much they can hurt you).
+  \end{enumerate}
+\end{thmbox}
+
+% ============================================================
+\section{Introduction to Two-Player Zero-Sum Games}
+
+\begin{defbox}{Two-Player Zero-Sum Game}
+  A game $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$ is called a two-player zero-sum game if:
+  \begin{enumerate}
+      \item $N = \{1, 2\}$
+      \item $u_1(s_1, s_2) + u_2(s_1, s_2) = 0 \quad \forall (s_1, s_2) \in S_1 \times S_2$
+  \end{enumerate}
+\end{defbox}
+
+This means whatever Player 1 wins, Player 2 loses. $u_2(s_1, s_2) = -u_1(s_1, s_2)$.
+Because of this, we often only write the payoffs for Player 1 in the matrix.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|}
+  \hline
+  $P_1 \setminus P_2$ & $s_{2,1}$ & $s_{2,2}$ \\
+  \hline
+  $s_{1,1}$ & $u_1(s_{1,1}, s_{2,1})$ & $u_1(s_{1,1}, s_{2,2})$ \\
+  \hline
+  $s_{1,2}$ & $u_1(s_{1,2}, s_{2,1})$ & $u_1(s_{1,2}, s_{2,2})$ \\
+  \hline
+\end{tabular}
+\end{center}
+
+\end{document}

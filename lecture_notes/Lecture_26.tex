@@ -1,0 +1,273 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 26
+%  Subgames and Subgame Perfect Equilibrium
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 26: Subgames and Subgame Perfect Equilibrium}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Subgames of an Extensive Form Game}
+
+Recall that a general extensive form game is denoted
+\[
+  \Gamma = \langle N,\, V,\, E,\, n_0,\, (V_i)_{i \in N \cup \{0\}},\,
+           \mathcal{H},\, \bigl(A(h)\bigr)_{h \in \bigcup_{i} H_i},\,
+           (p_n)_{n \in V_0},\, (u_i)_{i \in N} \rangle.
+\]
+
+\begin{defbox}{Subgame}
+  For a game
+  $\Gamma = \langle N,\, V,\, E,\, n_0,\, (V_i)_{i \in N \cup \{0\}},\,
+  \mathcal{H},\, (A(h))_{h \in \bigcup_{i} H_i},\, (p_n)_{n \in V_0},\,
+  (u_i)_{i \in N} \rangle$,
+  a \textbf{subgame} starting at a node $y \in V$ is itself a game
+  \[
+    \Gamma_y = \langle N,\, V_y,\, E_y,\, y,\, (V_i)^y_{i \in N \cup \{0\}},\,
+               \mathcal{H}^y,\, \bigl(A(h)\bigr)^y_{h \in \bigcup_{i} H_i},\,
+               (p_n)_{n \in V_{0}^{y}},\, (u_i)_{i \in N} \rangle,
+  \]
+  where $V_y$ is the set of all nodes reachable from $y$, $E_y$ is the
+  restriction of edges to $V_y$, and every information set $h$ must
+  either be \textbf{entirely contained} in $V_y$ or entirely in
+  $V \setminus V_y$.
+\end{defbox}
+
+The condition on information sets is crucial: a subgame may only begin at
+a node $y$ if no information set is ``split'' by $y$ -- that is, no
+information set contains both a node inside $V_y$ and a node outside $V_y$.
+
+\subsection{Illustrative Examples of Subgames}
+
+\subsubsection*{Example 1 -- Battle of the Sexes (extensive form)}
+
+Consider the sequential Battle of the Sexes game. The Man (player M)
+moves first at the root $n_0$ and can choose $F$ (Football) or $D$ (Dance).
+The Woman (player W) then moves at the resulting node.
+
+\begin{center}
+\begin{tikzpicture}[
+    level 1/.style={sibling distance=4cm},
+    level 2/.style={sibling distance=2cm},
+    every node/.style={draw, circle, minimum size=0.7cm, font=\small}
+  ]
+  \node[label=above:{M}] (n0) {$n_0$}
+    child { node[label=left:{W}] {$n_1$}
+              child { node[draw=none] {$\cdot$} edge from parent node[left,draw=none] {$F$} }
+              child { node[draw=none] {$\cdot$} edge from parent node[right,draw=none] {$D$} }
+            edge from parent node[left,draw=none] {$F$} }
+    child { node[label=right:{W}] {$n_2$}
+              child { node[draw=none] {$\cdot$} edge from parent node[left,draw=none] {$F$} }
+              child { node[draw=none] {$\cdot$} edge from parent node[right,draw=none] {$D$} }
+            edge from parent node[right,draw=none] {$D$} };
+\end{tikzpicture}
+\end{center}
+
+Here the information set of the Woman (player W) is $\{n_1, n_2\}$, shown
+with a dashed arc connecting the two nodes. Because both $n_1$ and $n_2$
+belong to the \emph{same} information set, neither $n_1$ alone nor $n_2$
+alone can serve as the root of a subgame -- the information set would be
+split. The \emph{only} proper subgame is the entire game itself (i.e.\ the
+game is its own unique subgame).
+
+\subsubsection*{Example 2 -- Three-player game with information sets}
+
+Consider a game with three players I, II, III whose tree has nodes
+$n_0, n_1, \ldots, n_6$.
+\begin{itemize}
+  \item Player I moves at $n_0$ (actions $A$ and $B$).
+  \item Player II has an information set $\{n_1, n_2\}$ and moves with
+        actions $\ell$ and $r$ (from $n_1$) and $L$, $R$ (from $n_2$).
+  \item Player III has an information set $\{n_3, n_4, n_5, n_6\}$ and
+        takes actions $a$, $b$ at each node.
+\end{itemize}
+
+Because player III's information set $\{n_3,n_4,n_5,n_6\}$ spans nodes
+reached via \emph{both} branches of player I's move, no subgame can be
+started at any node $n_3, \ldots, n_6$ individually. The entire game is
+therefore its own only subgame.
+
+% ============================================================
+\section{Subgame Perfect Equilibrium (SPE)}
+
+\begin{defbox}{Subgame Perfect Equilibrium (SPE)}
+  A strategy profile $\sigma$ is a \textbf{Subgame Perfect Equilibrium
+  (SPE)} if it is a Nash Equilibrium in \emph{all} subgames of the game.
+\end{defbox}
+
+SPE refines Nash Equilibrium by eliminating non-credible threats: a player
+cannot credibly threaten to take a suboptimal action in a subgame that would
+never be reached in equilibrium, because the SPE requirement forces rational
+play even in off-path subgames.
+
+% ============================================================
+\section{Examples of Finding SPE}
+
+\subsection*{Example A}
+
+Consider a two-player sequential game with the following structure. Player I
+moves first at $n_0$ choosing $L$ or $R$. After $L$ the game reaches a
+subgame at $n_2$ where player II chooses $\ell$ or $r$; the payoff from $L$
+alone is $(1, -1)$. After $R$ the game reaches a subgame at $n_3$ where
+player II again chooses $\ell$ or $r$.
+
+\medskip
+\noindent The terminal payoffs are:
+\begin{center}
+  \begin{tabular}{c|cc}
+             & $\ell$    & $r$     \\
+    \hline
+    $L$      & $(1,-1)$  & $(-1,1)$\\
+    $R$      & $(-1,1)$  & $(1,-2)$\\
+  \end{tabular}
+\end{center}
+
+\noindent\textbf{Nash Equilibria found:} $(L, \ell)$ and $(-1, 1)$ -- two
+NE exist.
+
+\noindent\textbf{SPE:} $(L, \ell)$ -- only one SPE.
+
+Observe the game tree with player I at $n_0$ branching into $L$ (to $n_2$,
+player II) and $R$ (to $n_3$, player II), where player II's information set
+$\{n_2, n_3\}$ is circled. The four terminal payoffs are
+$(1,-1),(-1,1),(-1,1),(1,-2)$ from left to right.
+
+\begin{notebox}
+  There are two Nash Equilibria $(L, \ell)$ and $(-1, 1)$, but \emph{only
+  one} SPE: $(L, \ell)$.
+\end{notebox}
+
+\subsection*{Example B -- Two-stage sequential game}
+
+Player I moves at $n_0$: actions $A$ or $B$.
+\begin{itemize}
+  \item If $A$: payoff $(1, 2)$ immediately.
+  \item If $B$: play reaches player II at node $u_1$, who chooses $C$ or
+        $D$, giving payoffs $(0,0)$ or $(2,1)$ respectively.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Game tree:}
+\begin{center}
+\begin{tikzpicture}[
+    level 1/.style={sibling distance=4cm},
+    level 2/.style={sibling distance=2.5cm},
+    every node/.style={font=\small}
+  ]
+  \node[draw,circle] (I) {I}
+    child { node[draw=none] {$(1,2)$} edge from parent node[left,draw=none] {$A$} }
+    child { node[draw,circle] {II}
+              child { node[draw=none] {$(0,0)$} edge from parent node[left,draw=none] {$C$} }
+              child { node[draw=none] {$(2,1)$} edge from parent node[right,draw=none] {$D$} }
+            edge from parent node[right,draw=none] {$B$} };
+\end{tikzpicture}
+\end{center}
+
+\noindent The normal form matrix (Player I rows, Player II columns):
+\begin{center}
+  \begin{tabular}{c|cc}
+           & $C$    & $D$    \\
+    \hline
+    $A$    & \payoff{1}{2} & \payoff{1}{2} \\
+    $B$    & \payoff{0}{0} & \payoff{2}{1} \\
+  \end{tabular}
+\end{center}
+
+\noindent\textbf{Two NE:} $(A, C)$ and $(B, D)$.
+
+\noindent\textbf{One SPE:} $(B, D)$.
+
+The strategy $(A, C)$ is an NE: if Player I plays $A$, Player II's choice
+is irrelevant (payoff is $(1,2)$ regardless). However, if the game ever
+reached Player II's node, Player II would prefer $D$ (payoff 1 to II) over
+$C$ (payoff 0). The threat of $C$ is non-credible. The SPE is therefore
+$(B, D)$.
+
+\subsection*{Example C -- Mixed strategy NE and SPE}
+
+Consider the same game structure as Example B but now allowing mixed
+strategies. The NE of the game are:
+\[
+  (A,\, \alpha[C] + (1-\alpha)[D]), \quad \alpha \geq \tfrac{1}{2}
+\]
+and $(B, D)$.
+
+The SPE are those NE that also constitute an NE in the subgame rooted at
+player II's node. In the subgame at $n_1$:
+\begin{center}
+  \begin{tikzpicture}[
+      level 1/.style={sibling distance=3cm},
+      every node/.style={font=\small}
+    ]
+    \node[draw,circle,label=above:{II}] {}
+      child { node[draw=none] {$(0,0)$} edge from parent node[left,draw=none] {$C$} }
+      child { node[draw=none] {$(2,1)$} edge from parent node[right,draw=none] {$D$} };
+  \end{tikzpicture}
+\end{center}
+
+In the subgame $\Gamma_{n_1}$, the strategy $\alpha[C] + (1-\alpha)[D]$ is
+\emph{not} an NE if $\alpha > 0$: Player II strictly prefers $D$ (payoff 1)
+over $C$ (payoff 0). Therefore only $D$ is an NE of the subgame.
+
+\begin{itemize}
+  \item The mixed strategy $(A,\, \alpha[C]+(1-\alpha)[D])$ with $1 > \alpha
+        \geq \tfrac{1}{2}$: \textbf{SPE} (Player I plays $A$, so subgame is
+        off-path; but Player II must play $D$ in the subgame -- contradiction
+        with $\alpha>0$). \emph{Not} an SPE for $\alpha > 0$.
+  \item $(B, D)$: \textbf{SPE}.
+\end{itemize}
+
+\begin{notebox}
+  $(\alpha[C],\,(1-\alpha)[D])$ is not an NE of the subgame at $n_1$ for any
+  $\alpha > 0$. The only NE of that subgame is $D$. Therefore the unique SPE
+  is $(B, D)$.
+\end{notebox}
+
+\subsection*{Example D -- Larger sequential game}
+
+\noindent Player I at $n_0$ chooses $A$ or $B$.
+\begin{itemize}
+  \item $A \to$ payoff $(1,2)$.
+  \item $B \to$ Player II at node with children $n_3$ (from $C$) and
+        $n_5$ (from $D$).
+        \begin{itemize}
+          \item $C \to$ payoff $(0,0)$.
+          \item $D \to$ payoff $(1,1)$.
+        \end{itemize}
+\end{itemize}
+
+\noindent Normal form:
+\begin{center}
+  \begin{tabular}{c|cc}
+           & $C$    & $D$    \\
+    \hline
+    $A$    & \payoff{1}{2} & \payoff{1}{2} \\
+    $B$    & \payoff{0}{0} & \payoff{1}{1} \\
+  \end{tabular}
+\end{center}
+
+\noindent NE of the game: $(A,C)$ (not SPE), $(A,D)$ (SPE), and
+$\left(\tfrac{1}{2}[A]+\tfrac{1}{2}[B],\, D\right)$ (SPE).
+
+\noindent $(B, D)$ is also an SPE.
+
+\begin{takebox}
+  The SPE concept eliminates Nash Equilibria that rely on non-credible
+  threats. Whenever a player's strategy prescribes an action in a subgame
+  that is irrational for that player (given the subgame), that NE is
+  \emph{not} an SPE.
+\end{takebox}
+
+\end{document}

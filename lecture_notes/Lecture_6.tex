@@ -1,0 +1,144 @@
+% ============================================================
+%  MTH636 -- Game Theory | Lecture 6
+%  Two-Player Zero-Sum Games & Min-Max Theorem
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 6: Two-Player Zero-Sum Games}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Zero-Sum Games: Max-Min and Min-Max}
+
+Recall that in a two-player zero-sum game, $u_1(s_1, s_2) + u_2(s_1, s_2) = 0$. Let $u = u_1$. Thus, $u_2 = -u$.
+Player 1 wants to maximize $u$, while Player 2 wants to maximize $u_2 = -u$, which is equivalent to Player 2 wanting to \emph{minimize} $u$.
+
+\begin{exbox}{Zero-Sum Matrix Notation}
+  Consider a game where Player 1 chooses U or NU, and Player 2 chooses R or NR.
+  Let the payoffs for Player 1 be:
+  $u(U, R) = 3$, $u(NU, R) = -2$, $u(U, NR) = 1$, $u(NU, NR) = 3$.
+  
+  We represent this simply with Player 1's payoffs:
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc}
+    $P_1 \setminus P_2$ & R & NR \\
+    \hline
+    U  & \payoff{3}{-3} & \payoff{1}{-1} \\
+    NU & \payoff{-2}{2} & \payoff{3}{-3} \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+\subsection{Player 1: Max-Min Value ($\underline{v}$)}
+Player 1 guarantees themselves a payoff of:
+\[
+  \underline{v}_1 = \max_{s_1 \in S_1} \min_{s_2 \in S_2} u_1(s_1, s_2) = \max_{s_1} \min_{s_2} u(s_1, s_2)
+\]
+We denote this as $\underline{v}$. This is the \textbf{maximum amount Player 1 can guarantee to get}.
+
+\subsection{Player 2: Min-Max Value ($\overline{v}$)}
+Player 2 looks at their own max-min value:
+\[
+  \underline{v}_2 = \max_{s_2 \in S_2} \min_{s_1 \in S_1} u_2(s_1, s_2) = \max_{s_2} \min_{s_1} (-u(s_1, s_2))
+\]
+Because $\max(-f) = -\min(f)$, we can rewrite this as:
+\[
+  \underline{v}_2 = -\min_{s_2 \in S_2} \max_{s_1 \in S_1} u(s_1, s_2)
+\]
+Let $\overline{v} = \min_{s_2} \max_{s_1} u(s_1, s_2)$. This is called the \textbf{min-max value}.
+For Player 2, $\overline{v}$ represents the \textbf{minimum amount Player 2 can guarantee to pay} to Player 1.
+In this context, for Player 2, we call the max-min strategy the \textbf{min-max strategy}.
+
+% ============================================================
+\section{The Relationship Between $\underline{v}$ and $\overline{v}$}
+
+\begin{thmbox}{Inequality of Max-Min and Min-Max}
+  In general, for any game:
+  \[
+    \underline{v} \leq \overline{v}
+  \]
+  Meaning: (The max amount P1 can guarantee to get) $\leq$ (The min amount P2 can guarantee to pay).
+\end{thmbox}
+
+\begin{exbox}{Example 1: Value Exists}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|ccc|c}
+    & L & C & R & \textbf{Row Min} \\
+    \hline
+    T & 3 & -5 & -2 & -5 \\
+    M & 1 & 4 & 1 & \textbf{\color{defblue} 1} $\implies \underline{v} = 1$ \\
+    B & 6 & -3 & -5 & -5 \\
+    \hline
+    \textbf{Col Max} & 6 & 4 & \textbf{\color{defblue} 1} & $\implies \overline{v} = 1$
+  \end{tabular}
+  \end{center}
+  Here, $\underline{v} = 1$ and $\overline{v} = 1$. The max-min strategy for P1 is M, and the min-max strategy for P2 is R.
+\end{exbox}
+
+\begin{exbox}{Example 2: No Value in Pure Strategies}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c|cc|c}
+    & L & R & \textbf{Row Min} \\
+    \hline
+    T & -2 & 5 & -2 \\
+    B & 3 & 0 & \textbf{\color{defblue} 0} $\implies \underline{v} = 0$ \\
+    \hline
+    \textbf{Col Max} & \textbf{\color{defblue} 3} & 5 & $\implies \overline{v} = 3$
+  \end{tabular}
+  \end{center}
+  Here, $\underline{v} = 0$ and $\overline{v} = 3$. Since $\underline{v} < \overline{v}$, this game has \textbf{no value in pure strategies}.
+\end{exbox}
+
+% ============================================================
+\section{Value of a Game and Optimal Strategies}
+
+\begin{defbox}{Value of a Game}
+  For a two-player zero-sum game, if $\underline{v} = \overline{v} = v$, then we say the game has a \textbf{value} $v$.
+  
+  And, the max-min and min-max strategies are called \textbf{optimal strategies}.
+\end{defbox}
+
+Suppose $s_1^*$ is a max-min strategy for P1, and $s_2^*$ is a min-max strategy for P2.
+We always have:
+\[
+  \underline{v} \leq u(s_1^*, s_2^*) \leq \overline{v}
+\]
+If the game has a value ($\underline{v} = \overline{v} = v$), then $u(s_1^*, s_2^*) = v$.
+Furthermore:
+\[
+  u(s_1, s_2^*) \leq v \quad \text{and} \quad u(s_1^*, s_2) \geq v
+\]
+
+% ============================================================
+\section{Nash Equilibrium Connection}
+
+\begin{defbox}{Nash Equilibrium (NE)}
+  A strategy profile $(s_1^*, \dots, s_n^*)$ is called a \textbf{Nash Equilibrium} if no player has an incentive to unilaterally deviate. For all $i$:
+  \[
+    u_i(s_i^*, s_{-i}^*) \geq u_i(s_i, s_{-i}^*) \quad \forall s_i \in S_i
+  \]
+\end{defbox}
+
+\begin{thmbox}{Minimax Theorem (Partial Statement)}
+  For a two-player zero-sum game, if the value exists ($\underline{v} = \overline{v}$), then $(s_1^*, s_2^*)$ is a Nash Equilibrium, where $s_1^*$ is a max-min strategy of Player 1, and $s_2^*$ is a min-max strategy for Player 2.
+\end{thmbox}
+
+\begin{takebox}
+  In zero-sum games with a defined value, playing defensively (optimizing your worst-case scenario) coincides perfectly with finding the Nash Equilibrium. Your best defensive move is also your best offensive response to an optimal opponent!
+\end{takebox}
+
+\end{document}

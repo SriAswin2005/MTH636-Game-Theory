@@ -1,0 +1,123 @@
+% ============================================================
+%  MTH636 – Game Theory
+%  Short Notes / Exam Prep Guide
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} Game Theory: Short Notes}\\[6pt]
+  {\Large\sffamily Intuition, Frameworks, and Problem-Solving Guide}\\[4pt]
+\end{center}
+\vspace{0.3cm}
+\hrule height 1.5pt
+\vspace{0.6cm}
+
+% ============================================================
+\section{The Core Philosophy of Game Theory}
+Game theory isn't just about finding the ``best'' move in a vacuum; it is about \textbf{interactive decision making}. 
+\textit{Core Intuition:} You must put yourself in your opponent's shoes. ``What will they do? If they do X, what is my best response? But they know I will play my best response to X, so will they actually play X?''
+
+% ============================================================
+\section{Normal Form (Simultaneous) Games}
+
+A game needs 3 ingredients: Players ($N$), Strategies ($S_i$), and Payoff/Utility functions ($u_i$).
+
+\subsection{Dominance and IESDS}
+\begin{itemize}
+    \item \textbf{Strictly Dominated Strategy:} A strategy $A$ is strictly dominated by $B$ if playing $B$ \textit{always} gives you a strictly higher payoff than playing $A$, regardless of what your opponent does.
+    \item \textbf{Rationality Assumption:} A rational player will \textbf{never} play a strictly dominated strategy.
+    \item \textbf{IESDS (Iterated Elimination of Strictly Dominated Strategies):} 
+    \textit{How to use it:} Cross out strictly dominated rows for P1. Then, in the remaining matrix, cross out strictly dominated columns for P2. Repeat until nothing else can be crossed out. 
+    \textit{Trick:} If an exam question asks you to solve a large $4 \times 4$ game, always check for dominated strategies first. It usually collapses into a $2 \times 2$ game!
+    \item \textbf{Domination by a Mixed Strategy:} A pure strategy can be strictly dominated by a \textit{mixture} of other strategies! (e.g., $1/2(\text{Top}) + 1/2(\text{Bottom})$ strictly dominates Middle). If it is strictly dominated (even by a mixed strategy), it will \textbf{never} get positive probability in any Nash Equilibrium. Always check for mixed domination if you can't eliminate a strategy purely.
+\end{itemize}
+
+\subsection{Pure Strategy Nash Equilibrium (NE)}
+\textbf{Intuition:} A state of the world where \textbf{no one has regrets}. If everyone's choice is revealed, no single player would want to change their move.
+\begin{itemize}
+    \item \textbf{Best Response (BR):} The strategy that yields the highest payoff given a specific belief about what the opponent will do.
+    \item \textbf{How to find Pure NE (The Underline Method):}
+    \begin{enumerate}
+        \item Assume P2 plays Left. Underline P1's highest payoff in that column. Repeat for all columns.
+        \item Assume P1 plays Top. Underline P2's highest payoff in that row. Repeat for all rows.
+        \item Any cell with \textbf{both payoffs underlined} is a Nash Equilibrium!
+    \end{enumerate}
+\end{itemize}
+
+\begin{notebox}
+  \textbf{Classic Game Archetypes (Learn the stories, not just the matrices):}
+  \begin{itemize}
+      \item \textbf{Prisoner's Dilemma:} Individual rationality leads to collective ruin. (Defect, Defect) is the unique NE, but it is Pareto inefficient.
+      \item \textbf{Battle of the Sexes:} Players want to coordinate, but disagree on where. Yields multiple Pure NEs (coordination points) and one Mixed NE.
+      \item \textbf{Matching Pennies:} Pure conflict (Zero-sum). P1 wants to match, P2 wants to mismatch. Result: \textbf{No Pure NE exists}. You must be unpredictable (mix).
+  \end{itemize}
+\end{notebox}
+
+% ============================================================
+\section{Mixed Strategies \& The Indifference Principle}
+
+\begin{thmbox}{Nash's Existence Theorem}
+  \textbf{Every finite game has at least one Nash Equilibrium.} If you can't find a Pure NE, a Mixed NE is mathematically guaranteed to exist (proved via Brouwer's Fixed Point Theorem).
+\end{thmbox}
+
+If a game has no Pure NE (or if you need to find all NEs), players randomize their choices using probabilities.
+
+\textbf{The Indifference Principle (The Golden Rule of Mixing):} \\
+If a player is randomizing between two strategies (say, Top and Bottom), it \textit{must} be because both strategies give them the \textbf{exact same expected payoff} against the opponent's mixed strategy. If one gave a higher expected payoff, the player would just play that one 100\% of the time!
+
+\begin{thmbox}{How to Solve for Mixed NE (Crucial Step-by-Step)}
+  Let P1 play Top with probability $p$ and Bottom with $1-p$. \\
+  Let P2 play Left with probability $q$ and Right with $1-q$.
+  \begin{enumerate}
+      \item \textbf{To find P2's mixing prob ($q$):} Set P1's expected payoffs equal!
+      \[ E[U_1(\text{Top})] = E[U_1(\text{Bottom})] \]
+      Express these expected utilities in terms of $q$. Solve for $q$.
+      \item \textbf{To find P1's mixing prob ($p$):} Set P2's expected payoffs equal!
+      \[ E[U_2(\text{Left})] = E[U_2(\text{Right})] \]
+      Express these in terms of $p$. Solve for $p$.
+  \end{enumerate}
+\end{thmbox}
+\textit{Deep Intuition:} Your mixing probabilities are designed to keep your opponent indifferent, \textbf{not} to maximize your own payoff in isolation! You mix to make the opponent indifferent so they don't exploit you.
+
+% ============================================================
+\section{Extensive Form (Sequential) Games}
+
+When players move one after another, we use Game Trees.
+\begin{itemize}
+    \item \textbf{Nodes \& Branches:} Decision points and actions.
+    \item \textbf{Information Sets:} A dotted line (or bubble) connecting nodes. It means the player whose turn it is \textit{cannot distinguish} which of those nodes they are actually at. (e.g., they don't know what the previous player chose).
+    \item \textbf{Perfect Information:} Every information set contains exactly one node. (Like Chess).
+\end{itemize}
+
+\subsection{Backward Induction and SPNE}
+If you just convert a tree into a matrix and find the Nash Equilibria, you will often find NEs that rely on \textbf{Non-Credible Threats}. (e.g., ``If you enter the market, I will start a price war.'' But if the price war hurts both, would they actually do it if tested?)
+
+\textbf{Subgame Perfect Nash Equilibrium (SPNE):} \\
+A refinement of NE that eliminates non-credible threats. It requires that the strategies constitute a Nash Equilibrium in \textit{every subgame} (every smaller subtree).
+
+\begin{thmbox}{How to Solve for SPNE (Backward Induction)}
+  \begin{enumerate}
+      \item Go to the very end of the tree (the final decision nodes before the payoffs).
+      \item Ask: ``What is the rational choice for the player at this node?'' Highlight that branch.
+      \item Replace that entire subgame with the payoff of the highlighted branch.
+      \item Move one step up the tree and repeat.
+  \end{enumerate}
+  \textit{Note:} Backward induction only works perfectly for games of \textit{perfect information}. If there are information bubbles, you must treat that bubble as a simultaneous mini-game (matrix) and find its NE, then fold that NE payoff back up the tree.
+\end{thmbox}
+
+% ============================================================
+\section{Emergency Exam Tips}
+\begin{itemize}
+    \item \textbf{If asked to find ALL Nash Equilibria:} Don't forget the mixed ones! Check pure NE first, then assign probabilities, apply the indifference principle, and check for mixed NE.
+    \item \textbf{If a mixed probability equation gives $q = 2$ or $q < 0$:} You've made an arithmetic mistake, or there is no mixed NE involving those specific strategies. Probabilities must be between 0 and 1.
+    \item \textbf{If a game looks too big to solve:} Look immediately for strictly dominated strategies to delete. 
+    \item \textbf{If asked why a threat is ``non-credible'':} Show that if the subgame was actually reached, the player would strictly prefer to take a different action than the one they threatened.
+\end{itemize}
+
+\end{document}

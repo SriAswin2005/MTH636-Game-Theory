@@ -1,0 +1,478 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 32
+%  Agent Form Representation, Correlated Equilibrium &
+%  Introduction to Auction Theory
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 32: Agent Form Games, Correlated Equilibrium \& Auction Theory}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Agent Form Representation \& Bayesian Nash Equilibrium}
+
+In Lecture 31, we introduced Harsanyi games of incomplete information and defined the concept of \textbf{Bayesian Nash Equilibrium (BNE)}. We now establish the formal mathematical connection between a Harsanyi game and a strategic form game called the \textbf{Agent Form Game}, which will allow us to prove both the existence of BNE and its fundamental equivalence with Nash Equilibrium.
+
+\subsection{Formulation of the Agent Form Game}
+
+Let $\Gamma = \langle N, (T_i)_{i \in N}, p, S, (u_t)_{t \in T} \rangle$ be an incomplete information game, where:
+\begin{itemize}
+    \item $N = \{1, 2, \dots, n\}$ is the set of players.
+    \item $T_i$ is the finite type set of player $i$, and $T = \prod_{i=1}^n T_i$.
+    \item $p$ is the common prior probability distribution over $T$ with $p(t) > 0$ for all $t \in T$.
+    \item $A_i(t_i)$ is the action set available to player $i$ when their type is $t_i$.
+    \item $u_i(t, a)$ is player $i$'s payoff given type profile $t \in T$ and action profile $a \in \prod_i A_i(t_i)$.
+\end{itemize}
+
+We formulate an associated strategic form game called the \textbf{Agent Form Game}, denoted by $\hat{\Gamma}$.
+
+\begin{defbox}{Agent Form Game $\hat{\Gamma}$}
+The \textbf{Agent Form Game} associated with the incomplete information game $\Gamma$ is defined as the tuple:
+\[
+  \hat{\Gamma} = \langle \hat{N}, (\hat{S}_\ell)_{\ell \in \hat{N}}, (\hat{u}_\ell)_{\ell \in \hat{N}} \rangle
+\]
+where:
+\begin{enumerate}
+    \item \textbf{Set of Agents:} Each type of each player is treated as an autonomous decision-maker:
+    \[
+      \hat{N} = \bigcup_{i=1}^n T_i
+    \]
+    Thus, an agent $\ell \in \hat{N}$ corresponds to a specific pair $(i, t_i)$ where $t_i \in T_i$.
+    \item \textbf{Strategy Sets:} If agent $\ell$ corresponds to type $t_i \in T_i$ of player $i$, their pure strategy set is simply the action set of that type:
+    \[
+      \hat{S}_\ell = A_i(t_i) \quad \text{where } \ell = t_i
+    \]
+    \item \textbf{Payoff Functions:} When an action profile $a = (a_\ell)_{\ell \in \hat{N}}$ is chosen by all agents, the payoff of agent $\ell = t_i \in T_i$ is the \textbf{interim expected utility} of player $i$ conditional on having type $t_i$:
+    \[
+      \hat{u}_\ell(a) = \sum_{t_{-i} \in T_{-i}} p(t_{-i} \mid t_i) \, u_i\!\left( (t_i, t_{-i}),\, (a_{t_i}, (a_{t_j})_{j \neq i}) \right)
+    \]
+    where $p(t_{-i} \mid t_i) = \frac{p(t_i, t_{-i})}{\sum_{t'_{-i}} p(t_i, t'_{-i})}$ is the conditional probability of opponent types.
+\end{enumerate}
+\end{defbox}
+
+\begin{notebox}
+\textbf{Remark on Strategy Correspondences:}
+For any player $i \in N$, a behavior strategy $\sigma_i$ specifies an action distribution $\sigma_i(t_i) \in \Delta(A_i(t_i))$ for each type $t_i \in T_i$. In the agent form game $\hat{\Gamma}$, each such distribution is precisely a mixed strategy for agent $\ell = t_i$. 
+
+Conversely, any profile of mixed strategies for the agents $\{t_i\}_{t_i \in T_i}$ in the agent form game directly defines a valid behavior strategy for player $i$ in the incomplete information game $\Gamma$.
+\end{notebox}
+
+\subsection{Equivalence and Existence Theorems}
+
+\begin{thmbox}{Equivalence of BNE and Agent Form NE}
+A behavior strategy profile $(\sigma_i)_{i \in N}$ is a \textbf{Bayesian Nash Equilibrium (BNE)} in the incomplete information game $\Gamma$ if and only if the corresponding strategy vector $(\sigma_i(t_i))_{i \in N,\, t_i \in T_i}$ is a \textbf{Nash Equilibrium} in the agent form game $\hat{\Gamma}$.
+\end{thmbox}
+
+\begin{proof}
+$(\implies)$ Suppose $(\sigma_i)_{i \in N}$ is a BNE of $\Gamma$. By definition, for every player $i \in N$ and every type $t_i \in T_i$:
+\[
+  U_i(\sigma \mid t_i) \geq U_i\!\left( (a_i, \sigma_{-i}) \mid t_i \right) \quad \forall\, a_i \in A_i(t_i)
+\]
+Since the payoff function of agent $\ell = t_i$ in $\hat{\Gamma}$ is defined identically as the interim expected utility $\hat{u}_\ell = U_i(\cdot \mid t_i)$, no agent $\ell$ can profitably deviate from $\sigma_i(t_i)$. Thus, the strategy vector is a Nash Equilibrium of $\hat{\Gamma}$.
+
+$(\impliedby)$ We prove the contrapositive. Suppose $(\sigma_i)_{i \in N}$ is \textbf{not} a BNE of $\Gamma$. Then there exists some player $i \in N$, some type $t_i \in T_i$, and an action $a \in A_i(t_i)$ such that deviating to $a$ yields a strictly higher interim utility:
+\[
+  U_i(\sigma \mid t_i) < U_i\!\left( (a, \sigma_{-i}) \mid t_i \right)
+\]
+In the agent form game $\hat{\Gamma}$, this implies that agent $\ell = t_i$ can unilaterally deviate to action $a$ and achieve:
+\[
+  \hat{u}_\ell\!\left( (\sigma_j(t_j))_{j \in N,\, t_j \in T_j} \right) < \hat{u}_\ell\!\left( a,\, \sigma_{-\ell} \right)
+\]
+Hence, the strategy profile is not a Nash Equilibrium of $\hat{\Gamma}$.
+\end{proof}
+
+\begin{thmbox}{Existence of Bayesian Nash Equilibrium}
+Every finite incomplete information game $\Gamma$ possesses at least one \textbf{Bayesian Nash Equilibrium} in behavior strategies.
+\end{thmbox}
+
+\begin{proof}
+The agent form game $\hat{\Gamma}$ is a standard finite strategic form game with player set $\hat{N}$ and pure action sets $\hat{S}_\ell$. By Nash's Existence Theorem (1950), every finite normal form game has at least one Nash Equilibrium in mixed strategies. By the Equivalence Theorem above, this mixed Nash Equilibrium in $\hat{\Gamma}$ is precisely a Bayesian Nash Equilibrium in behavior strategies for $\Gamma$.
+\end{proof}
+
+\begin{thmbox}{BNE and Strategic Form Nash Equilibrium}
+In any Harsanyi incomplete information model with strictly positive common prior $p(t) > 0$ for all $t \in T$, a strategy profile is an ex-ante Nash Equilibrium if and only if it is a Bayesian Nash Equilibrium.
+\end{thmbox}
+
+\subsection{Worked Example: Constructing the Agent Form Game}
+
+\begin{exbox}{Agent Form Representation with Asymmetric Types}
+Consider an incomplete information game with two players, $N = \{1, 2\}$:
+\begin{itemize}
+    \item Player 1 has two types: $T_1 = \{t_1, t_2\}$ (often denoted $l_1, l_2$).
+    \item Player 2 has one type: $T_2 = \{\text{II}\}$.
+    \item Common prior probabilities: $p(t_1, \text{II}) = \frac{1}{2}$ and $p(t_2, \text{II}) = \frac{1}{2}$.
+\end{itemize}
+Conditional beliefs are trivially:
+\[
+  p(\text{II} \mid t_1) = 1, \quad p(\text{II} \mid t_2) = 1, \quad p(t_1 \mid \text{II}) = \frac{1/2}{1} = \frac{1}{2}, \quad p(t_2 \mid \text{II}) = \frac{1}{2}
+\]
+
+The state payoff matrices are:
+\begin{center}
+\begin{tabular}{cc}
+\textbf{State $(t_1, \text{II})$} & \textbf{State $(t_2, \text{II})$} \\[4pt]
+\begin{tabular}{c|cc}
+ & $L$ & $R$ \\ \hline
+$T_1$ & $(1, 0)$ & $(0, 2)$ \\
+$B_1$ & $(0, 3)$ & $(1, 0)$
+\end{tabular}
+&
+\begin{tabular}{c|cc}
+ & $L$ & $R$ \\ \hline
+$T_2$ & $(0, 2)$ & $(1, 1)$ \\
+$B_2$ & $(1, 0)$ & $(0, 2)$
+\end{tabular}
+\end{tabular}
+\end{center}
+
+\textbf{Step 1: Formulate the Agent Form Game $\hat{\Gamma}$:}
+\begin{itemize}
+    \item Set of agents: $\hat{N} = \{t_1, t_2, \text{II}\}$ (3 agents).
+    \item Action sets: $\hat{S}_{t_1} = \{T_1, B_1\}$, $\hat{S}_{t_2} = \{T_2, B_2\}$, $\hat{S}_{\text{II}} = \{L, R\}$.
+\end{itemize}
+
+\textbf{Step 2: Payoff Computations for Profiles:}
+Consider the pure action profile $(T_1, B_2, L)$:
+\begin{itemize}
+    \item For agent $t_1$:
+    \[
+      \hat{u}_{t_1}(T_1, B_2, L) = 1 \cdot u_1((t_1, \text{II}), (T_1, L)) = 1
+    \]
+    \item For agent $t_2$:
+    \[
+      \hat{u}_{t_2}(T_1, B_2, L) = 1 \cdot u_1((t_2, \text{II}), (B_2, L)) = 1
+    \]
+    \item For agent $\text{II}$:
+    \begin{align*}
+      \hat{u}_{\text{II}}(T_1, B_2, L) &= u_2((t_1, \text{II}), (T_1, L)) \, p(t_1 \mid \text{II}) + u_2((t_2, \text{II}), (B_2, L)) \, p(t_2 \mid \text{II}) \\
+      &= 0 \cdot \frac{1}{2} + 0 \cdot \frac{1}{2} = 0
+    \end{align*}
+\end{itemize}
+
+\textbf{Step 3: Verification of Deviation Equivalence:}
+Let mixed strategies be:
+\[
+  \sigma_{t_1} = x [T_1] + (1-x)[B_1], \quad \sigma_{t_2} = y [T_2] + (1-y)[B_2], \quad \sigma_{\text{II}} = q [L] + (1-q)[R]
+\]
+Suppose this strategy profile is not a BNE because Player 1 can profitably deviate at type $t_1$ by playing pure action $T_1$. Then:
+\[
+  U_1(\sigma \mid t_1) < U_1((T_1, \sigma_{\text{II}}) \mid t_1)
+\]
+The ex-ante utility of Player 1 decomposes as:
+\[
+  U_1(\sigma) = p(t_1) \, U_1(\sigma \mid t_1) + p(t_2) \, U_1(\sigma \mid t_2)
+\]
+Defining the modified strategy $\bar{\sigma}_1$ by:
+\[
+  \bar{\sigma}_1(t) = \begin{cases} T_1 & \text{if } t = t_1 \\ y[T_2] + (1-y)[B_2] & \text{if } t = t_2 \end{cases}
+\]
+we immediately obtain $U_1(\sigma) < U_1(\bar{\sigma}_1, \sigma_{\text{II}})$, establishing that interim optimality per agent is strictly equivalent to ex-ante optimality.
+\end{exbox}
+
+% ============================================================
+\newpage
+\section{Correlated Equilibrium}
+
+The concept of \textbf{Correlated Equilibrium}, introduced by Robert Aumann in 1974, generalizes Nash Equilibrium by allowing players to coordinate their choices through public or private signals generated by a correlation device (such as a mediator or randomizing mechanism).
+
+\subsection{Motivating Example: The Traffic Intersection (Chicken Game)}
+
+Consider two cars approaching an intersection simultaneously. Each driver can either \textbf{Cross ($C$)} or \textbf{Stop ($S$)}.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc}
+ & $C$ & $S$ \\ \hline
+$C$ & $(-10, -10)$ & $(5, 0)$ \\
+$S$ & $(0, 5)$ & $(-1, -1)$
+\end{tabular}
+\end{center}
+
+\subsubsection{Standard Nash Equilibrium Analysis}
+\begin{itemize}
+    \item \textbf{Pure Strategy NE:} There are two asymmetric pure Nash equilibria:
+    \[
+      (C, S) \implies \text{payoffs } (5, 0), \qquad (S, C) \implies \text{payoffs } (0, 5)
+    \]
+    Both are inherently unfair to one driver, and in a simultaneous game with no prior communication, players cannot determine which equilibrium to coordinate upon.
+    \item \textbf{Symmetric Mixed Strategy NE:} Let Player 2 choose Cross with probability $q$ and Stop with probability $1-q$. For Player 1 to be indifferent:
+    \[
+      U_1(C) = U_1(S) \implies -10q + 5(1-q) = 0q - 1(1-q)
+    \]
+    \[
+      5 - 15q = q - 1 \implies 16q = 6 \implies q = \frac{3}{8}
+    \]
+    Thus, the unique symmetric mixed strategy NE is:
+    \[
+      \sigma_1^* = \sigma_2^* = \left( \frac{3}{8}[C] + \frac{5}{8}[S] \right)
+    \]
+    Under this mixed equilibrium, the expected utility of each player is:
+    \[
+      U_i(\sigma^*) = \frac{3}{8}(0) + \frac{5}{8}(-1) = -\frac{5}{8} = -0.625
+    \]
+    Both players suffer negative expected payoffs, and a disastrous crash $(C, C)$ occurs with probability $\left(\frac{3}{8}\right)^2 = \frac{9}{64} \approx 14.1\%$.
+\end{itemize}
+
+\subsubsection{Introducing a Correlation Device (Traffic Light / Mediator)}
+
+Now suppose an external device (e.g., a traffic signal) selects a recommended strategy profile $(s_1, s_2)$ according to the following joint probability distribution $p$:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc|c}
+ & $C$ & $S$ & Total \\ \hline
+$C$ & $0$ & $0.55$ & $0.55$ \\
+$S$ & $0.40$ & $0.05$ & $0.45$ \\ \hline
+Total & $0.40$ & $0.60$ & $1.00$
+\end{tabular}
+\end{center}
+
+The recommendations are \textbf{private}: Player 1 is told only their own action $s_1$, and Player 2 is told only their own action $s_2$. Both players know the joint distribution $p$.
+
+\textbf{Checking Player 1's Incentive to Obey:}
+\begin{enumerate}
+    \item \textbf{Case 1: Player 1 is recommended Cross ($s_1 = C$):}
+    \begin{itemize}
+        \item Since $p(C, C) = 0$, Player 1 updates their belief about Player 2:
+        \[
+          p(s_2 = S \mid s_1 = C) = \frac{0.55}{0 + 0.55} = 1
+        \]
+        Player 1 knows with certainty that Player 2 was told to Stop ($S$).
+        \item If Player 1 obeys and plays $C$: Payoff is $u_1(C, S) = 5$.
+        \item If Player 1 deviates to Stop ($S$): Payoff is $u_1(S, S) = -1$.
+        \item Since $5 > -1$, Player 1 has \textbf{no incentive to deviate}.
+    \end{itemize}
+    
+    \item \textbf{Case 2: Player 1 is recommended Stop ($s_1 = S$):}
+    \begin{itemize}
+        \item The marginal probability of getting recommendation $S$ is $p(s_1 = S) = 0.40 + 0.05 = 0.45$.
+        \item Conditional probability that Player 2 received $C$:
+        \[
+          p(s_2 = C \mid s_1 = S) = \frac{0.40}{0.45} = \frac{8}{9} \approx 0.89
+        \]
+        \item Conditional probability that Player 2 received $S$:
+        \[
+          p(s_2 = S \mid s_1 = S) = \frac{0.05}{0.45} = \frac{1}{9} \approx 0.11
+        \]
+        \item If Player 1 obeys the recommendation and plays $S$:
+        \[
+          \mathbb{E}[u_1 \mid S] = \frac{8}{9}(0) + \frac{1}{9}(-1) = -0.11
+        \]
+        \item If Player 1 disobeys and plays $C$:
+        \[
+          \mathbb{E}[u_1 \mid C] = \frac{8}{9}(-10) + \frac{1}{9}(5) = -\frac{80}{9} + \frac{5}{9} = -\frac{75}{9} \approx -8.33
+        \]
+        \item Since $-0.11 > -8.33$, Player 1 strictly prefers to \textbf{obey the signal and stop}.
+    \end{itemize}
+\end{enumerate}
+
+\begin{takebox}
+\textbf{Payoff Comparison:}
+Under this correlated distribution $p$, Player 1's expected payoff is:
+\[
+  U_1(p) = 0.55(5) + 0.40(0) + 0.05(-1) = 2.75 - 0.05 = 2.70
+\]
+Notice that $2.70 \gg -\frac{5}{8} = -0.625$. Both players achieve substantially higher expected payoffs than the mixed NE, collisions are completely avoided ($p(C, C) = 0$), and yet neither player has any incentive to disobey the mediator!
+\end{takebox}
+
+\subsection{Formal Definition of Correlated Equilibrium}
+
+Let $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$ be a strategic form game, and let $S = \prod_{i=1}^n S_i$.
+
+\begin{defbox}{Extensive Form Game $\Gamma^*(p)$ of a Correlation Device}
+Let $p \in \Delta(S)$ be a probability distribution over the pure strategy space $S$. The correlation device defines an extensive form game $\Gamma^*(p)$ as follows:
+\begin{enumerate}
+    \item Nature chooses a strategy profile $s = (s_1, \dots, s_n) \in S$ according to distribution $p$.
+    \item Each player $i \in N$ is privately informed of their recommended action $s_i$ (and learns nothing about $s_{-i}$).
+    \item Each player $i$ then chooses an action $s'_i \in S_i$.
+    \item Payoffs are given by $u_i(s'_1, \dots, s'_n)$.
+\end{enumerate}
+In $\Gamma^*(p)$, a pure strategy for player $i$ is a mapping $\tau_i : S_i \to S_i$, where $\tau_i(s_i)$ is the action taken when recommended $s_i$. The strategy of \textbf{following recommendations} is denoted by:
+\[
+  \tilde{\tau}_i(s_i) = s_i \quad \forall\, s_i \in S_i
+\]
+\end{defbox}
+
+\begin{defbox}{Correlated Equilibrium (Aumann, 1974)}
+A probability distribution $p \in \Delta(S)$ is a \textbf{Correlated Equilibrium} of the game $G$ if the obedience strategy profile $\tilde{\tau} = (\tilde{\tau}_i)_{i \in N}$ is a Nash Equilibrium of the game $\Gamma^*(p)$.
+\end{defbox}
+
+\begin{warnbox}{Privacy of Recommendations}
+It is critical that recommendations are \textbf{private}. If Player 1 knew Player 2's recommendation in advance, the strategic interaction would collapse back into standard subgames, potentially destroying the incentive to obey.
+\end{warnbox}
+
+\subsection{Characterization Theorem and Proof}
+
+\begin{thmbox}{Linear Incentive Constraints for Correlated Equilibrium}
+A probability distribution $p \in \Delta(S)$ is a Correlated Equilibrium of $G$ if and only if for every player $i \in N$ and for all actions $s_i, s'_i \in S_i$:
+\[
+  \sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) \, u_i(s_i, s_{-i}) \;\geq\; \sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) \, u_i(s'_i, s_{-i})
+\]
+\end{thmbox}
+
+\begin{proof}
+Fix player $i \in N$, a recommended strategy $s_i \in S_i$, and an alternative strategy $s'_i \in S_i$.
+
+\textbf{Case 1:} Suppose $\sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) = 0$. Then $p(s_i, s_{-i}) = 0$ for all $s_{-i}$. In this case, recommendation $s_i$ occurs with probability zero, both sides of the inequality evaluate to 0, and the condition is trivially satisfied.
+
+\textbf{Case 2:} Suppose $\sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) > 0$. By Bayes' Rule, when player $i$ receives recommendation $s_i$, their posterior belief about opponent actions is:
+\[
+  p(s_{-i} \mid s_i) = \frac{p(s_i, s_{-i})}{\sum_{t_{-i} \in S_{-i}} p(s_i, t_{-i})}
+\]
+The expected utility of player $i$ from following the recommendation $s_i$ (assuming all opponents also follow their recommendations) is:
+\[
+  \mathbb{E}[u_i \mid s_i] = \sum_{s_{-i} \in S_{-i}} p(s_{-i} \mid s_i) \, u_i(s_i, s_{-i})
+\]
+If player $i$ instead deviates to action $s'_i$, their expected utility is:
+\[
+  \mathbb{E}[u_i \mid s'_i] = \sum_{s_{-i} \in S_{-i}} p(s_{-i} \mid s_i) \, u_i(s'_i, s_{-i})
+\]
+By definition, $\tilde{\tau}$ is a Nash Equilibrium of $\Gamma^*(p)$ iff no player has an incentive to deviate upon receiving any recommendation $s_i$:
+\[
+  \sum_{s_{-i} \in S_{-i}} p(s_{-i} \mid s_i) \, u_i(s_i, s_{-i}) \;\geq\; \sum_{s_{-i} \in S_{-i}} p(s_{-i} \mid s_i) \, u_i(s'_i, s_{-i}) \quad \forall\, i \in N,\ \forall\, s_i, s'_i \in S_i
+\]
+Substituting the formula for $p(s_{-i} \mid s_i)$:
+\[
+  \frac{\sum_{s_{-i}} p(s_i, s_{-i}) \, u_i(s_i, s_{-i})}{\sum_{t_{-i}} p(s_i, t_{-i})} \;\geq\; \frac{\sum_{s_{-i}} p(s_i, s_{-i}) \, u_i(s'_i, s_{-i})}{\sum_{t_{-i}} p(s_i, t_{-i})}
+\]
+Multiplying both sides by the strictly positive denominator $\sum_{t_{-i}} p(s_i, t_{-i}) = p(s_i)$ yields:
+\[
+  \sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) \, u_i(s_i, s_{-i}) \;\geq\; \sum_{s_{-i} \in S_{-i}} p(s_i, s_{-i}) \, u_i(s'_i, s_{-i})
+\]
+which is the desired characterization.
+\end{proof}
+
+\subsection{Properties of Correlated Equilibria}
+
+\begin{thmbox}{Mixed NE Induces a Correlated Equilibrium}
+Every Nash Equilibrium (pure or mixed) of a strategic form game $G$ induces a Correlated Equilibrium.
+\end{thmbox}
+
+\begin{proof}
+Let $\sigma^* = (\sigma_1^*, \dots, \sigma_n^*)$ be a Nash Equilibrium of $G$. Define the probability distribution $p_{\sigma^*}$ on $S$ as the product distribution:
+\[
+  p_{\sigma^*}(s_1, \dots, s_n) = \sigma_1^*(s_1) \cdot \sigma_2^*(s_2) \cdots \sigma_n^*(s_n)
+\]
+Since the distribution factors independently, knowing $s_i$ provides no information about $s_{-i}$:
+\[
+  p(s_{-i} \mid s_i) = \sigma_{-i}^*(s_{-i})
+\]
+The obedience condition for player $i$ becomes:
+\[
+  \sum_{s_{-i}} \sigma_{-i}^*(s_{-i}) \, u_i(s_i, s_{-i}) \;\geq\; \sum_{s_{-i}} \sigma_{-i}^*(s_{-i}) \, u_i(s'_i, s_{-i})
+\]
+which is precisely the definition that $s_i$ is a best response to $\sigma_{-i}^*$ for every $s_i$ in the support of $\sigma_i^*$. Thus, $p_{\sigma^*}$ is a Correlated Equilibrium.
+\end{proof}
+
+\begin{intubox}
+\textbf{Geometric Insight:}
+The set of Correlated Equilibria is defined by a finite system of linear inequalities together with the probability simplex constraints ($\sum_s p(s) = 1$, $p(s) \geq 0$). 
+Therefore, \textbf{the set of Correlated Equilibria is a convex polytope}. 
+In contrast, the set of Nash Equilibria is generally non-convex and disconnected due to the non-linear independence constraints $p(s) = \prod_i \sigma_i(s_i)$.
+\end{intubox}
+
+\begin{exbox}{Correlated Equilibrium in the Prisoner's Dilemma}
+Consider the standard Prisoner's Dilemma:
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c|cc}
+ & $C$ & $D$ \\ \hline
+$C$ & $(3, 3)$ & $(0, 5)$ \\
+$D$ & $(5, 0)$ & $(1, 1)$
+\end{tabular}
+\end{center}
+\textbf{Question:} Is there any Correlated Equilibrium where the cooperative outcome $(C, C)$ receives positive probability?
+
+\textbf{Analysis:} Suppose $p(C, C) > 0$. Then Player 1 can be recommended $C$ with positive probability. If Player 1 is recommended $C$, her expected payoff from obeying is:
+\[
+  \mathbb{E}[u_1 \mid C] = 3 \cdot p(C \mid C) + 0 \cdot p(D \mid C) = 3 \, p(C \mid C)
+\]
+If Player 1 deviates to $D$:
+\[
+  \mathbb{E}[u_1 \mid D] = 5 \cdot p(C \mid C) + 1 \cdot p(D \mid C) = 5 \, p(C \mid C) + p(D \mid C)
+\]
+Subtracting the two:
+\[
+  \mathbb{E}[u_1 \mid D] - \mathbb{E}[u_1 \mid C] = 2 \, p(C \mid C) + p(D \mid C) > 0
+\]
+Because $D$ strictly dominates $C$, Player 1 has a strictly positive incentive to defect regardless of any posterior beliefs about Player 2! 
+
+Consequently, \textbf{no correlated equilibrium can assign positive probability to any strictly dominated strategy}. The unique correlated equilibrium of the Prisoner's Dilemma is $p(D, D) = 1$.
+\end{exbox}
+
+% ============================================================
+\newpage
+\section{Introduction to Auction Theory}
+
+Auction theory models markets where goods are allocated via bidding mechanisms under asymmetric and incomplete information.
+
+\subsection{Mathematical Preliminaries: Random Variables}
+
+\begin{defbox}{Cumulative Distribution Function (CDF)}
+For a real-valued random variable $X$, its \textbf{Cumulative Distribution Function (CDF)}, denoted $F_X : \mathbb{R} \to [0, 1]$, is defined by:
+\[
+  F_X(c) = \mathbb{P}(X \leq c) \quad \forall\, c \in \mathbb{R}
+\]
+A CDF is non-decreasing, right-continuous, and satisfies $\lim_{c \to -\infty} F_X(c) = 0$ and $\lim_{c \to \infty} F_X(c) = 1$.
+\end{defbox}
+
+\begin{defbox}{Probability Density Function (PDF)}
+If $X$ is an absolutely continuous random variable, there exists a non-negative function $f_X : \mathbb{R} \to \mathbb{R}^+$, called the \textbf{Probability Density Function (PDF)}, such that:
+\[
+  F_X(c) = \int_{-\infty}^c f_X(x) \, dx \quad \forall\, c \in \mathbb{R}
+\]
+\end{defbox}
+
+\subsection{Sealed-Bid Auctions with Independent Private Valuations (IPV)}
+
+In the \textbf{Independent Private Valuations (IPV)} model, each buyer knows their own willingness to pay for the good, but does not know the valuations of the competing bidders.
+
+\begin{defbox}{Sealed-Bid Auction Model $\langle N, (V_i, F_i)_{i \in N}, p, c \rangle$}
+A sealed-bid auction with independent private valuations is defined by the tuple:
+\[
+  \langle N, (V_i, F_i)_{i \in N}, p, c \rangle
+\]
+where:
+\begin{enumerate}
+    \item $N = \{1, 2, \dots, n\}$ is the set of buyers (bidders).
+    \item $V_i \subseteq \mathbb{R}$ is the set of all possible valuations of buyer $i$. Each buyer has a private valuation $v_i \in V_i$.
+    \item $F_i$ is the Cumulative Distribution Function (CDF) from which buyer $i$'s valuation is drawn independently.
+    \item $p : [0, \infty)^N \to \Delta N$ is the \textbf{allocation rule}, where $p_i(b)$ denotes the probability that buyer $i$ wins the object given the bid profile $b = (b_1, \dots, b_n)$. Here $\Delta N = \{ (p_1, \dots, p_n) \mid p_i \geq 0,\, \sum_{i=1}^n p_i \leq 1 \}$.
+    \item $c : N \times [0, \infty)^N \to \mathbb{R}$ (or $c : [0, \infty)^N \to \mathbb{R}^N$) is the \textbf{payment rule}, determining the payment $c_i(b)$ that buyer $i$ must pay to the seller given the bid profile $b$.
+\end{enumerate}
+\end{defbox}
+
+\subsection{Protocol of a Sealed-Bid Auction}
+
+A sealed-bid auction proceeds through the following chronological stages:
+\begin{enumerate}
+    \item \textbf{Valuation Realization:} Nature draws each buyer's private valuation $v_i \in V_i$ independently according to distribution $F_i$.
+    \item \textbf{Information Revelation:} Each buyer learns their own private valuation $v_i$, but does not observe the valuations $v_{-i}$ of any other buyers.
+    \item \textbf{Bidding:} Every buyer simultaneously submits a bid $b_i \in [0, \infty)$ in a sealed/closed envelope.
+    \item \textbf{Winner Determination:} The auctioneer opens all envelopes and selects the winner(s) according to the allocation rule $p(b)$. Typically, the highest bidder wins:
+    \[
+      p_i(b) = \begin{cases} 1 & \text{if } b_i > \max_{j \neq i} b_j \\ \frac{1}{k} & \text{if } b_i \text{ is tied among } k \text{ highest bidders} \\ 0 & \text{otherwise} \end{cases}
+    \]
+    \item \textbf{Payment Execution:} Buyers pay the seller according to payment rule $c(b)$. For example:
+    \begin{itemize}
+        \item \textbf{First-Price Auction:} The winning bidder pays their own bid, $c_i(b) = b_i$.
+        \item \textbf{Second-Price (Vickrey) Auction:} The winning bidder pays the second-highest bid, $c_i(b) = \max_{j \neq i} b_j$.
+    \end{itemize}
+    \item \textbf{Utility Realization:} Assuming risk-neutral quasi-linear utility, buyer $i$'s realized utility is:
+    \[
+      u_i(v_i, b) = p_i(b) \cdot v_i - c_i(b)
+    \]
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,82 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 18
+%  Chomp \& Extensive Form Games with Chance
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 18: Winning Chomp \& Chance Moves}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Winning Strategies in Chomp}
+
+Recall Zermelo's Theorem: In any finite, perfect-information, two-player game with no chance moves, if there are no draws, either Player 1 or Player 2 must have a winning strategy.
+We apply this to David Gale's game of \textbf{Chomp}. The game cannot end in a draw, as someone must eventually eat the poisoned square $(1,1)$. Therefore, a winning strategy exists. But who has it?
+
+\subsection{Square Boards ($n \times n$)}
+\begin{thmbox}{Chomp on a Square Board}
+  For an $n \times n$ board ($n > 1$), Player 1 has a winning strategy.
+\end{thmbox}
+
+\begin{proof}
+  Player 1's winning strategy is explicit and constructive:
+  \begin{enumerate}
+      \item \textbf{Opening move:} Player 1 chooses the square $(2,2)$. This removes a large block of squares and leaves a perfectly symmetrical board consisting of one row and one column of identical length meeting at the poisoned square $(1,1)$.
+      \item \textbf{Subsequent moves:} Player 1 simply mirrors Player 2's moves. If Player 2 chooses a cell $(i, j)$, Player 1 immediately chooses the symmetric cell $(j, i)$.
+  \end{enumerate}
+  Because Player 1 always restores symmetry, Player 2 is always faced with a symmetric board and is eventually forced to break the symmetry by eating the only square on the diagonal: $(1,1)$. Thus, Player 1 wins.
+\end{proof}
+
+\subsection{Rectangular Boards ($n \times m$)}
+\begin{thmbox}{Chomp on a Rectangular Board}
+  For any $n \times m$ board (where $n \neq m$), Player 1 \textit{always} has a winning strategy.
+\end{thmbox}
+
+\begin{proof}
+  We prove this by contradiction using a strategy-stealing argument. Because the game is finite and has no draws, Zermelo's theorem dictates that either Player 1 or Player 2 must have a winning strategy.
+  
+  Suppose for contradiction that Player 2 has a winning strategy $\bar{s}_2$.
+  Consider an experimental opening move by Player 1: Player 1 simply eats the single top-right corner square $(n, m)$.
+  Because Player 2 possesses a winning strategy $\bar{s}_2$, there must exist some specific response move $(i, j)$ that Player 2 can make following Player 1's opening move, which guarantees a win for Player 2 from that point forward.
+  
+  However, notice the geometry of Chomp: eating any square $(i, j)$ automatically eats all squares above and to its right, including the top-right square $(n, m)$. 
+  This means Player 1 could have simply skipped the "experimental" move and chosen $(i, j)$ on their very first turn! The resulting board state would be exactly identical to the state created after Player 2's "winning" response.
+  
+  If Player 1 does this, Player 1 effectively "steals" Player 2's winning strategy. Player 1 can now use $\bar{s}_2$ from that point forward to guarantee a win.
+  
+  Thus, if Player 2 has a winning strategy, Player 1 can steal it to win, which is a logical contradiction (both players cannot have a winning strategy). Therefore, Player 2 cannot have a winning strategy. By Zermelo's theorem, Player 1 \textbf{must} have a winning strategy.
+\end{proof}
+\textit{Note:} This is a classic non-constructive proof. We know Player 1 wins, but the proof does not tell us exactly what Player 1's opening move should be (unless the board is square).
+
+% ============================================================
+\section{Extensive Form Games with Chance}
+
+We now expand our model to include probabilistic elements (like rolling dice or drawing cards). We represent this by introducing a dummy player called \textbf{Nature} (Player 0), who moves randomly according to predetermined probabilities.
+
+\begin{defbox}{Extensive Form Game with Chance Moves}
+  A game in extensive form with perfect information and chance moves is a tuple:
+  \[ \Gamma = \langle N, V, E, n_0, (V_i)_{i \in N \cup \{0\}}, (p_n)_{n \in V_0}, (u_i)_{i \in N} \rangle \]
+  where:
+  \begin{itemize}
+      \item $N$ is the set of strategic players.
+      \item $(V, E, n_0)$ is the directed rooted tree.
+      \item $(V_i)_{i \in N \cup \{0\}}$ is a partition of the non-leaf nodes among the agents \textit{and} Nature ($P_0$).
+      \item For every node $n \in V_0$ (a node where Nature plays), $p_n$ is a probability distribution over the outgoing edges $A(n)$ from $n$.
+      \item $(u_i)_{i \in N}$ are the utility functions mapping leaf nodes to payoffs.
+  \end{itemize}
+\end{defbox}
+
+When the game reaches a node $n \in V_0$, no strategic choice is made. Instead, nature randomly selects a branch according to the explicit probabilities $p_n$.
+
+\end{document}

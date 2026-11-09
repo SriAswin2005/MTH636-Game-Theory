@@ -1,0 +1,128 @@
+% ============================================================
+%  MTH636 – Game Theory | Lecture 15
+%  Proof of Nash's Theorem (Contd.) & Extensive Form Games Intro
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+% ============================================================
+\begin{document}
+
+% Title
+\begin{center}
+  {\LARGE\bfseries\sffamily\color{defblue} MTH636 -- Game Theory}\\[6pt]
+  {\Large\sffamily Lecture 15: Nash's Theorem Proof \& Extensive Form Games}\\[4pt]
+\end{center}
+\vspace{0.5cm}
+\hrule height 1.5pt
+\vspace{0.3cm}
+
+% ============================================================
+\section{Proof of Nash's Theorem (Continued)}
+
+\begin{thmbox}{Nash's Existence Theorem}
+  For every finite game, there is a Nash Equilibrium in mixed strategies.
+\end{thmbox}
+
+\textbf{Proof (Contd.):}
+Let $G = \langle N, (S_i)_{i \in N}, (u_i)_{i \in N} \rangle$. Let $|N| = n$ and $|S_i| = m_i$ for all $i = 1, \dots, n$.
+
+Recall the gain function $g_i^j : \Sigma \to \mathbb{R}$ defined for each player $i$ and pure strategy $s_i^j$:
+\[
+  g_i^j(\sigma) = \max \left\{ 0, U_i(s_i^j, \sigma_{-i}) - U_i(\sigma) \right\}
+\]
+\textbf{Claim 1:} $g_i^j$ is a continuous function of $\sigma$ for all $i$ and $j$. \\
+\textbf{Claim 2:} $\sigma$ is an NE if and only if $g_i^j(\sigma) = 0$ for all $i=1,\dots,n$ and $j=1,\dots,m_i$.
+
+\textbf{Our Goal:} We want to construct a mapping $f: \Sigma \to \Sigma$ such that:
+\begin{itemize}
+    \item $f$ is continuous.
+    \item Every fixed point of $f$ is an NE of the game.
+\end{itemize}
+Then by Brouwer's Fixed Point Theorem, $f$ will have a fixed point, proving an NE exists.
+
+\textbf{Construction of $f$:}
+Define $f = (f_1, \dots, f_n)$ where $f_i = (f_i^1, \dots, f_i^{m_i})$ is given by:
+\[
+  f_i^j(\sigma) = \frac{\sigma_i(s_i^j) + g_i^j(\sigma)}{1 + \sum_{k=1}^{m_i} g_i^k(\sigma)} \quad \forall i=1,\dots,n, \ \forall j=1,\dots,m_i
+\]
+
+\textbf{Claim 3:} $f(\sigma) \in \Sigma$.
+\begin{proof}
+  We must verify two properties for $f_i(\sigma)$ to be a valid probability distribution:
+  \begin{enumerate}
+      \item $f_i^j(\sigma) \geq 0$: This holds because $\sigma_i(s_i^j) \geq 0$ and $g_i^j(\sigma) \geq 0$.
+      \item $\sum_{j=1}^{m_i} f_i^j(\sigma) = 1$: 
+      \[ \sum_{j=1}^{m_i} \frac{\sigma_i(s_i^j) + g_i^j(\sigma)}{1 + \sum_{k=1}^{m_i} g_i^k(\sigma)} = \frac{\sum_{j=1}^{m_i} \sigma_i(s_i^j) + \sum_{j=1}^{m_i} g_i^j(\sigma)}{1 + \sum_{k=1}^{m_i} g_i^k(\sigma)} = \frac{1 + \sum_{j=1}^{m_i} g_i^j(\sigma)}{1 + \sum_{k=1}^{m_i} g_i^k(\sigma)} = 1 \]
+  \end{enumerate}
+\end{proof}
+
+\textbf{Claim 4:} $f$ is a continuous function of $\sigma$. \\
+\textit{Proof:} This follows directly since the components $g_i^j(\sigma)$ are continuous functions.
+
+\textbf{Claim 5:} Let $\sigma$ be a fixed point of $f$. Then $g_i^j(\sigma) = \sigma_i(s_i^j) \sum_{k=1}^{m_i} g_i^k(\sigma)$.
+\begin{proof}
+  Suppose $\sigma$ is a fixed point, meaning $f_i^j(\sigma) = \sigma_i(s_i^j)$. Then:
+  \[ \frac{\sigma_i(s_i^j) + g_i^j(\sigma)}{1 + \sum_{k=1}^{m_i} g_i^k(\sigma)} = \sigma_i(s_i^j) \]
+  \[ \sigma_i(s_i^j) + g_i^j(\sigma) = \sigma_i(s_i^j) + \sigma_i(s_i^j) \sum_{k=1}^{m_i} g_i^k(\sigma) \]
+  \[ \implies g_i^j(\sigma) = \sigma_i(s_i^j) \sum_{k=1}^{m_i} g_i^k(\sigma) \]
+\end{proof}
+
+\textbf{Claim 6:} If $\sigma$ is a fixed point, then $\sigma$ is an NE of $G$.
+\begin{proof}
+  Assume for contradiction that $\sigma$ is a fixed point but \textbf{not} an NE.
+  This implies there exists some player $p \in N$ and strategy $s_p^k \in S_p$ such that $g_p^k(\sigma) > 0$.
+  Consequently, the sum of gains for player $p$ is strictly positive: $\sum_{k=1}^{m_p} g_p^k(\sigma) > 0$.
+  
+  As $\sigma$ is a fixed point, by Claim 5:
+  \[ g_p^j(\sigma) = \sigma_p(s_p^j) \sum_{k=1}^{m_p} g_p^k(\sigma) \]
+  Since the sum is strictly positive, we have:
+  \[ g_p^j(\sigma) > 0 \iff \sigma_p(s_p^j) > 0 \quad \forall j=1,\dots,m_p \]
+  
+  Now consider Player $p$'s expected utility:
+  \[ U_p(\sigma) = \sum_{k=1}^{m_p} \sigma_p(s_p^k) U(s_p^k, \sigma_{-p}) \]
+  Subtract $U_p(\sigma)$ from both sides (using the fact that $\sum \sigma_p(s_p^k) = 1$):
+  \[ 0 = \sum_{k=1}^{m_p} \sigma_p(s_p^k) \left( U(s_p^k, \sigma_{-p}) - U_p(\sigma) \right) \]
+  Since $g_p^k(\sigma) > 0$ for any $s_p^k$ in the support, we know $U(s_p^k, \sigma_{-p}) - U_p(\sigma)$ is exactly equal to $g_p^k(\sigma)$. So:
+  \[ \sum_{s_p^k \mid \sigma_p(s_p^k) > 0} \sigma_p(s_p^k) g_p^k(\sigma) = 0 \]
+  However, since $\sigma_p(s_p^k) > 0 \implies g_p^k(\sigma) > 0$, we are summing strictly positive terms, which cannot sum to 0. This is a contradiction. 
+  
+  Thus, $\sigma$ must be a Nash Equilibrium. By Brouwer's theorem, such a fixed point exists, so a mixed NE exists.
+\end{proof}
+
+% ============================================================
+\section{Extensive Form Games: Introduction}
+
+We now model games where players take turns sequentially.
+\begin{exbox}{Sequential Battle of the Sexes}
+  The man takes his action first, and then the woman sees his choice and makes her own move.
+  
+  \textbf{Game Tree:}
+  \begin{itemize}
+      \item Root node (M): Man chooses $F$ (Football) or $D$ (Dance).
+      \item If M chooses $F$, we reach node $W_1$. Woman chooses $F$ or $D$. Payoffs: $(2,1)$ for $FF$, $(0,0)$ for $FD$.
+      \item If M chooses $D$, we reach node $W_2$. Woman chooses $F$ or $D$. Payoffs: $(0,0)$ for $DF$, $(1,2)$ for $DD$.
+  \end{itemize}
+  
+  \textbf{Strategies:}
+  A strategy must specify an action for \textit{every} node a player controls.
+  \begin{itemize}
+      \item Man's strategies: $\{F, D\}$
+      \item Woman's strategies: Specify action at $W_1$ and action at $W_2$. E.g., $FD$ means "F if he plays F, D if he plays D". 
+      Total strategies: $\{FF, FD, DF, DD\}$.
+  \end{itemize}
+  
+  \textbf{Normal Form Representation:}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{c|cccc}
+    $M \setminus W$ & FF & FD & DF & DD \\
+    \hline
+    F & \payoff{2}{1} & \payoff{2}{1} & \payoff{0}{0} & \payoff{0}{0} \\
+    D & \payoff{0}{0} & \payoff{1}{2} & \payoff{0}{0} & \payoff{1}{2} \\
+  \end{tabular}
+  \end{center}
+\end{exbox}
+
+\end{document}
